@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">Asgardius S3 Manager</string>
+    <string name="title_activity_video_player">VideoPlayer</string>
+    <!-- don't forget removing s3 credentials before creating a git commit -->
+    <string name="endpoint_url">s3server</string>
+    <string name="access_key">username</string>
+    <string name="secret_key">password</string>
+    <string name="video_test_button">Video Test</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
 </resources>
