@@ -21,14 +21,17 @@ public class VideoPlayer extends AppCompatActivity {
     // url of video which we are loading.
     String videoURL = "https://video.asgardius.company/download/videos/41780585-a935-4d53-84c8-45ce97141231-480.mp4";
 
+    ExoPlayer player;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_video_player);
         playerView = findViewById(R.id.player_view);
+        // creating a variable for exoplayer
+        player = new ExoPlayer.Builder(this).build();
         try {
-            // creating a variable for exoplayer
-            ExoPlayer player = new ExoPlayer.Builder(this).build();
+
             // Attach player to the view.
             playerView.setPlayer(player);
             MediaItem mediaItem = MediaItem.fromUri(videoURL);
@@ -45,5 +48,10 @@ public class VideoPlayer extends AppCompatActivity {
             // handling our errors.
             System.out.println("Error : " + e.toString());
         }
+    }
+
+    public void onBackPressed() {
+        player.release();
+        finish();
     }
 }
