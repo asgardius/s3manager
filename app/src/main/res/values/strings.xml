@@ -6,6 +6,7 @@
     <string name="access_key">username</string>
     <string name="secret_key">password</string>
     <string name="video_test_button">Video Test</string>
+    <string name="media_load_fail">Cannot load media file</string>
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
 </resources>

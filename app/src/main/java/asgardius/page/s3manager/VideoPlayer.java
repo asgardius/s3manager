@@ -4,10 +4,14 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Toast;
 
 import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.MediaItem;
+import com.google.android.exoplayer2.PlaybackException;
+import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.ui.StyledPlayerView;
+import com.google.android.exoplayer2.upstream.HttpDataSource;
 
 /**
  * An example full-screen activity that shows and hides the system UI (i.e.
@@ -31,24 +35,34 @@ public class VideoPlayer extends AppCompatActivity {
         playerView = findViewById(R.id.player_view);
         // creating a variable for exoplayer
         player = new ExoPlayer.Builder(this).build();
-        try {
+        // Attach player to the view.
+        playerView.setPlayer(player);
+        MediaItem mediaItem = MediaItem.fromUri(videoURL);
 
-            // Attach player to the view.
-            playerView.setPlayer(player);
-            MediaItem mediaItem = MediaItem.fromUri(videoURL);
+        // Set the media item to be played.
+        player.setMediaItem(mediaItem);
+        // Prepare the player.
+        player.prepare();
+        // Start the playback.
+        player.play();
 
-            // Set the media item to be played.
-            player.setMediaItem(mediaItem);
-            // Prepare the player.
-            player.prepare();
-            // Start the playback.
-            player.play();
 
-        } catch (Exception e) {
-            // below line is used for
-            // handling our errors.
-            System.out.println("Error : " + e.toString());
-        }
+        player.addListener(new Player.Listener() {
+            @Override
+
+            public void onPlayerError(PlaybackException error) {
+                Throwable cause = error.getCause();
+                if (cause instanceof HttpDataSource.HttpDataSourceException) {
+                    // An HTTP error occurred.
+                    //System.out.println("Playback error F");
+                    Toast.makeText(getApplicationContext(),getResources().getString(R.string.media_load_fail), Toast.LENGTH_SHORT).show();
+                    player.release();
+                    finish();
+                }
+            }
+
+
+        });
     }
 
     @Override
