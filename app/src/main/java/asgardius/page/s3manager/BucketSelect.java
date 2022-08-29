@@ -13,6 +13,10 @@ import com.amazonaws.regions.Region;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.S3ClientOptions;
+import com.amazonaws.services.s3.model.Bucket;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class BucketSelect extends AppCompatActivity {
 
@@ -38,7 +42,20 @@ public class BucketSelect extends AppCompatActivity {
         @Override
         protected String doInBackground(String[] params) {
             // do above Server call here
-            System.out.println(s3client.listBuckets());
+            //This get bucket list
+            List<Bucket> buckets = s3client.listBuckets();
+            //This convert bucket list to an array list
+            List<String> bucketList = new ArrayList<String>();
+            // Print bucket names
+            //System.out.println("Buckets:");
+            int i=0;
+            for (Bucket bucket : buckets) {
+                //i++;
+                //System.out.println(bucket.getName());
+                bucketList.add(bucket.getName());
+            }
+            System.out.println(bucketList);
+            //System.out.println(s3client.listBuckets().toArray());
             return "some message";
         }
 
