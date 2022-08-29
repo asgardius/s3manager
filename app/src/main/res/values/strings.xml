@@ -7,6 +7,7 @@
     <string name="secret_key">password</string>
     <string name="bucketname">bucket</string>
     <string name="objectname">object</string>
+    <string name="explorer_test_button">File Explorer Test</string>
     <string name="video_test_button">Video Test</string>
     <string name="media_load_fail">Cannot load media file</string>
     <string name="dummy_button">Dummy Button</string>

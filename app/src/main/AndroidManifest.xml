@@ -16,6 +16,9 @@
         android:theme="@style/Theme.AsgardiusS3Manager"
         tools:targetApi="31">
         <activity
+            android:name=".BucketSelect"
+            android:exported="false" />
+        <activity
             android:name=".VideoPlayer"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:exported="false"

@@ -31,6 +31,14 @@
             android:text="@string/video_test_button"
             tools:ignore="MissingConstraints" />
 
+        <Button
+            android:id="@+id/ltest"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="@string/explorer_test_button"
+            tools:ignore="MissingConstraints" />
+
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

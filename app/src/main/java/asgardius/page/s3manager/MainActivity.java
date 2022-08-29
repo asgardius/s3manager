@@ -39,6 +39,17 @@ public class MainActivity extends AppCompatActivity {
                 //videoplayer("https://video.asgardius.company/download/videos/41780585-a935-4d53-84c8-45ce97141231-480.mp4");
             }
         });
+
+        //This is to launch file explorer test
+        Button explorertest = (Button)findViewById(R.id.ltest);
+        explorertest.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                //buttonaction
+                explorer();
+                //videoplayer("https://video.asgardius.company/download/videos/41780585-a935-4d53-84c8-45ce97141231-480.mp4");
+            }
+        });
     }
 
     private void s3test() {
@@ -61,6 +72,12 @@ public class MainActivity extends AppCompatActivity {
 
         Intent intent = new Intent(this, VideoPlayer.class);
         intent.putExtra("video_url", url);
+        startActivity(intent);
+
+    }
+    private void explorer() {
+
+        Intent intent = new Intent(this, BucketSelect.class);
         startActivity(intent);
 
     }
