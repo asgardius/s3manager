@@ -3,6 +3,8 @@ package asgardius.page.s3manager;
 import static com.amazonaws.regions.Regions.US_EAST_1;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -21,6 +23,9 @@ import java.util.List;
 public class BucketSelect extends AppCompatActivity {
 
     AmazonS3 s3client;
+    ArrayList Name;
+    ArrayList Img;
+    RecyclerView recyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,35 +38,54 @@ public class BucketSelect extends AppCompatActivity {
         s3client = new AmazonS3Client(myCredentials, region);
         s3client.setEndpoint(getResources().getString(R.string.endpoint_url));
         s3client.setS3ClientOptions(s3ClientOptions);
-        listbucket list = new listbucket();
-        list.execute("test");
-    }
 
-    private class listbucket extends AsyncTask<String, Void, String> {
+        recyclerView = findViewById(R.id.recyclerview);
 
-        @Override
-        protected String doInBackground(String[] params) {
-            // do above Server call here
-            //This get bucket list
-            List<Bucket> buckets = s3client.listBuckets();
-            //This convert bucket list to an array list
-            List<String> bucketList = new ArrayList<String>();
-            // Print bucket names
-            //System.out.println("Buckets:");
-            int i=0;
-            for (Bucket bucket : buckets) {
-                //i++;
-                //System.out.println(bucket.getName());
-                bucketList.add(bucket.getName());
+        // layout for vertical orientation
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getApplicationContext());
+        recyclerView.setLayoutManager(linearLayoutManager);
+        Thread listbucket = new Thread(new Runnable() {
+
+            @Override
+            public void run() {
+                try  {
+                    //Your code goes here
+                    List<Bucket> buckets = s3client.listBuckets();
+                    //This convert bucket list to an array list
+                    Name = new ArrayList<String>();
+                    Img = new ArrayList<String>();
+                    // Print bucket names
+                    //System.out.println("Buckets:");
+                    int i=0;
+                    for (Bucket bucket : buckets) {
+                        //i++;
+                        //System.out.println(bucket.getName());
+                        Name.add(bucket.getName());
+                        //Img.add(R.drawable.ic_launcher_foreground);
+                        Img.add(R.drawable.ic_launcher_foreground);
+                    }
+                    System.out.println(Name);
+
+                    runOnUiThread(new Runnable() {
+
+                        @Override
+                        public void run() {
+                            // Sending reference and data to Adapter
+                            Adapter adapter = new Adapter(BucketSelect.this, Img, Name);
+
+                            // Setting Adapter to RecyclerView
+                            recyclerView.setAdapter(adapter);
+                        }
+                    });
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
-            System.out.println(bucketList);
-            //System.out.println(s3client.listBuckets().toArray());
-            return "some message";
-        }
+        });
 
-        @Override
-        protected void onPostExecute(String message) {
-            //process message
-        }
+        listbucket.start();
+        //listbucket list = new listbucket();
+        //list.execute("test");
     }
 }

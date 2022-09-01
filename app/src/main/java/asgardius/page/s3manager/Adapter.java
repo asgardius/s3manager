@@ -33,7 +33,7 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder>{
     public void onBindViewHolder(@NonNull Adapter.ViewHolder holder, int position) {
         int res = (int) Img.get(position);
         holder.images.setImageResource(res);
-        holder.text.setText((Integer) Name.get(position));
+        holder.text.setText((CharSequence) Name.get(position));
     }
     @Override
     public int getItemCount() {
