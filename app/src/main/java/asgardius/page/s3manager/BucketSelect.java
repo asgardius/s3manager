@@ -62,7 +62,7 @@ public class BucketSelect extends AppCompatActivity {
                         //System.out.println(bucket.getName());
                         Name.add(bucket.getName());
                         //Img.add(R.drawable.ic_launcher_foreground);
-                        Img.add(R.drawable.ic_launcher_foreground);
+                        Img.add(R.drawable.bucket);
                     }
                     System.out.println(Name);
 
