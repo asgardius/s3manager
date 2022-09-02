@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
@@ -17,11 +18,13 @@ import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.S3ClientOptions;
 import com.amazonaws.services.s3.model.Bucket;
+import com.amazonaws.services.s3.model.GeneratePresignedUrlRequest;
 import com.amazonaws.services.s3.model.ListObjectsV2Result;
 import com.amazonaws.services.s3.model.ObjectListing;
 import com.amazonaws.services.s3.model.S3Object;
 import com.amazonaws.services.s3.model.S3ObjectSummary;
 
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -116,6 +119,9 @@ public class ObjectSelect extends AppCompatActivity {
             public void onClick(View view, int position) {
                 System.out.println("Click on "+Name.get(position).toString());
                 //explorer(Name.get(position).toString());
+                GeneratePresignedUrlRequest request = new GeneratePresignedUrlRequest(bucket, Name.get(position).toString());
+                URL objectURL = s3client.generatePresignedUrl(request);
+                videoplayer(objectURL.toString());
             }
 
             @Override
@@ -123,5 +129,13 @@ public class ObjectSelect extends AppCompatActivity {
                 System.out.println("Long click on "+Name.get(position).toString());
             }
         }));
+    }
+
+    private void videoplayer(String url) {
+
+        Intent intent = new Intent(this, VideoPlayer.class);
+        intent.putExtra("video_url", url);
+        startActivity(intent);
+
     }
 }
