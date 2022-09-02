@@ -17,6 +17,10 @@ import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.S3ClientOptions;
 import com.amazonaws.services.s3.model.Bucket;
+import com.amazonaws.services.s3.model.ListObjectsV2Result;
+import com.amazonaws.services.s3.model.ObjectListing;
+import com.amazonaws.services.s3.model.S3Object;
+import com.amazonaws.services.s3.model.S3ObjectSummary;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -56,20 +60,29 @@ public class ObjectSelect extends AppCompatActivity {
                 try  {
                     //Your code goes here
                     List<Bucket> buckets = s3client.listBuckets();
+                    //List<S3Object> objects = (List<S3Object>) s3client.listObjects(bucket, "/");
+                    ListObjectsV2Result result = s3client.listObjectsV2(bucket, "/");
+                    //System.out.println(objects);
                     //This convert bucket list to an array list
                     Name = new ArrayList<String>();
                     Img = new ArrayList<String>();
                     // Print bucket names
                     //System.out.println("Buckets:");
                     int i=0;
-                    for (Bucket bucket : buckets) {
+                    List<S3ObjectSummary> objects = result.getObjectSummaries();
+                    for (S3ObjectSummary os : objects) {
+                        Name.add(os.getKey());
+                        Img.add(R.drawable.videofile);
+                    }
+
+                    /*for (Bucket bucket : buckets) {
                         //i++;
                         //System.out.println(bucket.getName());
                         Name.add(bucket.getName());
                         //Img.add(R.drawable.ic_launcher_foreground);
-                        Img.add(R.drawable.bucket);
-                    }
-                    System.out.println(Name);
+                        Img.add(R.drawable.videofile);
+                    }*/
+                    //System.out.println(Name);
 
                     runOnUiThread(new Runnable() {
 

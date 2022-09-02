@@ -62,7 +62,6 @@ public class BucketSelect extends AppCompatActivity {
                     Img = new ArrayList<String>();
                     // Print bucket names
                     //System.out.println("Buckets:");
-                    int i=0;
                     for (Bucket bucket : buckets) {
                         //i++;
                         //System.out.println(bucket.getName());
@@ -70,7 +69,7 @@ public class BucketSelect extends AppCompatActivity {
                         //Img.add(R.drawable.ic_launcher_foreground);
                         Img.add(R.drawable.bucket);
                     }
-                    System.out.println(Name);
+                    //System.out.println(Name);
 
                     runOnUiThread(new Runnable() {
 
