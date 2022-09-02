@@ -10,6 +10,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
+import asgardius.page.s3manager.BucketSelect;
 
 public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder>{
     ArrayList Img, Name;
@@ -35,12 +36,6 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder>{
         int res = (int) Img.get(position);
         holder.images.setImageResource(res);
         holder.text.setText((CharSequence) Name.get(position));
-        holder.text.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                System.out.println("Click on "+Integer.toString(position));
-            }
-        });
     }
     @Override
     public int getItemCount() {

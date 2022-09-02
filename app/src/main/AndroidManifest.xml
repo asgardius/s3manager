@@ -16,6 +16,9 @@
         android:theme="@style/Theme.AsgardiusS3Manager"
         tools:targetApi="31">
         <activity
+            android:name=".ObjectSelect"
+            android:exported="false" />
+        <activity
             android:name=".list_item"
             android:exported="false" />
         <activity

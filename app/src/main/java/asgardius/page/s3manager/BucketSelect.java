@@ -6,8 +6,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Toast;
 
 import com.amazonaws.auth.AWSCredentials;
@@ -27,13 +29,14 @@ public class BucketSelect extends AppCompatActivity {
     ArrayList Name;
     ArrayList Img;
     RecyclerView recyclerView;
+    String username, password, endpoint;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        String endpoint = getIntent().getStringExtra("endpoint");
-        String username = getIntent().getStringExtra("username");
-        String password = getIntent().getStringExtra("password");
+        endpoint = getIntent().getStringExtra("endpoint");
+        username = getIntent().getStringExtra("username");
+        password = getIntent().getStringExtra("password");
         setContentView(R.layout.activity_bucket_select);
         Region region = Region.getRegion(US_EAST_1);
         S3ClientOptions s3ClientOptions = S3ClientOptions.builder().build();
@@ -100,5 +103,26 @@ public class BucketSelect extends AppCompatActivity {
         listbucket.start();
         //listbucket list = new listbucket();
         //list.execute("test");
+        recyclerView.addOnItemTouchListener(new RecyclerTouchListener(getApplicationContext(), recyclerView, new RecyclerTouchListener.ClickListener() {
+            @Override
+            public void onClick(View view, int position) {
+                System.out.println("Click on "+Integer.toString(position));
+            }
+
+            @Override
+            public void onLongClick(View view, int position) {
+                System.out.println("Long click on "+Integer.toString(position));
+            }
+        }));
+    }
+
+    private void explorer() {
+
+        Intent intent = new Intent(this, BucketSelect.class);
+        intent.putExtra("endpoint", endpoint);
+        intent.putExtra("username", username);
+        intent.putExtra("password", password);
+        startActivity(intent);
+
     }
 }
