@@ -30,13 +30,16 @@ public class BucketSelect extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        String endpoint = getIntent().getStringExtra("endpoint");
+        String username = getIntent().getStringExtra("username");
+        String password = getIntent().getStringExtra("password");
         setContentView(R.layout.activity_bucket_select);
         Region region = Region.getRegion(US_EAST_1);
         S3ClientOptions s3ClientOptions = S3ClientOptions.builder().build();
         s3ClientOptions.setPathStyleAccess(true);
-        AWSCredentials myCredentials = new BasicAWSCredentials(getResources().getString(R.string.access_key), getResources().getString(R.string.secret_key));
-        s3client = new AmazonS3Client(myCredentials, region);
-        s3client.setEndpoint(getResources().getString(R.string.endpoint_url));
+        AWSCredentials myCredentials = new BasicAWSCredentials(username, password);
+        AmazonS3 s3client = new AmazonS3Client(myCredentials, region);
+        s3client.setEndpoint(endpoint);
         s3client.setS3ClientOptions(s3ClientOptions);
 
         recyclerView = findViewById(R.id.recyclerview);

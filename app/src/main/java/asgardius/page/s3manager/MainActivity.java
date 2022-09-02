@@ -24,11 +24,15 @@ import java.net.URL;
 public class MainActivity extends AppCompatActivity {
 
     static boolean DEFAULT_PATH_STYLE_ACCESS = true;
+    String username, password, endpoint;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        username = getString(R.string.access_key);
+        password = getResources().getString(R.string.secret_key);
+        endpoint = getResources().getString(R.string.endpoint_url);
         //This is to launch video playback test
         Button videotest = (Button)findViewById(R.id.vtest);
         videotest.setOnClickListener(new View.OnClickListener(){
@@ -57,9 +61,9 @@ public class MainActivity extends AppCompatActivity {
         Region region = Region.getRegion(US_EAST_1);
         S3ClientOptions s3ClientOptions = S3ClientOptions.builder().build();
         s3ClientOptions.setPathStyleAccess(true);
-        AWSCredentials myCredentials = new BasicAWSCredentials(getResources().getString(R.string.access_key), getResources().getString(R.string.secret_key));
+        AWSCredentials myCredentials = new BasicAWSCredentials(username, password);
         AmazonS3 s3client = new AmazonS3Client(myCredentials, region);
-        s3client.setEndpoint(getResources().getString(R.string.endpoint_url));
+        s3client.setEndpoint(endpoint);
         s3client.setS3ClientOptions(s3ClientOptions);
         //s3client.setRegion(getRegion("asteroid"));
         GeneratePresignedUrlRequest request = new GeneratePresignedUrlRequest(getResources().getString(R.string.bucketname), getResources().getString(R.string.objectname));
@@ -78,6 +82,9 @@ public class MainActivity extends AppCompatActivity {
     private void explorer() {
 
         Intent intent = new Intent(this, BucketSelect.class);
+        intent.putExtra("endpoint", endpoint);
+        intent.putExtra("username", username);
+        intent.putExtra("password", password);
         startActivity(intent);
 
     }
