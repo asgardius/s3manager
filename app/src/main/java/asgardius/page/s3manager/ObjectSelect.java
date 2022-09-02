@@ -75,7 +75,14 @@ public class ObjectSelect extends AppCompatActivity {
                     List<S3ObjectSummary> objects = result.getObjectSummaries();
                     for (S3ObjectSummary os : objects) {
                         Name.add(os.getKey());
-                        Img.add(R.drawable.videofile);
+                        if (os.getKey().endsWith(".opus") || os.getKey().endsWith(".ogg")
+                                || os.getKey().endsWith(".oga") || os.getKey().endsWith(".mp3")
+                                || os.getKey().endsWith(".m4a")) {
+                            Img.add(R.drawable.audiofile);
+                        }
+                        else {
+                            Img.add(R.drawable.videofile);
+                        }
                     }
 
                     /*for (Bucket bucket : buckets) {
