@@ -57,10 +57,15 @@ public class VideoPlayer extends AppCompatActivity {
                 if (cause instanceof HttpDataSource.HttpDataSourceException) {
                     // An HTTP error occurred.
                     //System.out.println("Playback error F");
-                    Toast.makeText(getApplicationContext(),getResources().getString(R.string.media_load_fail), Toast.LENGTH_SHORT).show();
-                    player.release();
-                    finish();
+                    Toast.makeText(getApplicationContext(),getResources().getString(R.string.media_conn_fail), Toast.LENGTH_SHORT).show();
                 }
+                else {
+                    // An HTTP error occurred.
+                    //System.out.println("Playback error F");
+                    Toast.makeText(getApplicationContext(),getResources().getString(R.string.media_wrong_type), Toast.LENGTH_SHORT).show();
+                }
+                player.release();
+                finish();
             }
 
 
