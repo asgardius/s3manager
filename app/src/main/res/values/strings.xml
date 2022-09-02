@@ -10,6 +10,7 @@
     <string name="explorer_test_button">File Explorer Test</string>
     <string name="video_test_button">Video Test</string>
     <string name="media_load_fail">Cannot load media file</string>
+    <string name="media_list_fail">Cannot connect to server</string>
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
 </resources>

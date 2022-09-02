@@ -1,5 +1,6 @@
 package asgardius.page.s3manager;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,10 +31,16 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder>{
         return viewHolder;
     }
     @Override
-    public void onBindViewHolder(@NonNull Adapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull Adapter.ViewHolder holder, @SuppressLint("RecyclerView") int position) {
         int res = (int) Img.get(position);
         holder.images.setImageResource(res);
         holder.text.setText((CharSequence) Name.get(position));
+        holder.text.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                System.out.println("Click on "+Integer.toString(position));
+            }
+        });
     }
     @Override
     public int getItemCount() {
