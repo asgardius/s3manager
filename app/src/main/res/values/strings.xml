@@ -2,11 +2,11 @@
     <string name="app_name">Asgardius S3 Manager</string>
     <string name="title_activity_video_player">VideoPlayer</string>
     <!-- don't forget removing s3 credentials before creating a git commit -->
-    <string name="endpoint_url">s3server</string>
-    <string name="access_key">username</string>
-    <string name="secret_key">password</string>
-    <string name="bucketname">bucket</string>
-    <string name="objectname">object</string>
+    <string name="endpoint_url">https://object.asgardius.company</string>
+    <string name="access_key">asgardius</string>
+    <string name="secret_key">DTMp5kftamr49Ke7</string>
+    <string name="bucketname">asgardiustest</string>
+    <string name="objectname">peces felices.mp4</string>
     <string name="explorer_test_button">File Explorer Test</string>
     <string name="video_test_button">Video Test</string>
     <string name="media_load_fail">Cannot load media file</string>

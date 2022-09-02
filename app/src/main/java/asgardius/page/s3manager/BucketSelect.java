@@ -25,7 +25,6 @@ import java.util.List;
 
 public class BucketSelect extends AppCompatActivity {
 
-    AmazonS3 s3client;
     ArrayList Name;
     ArrayList Img;
     RecyclerView recyclerView;
@@ -46,7 +45,7 @@ public class BucketSelect extends AppCompatActivity {
         s3client.setEndpoint(endpoint);
         s3client.setS3ClientOptions(s3ClientOptions);
 
-        recyclerView = findViewById(R.id.recyclerview);
+        recyclerView = findViewById(R.id.blist);
 
         // layout for vertical orientation
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getApplicationContext());
@@ -106,22 +105,24 @@ public class BucketSelect extends AppCompatActivity {
         recyclerView.addOnItemTouchListener(new RecyclerTouchListener(getApplicationContext(), recyclerView, new RecyclerTouchListener.ClickListener() {
             @Override
             public void onClick(View view, int position) {
-                System.out.println("Click on "+Integer.toString(position));
+                System.out.println("Click on "+Name.get(position).toString());
+                explorer(Name.get(position).toString());
             }
 
             @Override
             public void onLongClick(View view, int position) {
-                System.out.println("Long click on "+Integer.toString(position));
+                System.out.println("Long click on "+Name.get(position).toString());
             }
         }));
     }
 
-    private void explorer() {
+    private void explorer(String bucket) {
 
-        Intent intent = new Intent(this, BucketSelect.class);
+        Intent intent = new Intent(this, ObjectSelect.class);
         intent.putExtra("endpoint", endpoint);
         intent.putExtra("username", username);
         intent.putExtra("password", password);
+        intent.putExtra("bucket", bucket);
         startActivity(intent);
 
     }
