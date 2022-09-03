@@ -87,26 +87,26 @@ public class ObjectSelect extends AppCompatActivity {
                     }
 
                     Name = new ArrayList<String>(object);
+                    object.clear();
                     //Img.add(R.drawable.unknownfile);
                     int i = 0;
                     while(i<Name.size()) {
-                        Img.add(R.drawable.unknownfile);
-                        /*if (os.getKey().endsWith(".opus") || os.getKey().endsWith(".ogg")
-                                || os.getKey().endsWith(".oga") || os.getKey().endsWith(".mp3")
-                                || os.getKey().endsWith(".m4a") || os.getKey().endsWith(".flac")
-                                || os.getKey().endsWith(".mka")) {
+                        //Img.add(R.drawable.unknownfile);
+                        if (Name.get(i).toString().endsWith(".opus") || Name.get(i).toString().endsWith(".ogg")
+                                || Name.get(i).toString().endsWith(".oga") || Name.get(i).toString().endsWith(".mp3")
+                                || Name.get(i).toString().endsWith(".m4a") || Name.get(i).toString().endsWith(".flac")
+                                || Name.get(i).toString().endsWith(".mka")) {
                             Img.add(R.drawable.audiofile);
                         }
-                        else if(os.getKey().endsWith(".mp4") || os.getKey().endsWith(".mkv")
-                                || os.getKey().endsWith(".webm") || os.getKey().endsWith(".m4v")) {
+                        else if(Name.get(i).toString().endsWith(".mp4") || Name.get(i).toString().endsWith(".mkv")
+                                || Name.get(i).toString().endsWith(".webm") || Name.get(i).toString().endsWith(".m4v")) {
                             Img.add(R.drawable.videofile);
                         }
                         else {
                             Img.add(R.drawable.unknownfile);
-                        }*/
+                        }
                         i++;
                     }
-                    object.clear();
 
                     /*for (Bucket bucket : buckets) {
                         //i++;
