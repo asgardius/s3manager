@@ -26,13 +26,14 @@ import com.amazonaws.services.s3.model.S3ObjectSummary;
 
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
 
 public class ObjectSelect extends AppCompatActivity {
 
     ArrayList Name;
     ArrayList Img;
-    ArrayList object;
+    //ArrayList object;
     RecyclerView recyclerView;
     String username, password, endpoint, bucket, prefix;
     int treelevel;
@@ -72,16 +73,25 @@ public class ObjectSelect extends AppCompatActivity {
                     ListObjectsV2Result result = s3client.listObjectsV2(bucket, "/");
                     //System.out.println(objects);
                     //This convert bucket list to an array list
-                    Name = new ArrayList<String>();
                     Img = new ArrayList<String>();
+                    LinkedHashSet<String> object = new LinkedHashSet<String>();
                     // Print bucket names
                     //System.out.println("Buckets:");
-                    int i=0;
+                    //int i=0;
                     List<S3ObjectSummary> objects = result.getObjectSummaries();
                     for (S3ObjectSummary os : objects) {
                         filename = os.getKey().split("/");
-                        Name.add(filename[treelevel]);
-                        if (os.getKey().endsWith(".opus") || os.getKey().endsWith(".ogg")
+                        object.add(filename[treelevel]);
+
+                        //i++;
+                    }
+
+                    Name = new ArrayList<String>(object);
+                    //Img.add(R.drawable.unknownfile);
+                    int i = 0;
+                    while(i<Name.size()) {
+                        Img.add(R.drawable.unknownfile);
+                        /*if (os.getKey().endsWith(".opus") || os.getKey().endsWith(".ogg")
                                 || os.getKey().endsWith(".oga") || os.getKey().endsWith(".mp3")
                                 || os.getKey().endsWith(".m4a") || os.getKey().endsWith(".flac")
                                 || os.getKey().endsWith(".mka")) {
@@ -93,9 +103,10 @@ public class ObjectSelect extends AppCompatActivity {
                         }
                         else {
                             Img.add(R.drawable.unknownfile);
-                        }
+                        }*/
                         i++;
                     }
+                    object.clear();
 
                     /*for (Bucket bucket : buckets) {
                         //i++;
