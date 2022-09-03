@@ -19,6 +19,8 @@ import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.S3ClientOptions;
 import com.amazonaws.services.s3.model.Bucket;
 import com.amazonaws.services.s3.model.GeneratePresignedUrlRequest;
+import com.amazonaws.services.s3.model.ListObjectsRequest;
+import com.amazonaws.services.s3.model.ListObjectsV2Request;
 import com.amazonaws.services.s3.model.ListObjectsV2Result;
 import com.amazonaws.services.s3.model.ObjectListing;
 import com.amazonaws.services.s3.model.S3Object;
@@ -68,9 +70,10 @@ public class ObjectSelect extends AppCompatActivity {
             public void run() {
                 try  {
                     //Your code goes here
-                    List<Bucket> buckets = s3client.listBuckets();
+                    //List<Bucket> buckets = s3client.listBuckets();
+                    ListObjectsRequest orequest = new ListObjectsRequest().withBucketName(bucket).withPrefix(prefix).withMaxKeys(2000);
                     //List<S3Object> objects = (List<S3Object>) s3client.listObjects(bucket, "/");
-                    ListObjectsV2Result result = s3client.listObjectsV2(bucket, "/");
+                    ObjectListing result = s3client.listObjects(orequest);
                     //System.out.println(objects);
                     //This convert bucket list to an array list
                     Img = new ArrayList<String>();
@@ -79,11 +82,21 @@ public class ObjectSelect extends AppCompatActivity {
                     //System.out.println("Buckets:");
                     //int i=0;
                     List<S3ObjectSummary> objects = result.getObjectSummaries();
-                    for (S3ObjectSummary os : objects) {
-                        filename = os.getKey().split("/");
-                        object.add(filename[treelevel]);
+                    boolean nextbatch = false;
+                    while (result.isTruncated() || !nextbatch) {
+                        if (nextbatch) {
+                            result = s3client.listNextBatchOfObjects (result);
+                            objects = result.getObjectSummaries();
+                        } else {
+                            nextbatch = true;
+                        }
+                        for (S3ObjectSummary os : objects) {
+                            filename = os.getKey().split("/");
+                            object.add(filename[treelevel]);
 
-                        //i++;
+                            //i++;
+                        }
+
                     }
 
                     Name = new ArrayList<String>(object);
@@ -107,6 +120,8 @@ public class ObjectSelect extends AppCompatActivity {
                         }
                         i++;
                     }
+
+
 
                     /*for (Bucket bucket : buckets) {
                         //i++;
