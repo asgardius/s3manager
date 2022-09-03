@@ -32,8 +32,11 @@ public class ObjectSelect extends AppCompatActivity {
 
     ArrayList Name;
     ArrayList Img;
+    ArrayList object;
     RecyclerView recyclerView;
-    String username, password, endpoint, bucket;
+    String username, password, endpoint, bucket, prefix;
+    int treelevel;
+    String[] filename;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +45,8 @@ public class ObjectSelect extends AppCompatActivity {
         username = getIntent().getStringExtra("username");
         password = getIntent().getStringExtra("password");
         bucket = getIntent().getStringExtra("bucket");
+        prefix = getIntent().getStringExtra("prefix");
+        treelevel = getIntent().getIntExtra("treelevel", 0);
         setContentView(R.layout.activity_object_select);
         Region region = Region.getRegion(US_EAST_1);
         S3ClientOptions s3ClientOptions = S3ClientOptions.builder().build();
@@ -74,15 +79,22 @@ public class ObjectSelect extends AppCompatActivity {
                     int i=0;
                     List<S3ObjectSummary> objects = result.getObjectSummaries();
                     for (S3ObjectSummary os : objects) {
-                        Name.add(os.getKey());
+                        filename = os.getKey().split("/");
+                        Name.add(filename[treelevel]);
                         if (os.getKey().endsWith(".opus") || os.getKey().endsWith(".ogg")
                                 || os.getKey().endsWith(".oga") || os.getKey().endsWith(".mp3")
-                                || os.getKey().endsWith(".m4a")) {
+                                || os.getKey().endsWith(".m4a") || os.getKey().endsWith(".flac")
+                                || os.getKey().endsWith(".mka")) {
                             Img.add(R.drawable.audiofile);
                         }
-                        else {
+                        else if(os.getKey().endsWith(".mp4") || os.getKey().endsWith(".mkv")
+                                || os.getKey().endsWith(".webm") || os.getKey().endsWith(".m4v")) {
                             Img.add(R.drawable.videofile);
                         }
+                        else {
+                            Img.add(R.drawable.unknownfile);
+                        }
+                        i++;
                     }
 
                     /*for (Bucket bucket : buckets) {
@@ -105,6 +117,7 @@ public class ObjectSelect extends AppCompatActivity {
                             recyclerView.setAdapter(adapter);
                         }
                     });
+                    System.out.println("tree "+treelevel);
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -124,7 +137,7 @@ public class ObjectSelect extends AppCompatActivity {
         recyclerView.addOnItemTouchListener(new RecyclerTouchListener(getApplicationContext(), recyclerView, new RecyclerTouchListener.ClickListener() {
             @Override
             public void onClick(View view, int position) {
-                System.out.println("Click on "+Name.get(position).toString());
+                //System.out.println("Click on "+Name.get(position).toString());
                 //explorer(Name.get(position).toString());
                 GeneratePresignedUrlRequest request = new GeneratePresignedUrlRequest(bucket, Name.get(position).toString());
                 URL objectURL = s3client.generatePresignedUrl(request);
@@ -133,7 +146,8 @@ public class ObjectSelect extends AppCompatActivity {
 
             @Override
             public void onLongClick(View view, int position) {
-                System.out.println("Long click on "+Name.get(position).toString());
+                //System.out.println("Long click on "+Name.get(position).toString());
+                explorer(bucket);
             }
         }));
     }
@@ -144,5 +158,25 @@ public class ObjectSelect extends AppCompatActivity {
         intent.putExtra("video_url", url);
         startActivity(intent);
 
+    }
+
+    private void explorer(String bucket) {
+
+        Intent intent = new Intent(this, ObjectSelect.class);
+        treelevel ++;
+        intent.putExtra("endpoint", endpoint);
+        intent.putExtra("username", username);
+        intent.putExtra("password", password);
+        intent.putExtra("bucket", bucket);
+        intent.putExtra("prefix", prefix);
+        intent.putExtra("treelevel", treelevel);
+        startActivity(intent);
+
+    }
+
+    public void onBackPressed() {
+        treelevel --;
+        System.out.println("tree "+treelevel);
+        finish();
     }
 }

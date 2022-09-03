@@ -28,7 +28,8 @@ public class BucketSelect extends AppCompatActivity {
     ArrayList Name;
     ArrayList Img;
     RecyclerView recyclerView;
-    String username, password, endpoint;
+    String username, password, endpoint, prefix;
+    int treelevel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +37,7 @@ public class BucketSelect extends AppCompatActivity {
         endpoint = getIntent().getStringExtra("endpoint");
         username = getIntent().getStringExtra("username");
         password = getIntent().getStringExtra("password");
+        prefix = "";
         setContentView(R.layout.activity_bucket_select);
         Region region = Region.getRegion(US_EAST_1);
         S3ClientOptions s3ClientOptions = S3ClientOptions.builder().build();
@@ -118,10 +120,13 @@ public class BucketSelect extends AppCompatActivity {
     private void explorer(String bucket) {
 
         Intent intent = new Intent(this, ObjectSelect.class);
+        treelevel = 0;
         intent.putExtra("endpoint", endpoint);
         intent.putExtra("username", username);
         intent.putExtra("password", password);
         intent.putExtra("bucket", bucket);
+        intent.putExtra("prefix", prefix);
+        intent.putExtra("treelevel", treelevel);
         startActivity(intent);
 
     }
