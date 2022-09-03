@@ -105,7 +105,10 @@ public class ObjectSelect extends AppCompatActivity {
                     int i = 0;
                     while(i<Name.size()) {
                         //Img.add(R.drawable.unknownfile);
-                        if (Name.get(i).toString().endsWith(".opus") || Name.get(i).toString().endsWith(".ogg")
+                        if (!Name.get(i).toString().contains((CharSequence) ".")) {
+                            Img.add(R.drawable.folder);
+                        }
+                        else if (Name.get(i).toString().endsWith(".opus") || Name.get(i).toString().endsWith(".ogg")
                                 || Name.get(i).toString().endsWith(".oga") || Name.get(i).toString().endsWith(".mp3")
                                 || Name.get(i).toString().endsWith(".m4a") || Name.get(i).toString().endsWith(".flac")
                                 || Name.get(i).toString().endsWith(".mka")) {
