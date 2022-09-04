@@ -107,12 +107,13 @@ public class MainActivity extends AppCompatActivity {
         }));
 
         //This is to launch video playback test
-        Button videotest = (Button)findViewById(R.id.vtest);
-        videotest.setOnClickListener(new View.OnClickListener(){
+        Button addaccount = (Button)findViewById(R.id.addaccount);
+        addaccount.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
+                System.out.println("This is not implemented yet");
                 //buttonaction
-                s3test();
+                //s3test();
                 //videoplayer("https://video.asgardius.company/download/videos/41780585-a935-4d53-84c8-45ce97141231-480.mp4");
             }
         });
@@ -129,29 +130,6 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void s3test() {
-
-        Region region = Region.getRegion(US_EAST_1);
-        S3ClientOptions s3ClientOptions = S3ClientOptions.builder().build();
-        s3ClientOptions.setPathStyleAccess(true);
-        AWSCredentials myCredentials = new BasicAWSCredentials(username, password);
-        AmazonS3 s3client = new AmazonS3Client(myCredentials, region);
-        s3client.setEndpoint(endpoint);
-        s3client.setS3ClientOptions(s3ClientOptions);
-        //s3client.setRegion(getRegion("asteroid"));
-        GeneratePresignedUrlRequest request = new GeneratePresignedUrlRequest(getResources().getString(R.string.bucketname), getResources().getString(R.string.objectname));
-        URL objectURL = s3client.generatePresignedUrl(request);
-        videoplayer(objectURL.toString());
-
-    }
-
-    private void videoplayer(String url) {
-
-        Intent intent = new Intent(this, VideoPlayer.class);
-        intent.putExtra("video_url", url);
-        startActivity(intent);
-
-    }
     private void explorer() {
 
         Intent intent = new Intent(this, BucketSelect.class);
