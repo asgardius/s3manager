@@ -111,10 +111,8 @@ public class MainActivity extends AppCompatActivity {
         addaccount.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
-                System.out.println("This is not implemented yet");
                 //buttonaction
-                //s3test();
-                //videoplayer("https://video.asgardius.company/download/videos/41780585-a935-4d53-84c8-45ce97141231-480.mp4");
+                addaccount();
             }
         });
 
@@ -136,6 +134,13 @@ public class MainActivity extends AppCompatActivity {
         intent.putExtra("endpoint", endpoint);
         intent.putExtra("username", username);
         intent.putExtra("password", password);
+        startActivity(intent);
+
+    }
+
+    private void addaccount() {
+
+        Intent intent = new Intent(this, AccountAdd.class);
         startActivity(intent);
 
     }
