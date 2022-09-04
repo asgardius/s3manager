@@ -32,7 +32,7 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
 
     static boolean DEFAULT_PATH_STYLE_ACCESS = true;
-    String username, password, endpoint;
+    String username, password, endpoint, aname;
     RecyclerView recyclerView;
     ArrayList Name;
     ArrayList Img;
@@ -41,9 +41,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        username = getString(R.string.access_key);
-        password = getResources().getString(R.string.secret_key);
-        endpoint = getResources().getString(R.string.endpoint_url);
 
         recyclerView = findViewById(R.id.alist);
 
@@ -74,8 +71,6 @@ public class MainActivity extends AppCompatActivity {
             public void run() {
                 try  {
                     //Your code goes here
-                    // Print bucket names
-                    //System.out.println("Buckets:");
 
                     System.out.println(Name);
 
@@ -111,8 +106,26 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.addOnItemTouchListener(new RecyclerTouchListener(getApplicationContext(), recyclerView, new RecyclerTouchListener.ClickListener() {
             @Override
             public void onClick(View view, int position) {
-                System.out.println("Click on "+Name.get(position).toString());
-                explorer();
+                //aname = Name.get(position).toString();
+                //System.out.println("Click on "+aname);
+                if (db != null) {
+                    // Database Queries
+                    System.out.println("Database OK");
+                    try {
+                        String query = "SELECT endpoint, username, password FROM account where id=\""+ Name.get(position).toString()+ "\"";
+                        System.out.println(query);
+                        Cursor cursor = db.rawQuery(query,null);
+                        if (cursor.moveToNext()){
+                            endpoint = cursor.getString(0);
+                            username = cursor.getString(1);
+                            password = cursor.getString(2);
+                            explorer();
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+                }
             }
 
             @Override
@@ -167,7 +180,7 @@ public class MainActivity extends AppCompatActivity {
         if (db != null) {
             // Database Queries
             try {
-                db.execSQL("INSERT INTO account VALUES (\"test account\", \""+endpoint+"\", \""+username+"\", \""+password+"\")");
+                db.execSQL("INSERT INTO account VALUES (\"test account\", \""+getResources().getString(R.string.endpoint_url)+"\", \""+getString(R.string.access_key)+"\", \""+getResources().getString(R.string.secret_key)+"\")");
                 System.out.println("Insert OK");
             } catch (Exception e) {
                 System.out.println("Insert error");
