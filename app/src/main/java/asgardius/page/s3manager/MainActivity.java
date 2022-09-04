@@ -5,11 +5,14 @@ import static com.amazonaws.regions.Regions.US_EAST_1;
 import static com.amazonaws.services.s3.S3ClientOptions.DEFAULT_PATH_STYLE_ACCESS;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.auth.BasicAWSCredentials;
@@ -17,14 +20,20 @@ import com.amazonaws.regions.Region;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.S3ClientOptions;
+import com.amazonaws.services.s3.model.Bucket;
 import com.amazonaws.services.s3.model.GeneratePresignedUrlRequest;
 
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
     static boolean DEFAULT_PATH_STYLE_ACCESS = true;
     String username, password, endpoint;
+    RecyclerView recyclerView;
+    ArrayList Name;
+    ArrayList Img;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +42,70 @@ public class MainActivity extends AppCompatActivity {
         username = getString(R.string.access_key);
         password = getResources().getString(R.string.secret_key);
         endpoint = getResources().getString(R.string.endpoint_url);
+
+        recyclerView = findViewById(R.id.alist);
+
+        // layout for vertical orientation
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getApplicationContext());
+        recyclerView.setLayoutManager(linearLayoutManager);
+
+        Thread listaccount = new Thread(new Runnable() {
+
+            @Override
+            public void run() {
+                try  {
+                    //Your code goes here
+                    Name = new ArrayList<String>();
+                    Img = new ArrayList<String>();
+                    // Print bucket names
+                    //System.out.println("Buckets:");
+                    Name.add("account");
+                    Img.add(R.drawable.account);
+
+                    System.out.println(Name);
+
+                    runOnUiThread(new Runnable() {
+
+                        @Override
+                        public void run() {
+                            // Sending reference and data to Adapter
+                            Adapter adapter = new Adapter(MainActivity.this, Img, Name);
+
+                            // Setting Adapter to RecyclerView
+                            recyclerView.setAdapter(adapter);
+                        }
+                    });
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    runOnUiThread(new Runnable() {
+
+                        @Override
+                        public void run() {
+                            Toast.makeText(getApplicationContext(),getResources().getString(R.string.media_list_fail), Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                    //Toast.makeText(getApplicationContext(),getResources().getString(R.string.media_list_fail), Toast.LENGTH_SHORT).show();
+                    finish();
+                }
+            }
+        });
+
+        listaccount.start();
+
+        recyclerView.addOnItemTouchListener(new RecyclerTouchListener(getApplicationContext(), recyclerView, new RecyclerTouchListener.ClickListener() {
+            @Override
+            public void onClick(View view, int position) {
+                System.out.println("Click on "+Name.get(position).toString());
+                explorer();
+            }
+
+            @Override
+            public void onLongClick(View view, int position) {
+                System.out.println("Long click on "+Name.get(position).toString());
+            }
+        }));
+
         //This is to launch video playback test
         Button videotest = (Button)findViewById(R.id.vtest);
         videotest.setOnClickListener(new View.OnClickListener(){

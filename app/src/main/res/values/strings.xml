@@ -7,6 +7,7 @@
     <string name="secret_key">DTMp5kftamr49Ke7</string>
     <string name="bucketname">asgardiustest</string>
     <string name="objectname">peces felices.mp4</string>
+    <string name="accountselect">Please choose an account</string>
     <string name="explorer_test_button">File Explorer Test</string>
     <string name="video_test_button">Video Test</string>
     <string name="media_conn_fail">Cannot retrieve media file</string>
