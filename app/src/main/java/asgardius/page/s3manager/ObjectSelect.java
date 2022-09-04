@@ -39,7 +39,7 @@ public class ObjectSelect extends AppCompatActivity {
     RecyclerView recyclerView;
     String username, password, endpoint, bucket, prefix;
     int treelevel;
-    String[] filename;
+    String[] filename, path;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,7 +92,12 @@ public class ObjectSelect extends AppCompatActivity {
                         }
                         for (S3ObjectSummary os : objects) {
                             filename = os.getKey().split("/");
-                            object.add(filename[treelevel]);
+                            if (filename.length == treelevel+1) {
+                                object.add(filename[treelevel]);
+                            }
+                            else {
+                                object.add(filename[treelevel]+"/");
+                            }
 
                             //i++;
                         }
@@ -105,7 +110,7 @@ public class ObjectSelect extends AppCompatActivity {
                     int i = 0;
                     while(i<Name.size()) {
                         //Img.add(R.drawable.unknownfile);
-                        if (!Name.get(i).toString().contains((CharSequence) ".")) {
+                        if (Name.get(i).toString().endsWith("/")) {
                             Img.add(R.drawable.folder);
                         }
                         else if (Name.get(i).toString().endsWith(".opus") || Name.get(i).toString().endsWith(".ogg")
@@ -146,7 +151,8 @@ public class ObjectSelect extends AppCompatActivity {
                             recyclerView.setAdapter(adapter);
                         }
                     });
-                    System.out.println("tree "+treelevel);
+                    //System.out.println("tree "+treelevel);
+                    //System.out.println("prefix "+prefix);
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -176,7 +182,7 @@ public class ObjectSelect extends AppCompatActivity {
             @Override
             public void onLongClick(View view, int position) {
                 //System.out.println("Long click on "+Name.get(position).toString());
-                explorer(bucket);
+                explorer(Name.get(position).toString());
             }
         }));
     }
@@ -189,7 +195,7 @@ public class ObjectSelect extends AppCompatActivity {
 
     }
 
-    private void explorer(String bucket) {
+    private void explorer(String object) {
 
         Intent intent = new Intent(this, ObjectSelect.class);
         treelevel ++;
@@ -197,15 +203,31 @@ public class ObjectSelect extends AppCompatActivity {
         intent.putExtra("username", username);
         intent.putExtra("password", password);
         intent.putExtra("bucket", bucket);
-        intent.putExtra("prefix", prefix);
+        intent.putExtra("prefix", prefix + object);
         intent.putExtra("treelevel", treelevel);
         startActivity(intent);
 
     }
 
     public void onBackPressed() {
+        if (treelevel >= 2) {
+            path = prefix.split("/");
+            prefix = "";
+            int i = 0;
+            //System.out.println("path "+i);
+            while(i <= path.length-2) {
+                prefix = prefix.concat(path[i]);
+                prefix = prefix.concat("/");
+                //System.out.println("position "+i);
+                i++;
+            }
+        }
+        else if (treelevel == 1) {
+            prefix = "";
+        }
         treelevel --;
-        System.out.println("tree "+treelevel);
+        //System.out.println("tree "+treelevel);
+        //System.out.println("prefix "+prefix);
         finish();
     }
 }
