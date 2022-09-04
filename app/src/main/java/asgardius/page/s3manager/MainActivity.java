@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -48,6 +49,15 @@ public class MainActivity extends AppCompatActivity {
         // layout for vertical orientation
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getApplicationContext());
         recyclerView.setLayoutManager(linearLayoutManager);
+
+        MyDbHelper dbHelper = new MyDbHelper(this);
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        if (db != null) {
+            // Hacer las operaciones que queramos sobre la base de datos
+            System.out.println("Database OK");
+        } else {
+            System.out.println("Database Missing");
+        }
 
         Thread listaccount = new Thread(new Runnable() {
 
@@ -122,7 +132,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 //buttonaction
-                explorer();
+                //explorer();
+                testaccount();
                 //videoplayer("https://video.asgardius.company/download/videos/41780585-a935-4d53-84c8-45ce97141231-480.mp4");
             }
         });
@@ -143,6 +154,16 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(this, AccountAdd.class);
         startActivity(intent);
 
+    }
+
+    private void testaccount() {
+        MyDbHelper dbHelper = new MyDbHelper(this);
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        if (db != null) {
+            // Hacer las operaciones que queramos sobre la base de datos
+            db.execSQL("INSERT INTO account VALUES (\"test account\", \"https://object.asgardius.company\", \"asgardius\", \"DTMp5kftamr49Ke7\")");
+            System.out.println("Insert OK");
+        }
     }
 
 }
