@@ -174,15 +174,21 @@ public class ObjectSelect extends AppCompatActivity {
             public void onClick(View view, int position) {
                 //System.out.println("Click on "+Name.get(position).toString());
                 //explorer(Name.get(position).toString());
-                GeneratePresignedUrlRequest request = new GeneratePresignedUrlRequest(bucket, Name.get(position).toString());
-                URL objectURL = s3client.generatePresignedUrl(request);
-                videoplayer(objectURL.toString());
+                if (Img.get(position).equals(R.drawable.folder)) {
+                    //go to subfolder
+                    explorer(Name.get(position).toString());
+                }
+                else {
+                    //load media file
+                    GeneratePresignedUrlRequest request = new GeneratePresignedUrlRequest(bucket, prefix + Name.get(position).toString());
+                    URL objectURL = s3client.generatePresignedUrl(request);
+                    videoplayer(objectURL.toString());
+                }
             }
 
             @Override
             public void onLongClick(View view, int position) {
-                //System.out.println("Long click on "+Name.get(position).toString());
-                explorer(Name.get(position).toString());
+                System.out.println("Long click on "+Name.get(position).toString());
             }
         }));
     }
@@ -198,13 +204,13 @@ public class ObjectSelect extends AppCompatActivity {
     private void explorer(String object) {
 
         Intent intent = new Intent(this, ObjectSelect.class);
-        treelevel ++;
+        //treelevel ++;
         intent.putExtra("endpoint", endpoint);
         intent.putExtra("username", username);
         intent.putExtra("password", password);
         intent.putExtra("bucket", bucket);
         intent.putExtra("prefix", prefix + object);
-        intent.putExtra("treelevel", treelevel);
+        intent.putExtra("treelevel", treelevel+1);
         startActivity(intent);
 
     }
