@@ -134,7 +134,6 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 //buttonaction
-                testaccount();
             }
         });
     }
@@ -154,20 +153,6 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(this, AccountAdd.class);
         startActivity(intent);
 
-    }
-
-    private void testaccount() {
-        MyDbHelper dbHelper = new MyDbHelper(this);
-        SQLiteDatabase db = dbHelper.getWritableDatabase();
-        if (db != null) {
-            // Database Queries
-            try {
-                db.execSQL("INSERT INTO account VALUES (\"test account\", \""+getResources().getString(R.string.endpoint_url)+"\", \""+getString(R.string.access_key)+"\", \""+getResources().getString(R.string.secret_key)+"\")");
-                System.out.println("Insert OK");
-            } catch (Exception e) {
-                System.out.println("Insert error");
-            }
-        }
     }
 
 }

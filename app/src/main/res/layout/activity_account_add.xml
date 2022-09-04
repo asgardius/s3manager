@@ -17,8 +17,6 @@
         android:hint="@string/accountadd_alias"
         android:importantForAutofill="no"
         android:inputType="text"
-        android:textColorHighlight="#ff7eff15"
-        android:textColorHint="#ffff25e6"
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="MissingConstraints" />
 
@@ -33,8 +31,6 @@
         android:hint="@string/accountadd_endpoint"
         android:importantForAutofill="no"
         android:inputType="textUri"
-        android:textColorHighlight="#ff7eff15"
-        android:textColorHint="#ffff25e6"
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="MissingConstraints" />
 
@@ -49,8 +45,6 @@
         android:focusable="true"
         android:hint="@string/accountadd_username"
         android:inputType="textNoSuggestions"
-        android:textColorHighlight="#ff7eff15"
-        android:textColorHint="#ffff25e6"
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="MissingConstraints" />
 
@@ -65,8 +59,6 @@
         android:focusable="true"
         android:hint="@string/accountadd_password"
         android:inputType="textPassword"
-        android:textColorHighlight="#ff7eff15"
-        android:textColorHint="#ffff25e6"
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="MissingConstraints" />
 

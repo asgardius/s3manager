@@ -1,10 +1,6 @@
 <resources>
     <string name="app_name">Asgardius S3 Manager</string>
     <string name="title_activity_video_player">VideoPlayer</string>
-    <!-- S3 credentials are being used during development process and will become useless when account manager is ready -->
-    <string name="endpoint_url">https://object.asgardius.company</string>
-    <string name="access_key">asgardius</string>
-    <string name="secret_key">DTMp5kftamr49Ke7</string>
     <string name="accountselect">Please choose an account</string>
     <string name="accountadd_button">Add Account</string>
     <string name="accountadd_alias">Account Alias</string>
