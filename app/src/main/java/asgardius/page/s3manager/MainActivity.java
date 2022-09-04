@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.View;
@@ -53,8 +54,16 @@ public class MainActivity extends AppCompatActivity {
         MyDbHelper dbHelper = new MyDbHelper(this);
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         if (db != null) {
-            // Hacer las operaciones que queramos sobre la base de datos
+            // Database Queries
             System.out.println("Database OK");
+            Name = new ArrayList<String>();
+            Img = new ArrayList<String>();
+            String query = "SELECT id FROM account";
+            Cursor cursor = db.rawQuery(query,null);
+            while (cursor.moveToNext()){
+                Name.add(cursor.getString(0));
+                Img.add(R.drawable.account);
+            }
         } else {
             System.out.println("Database Missing");
         }
@@ -65,12 +74,8 @@ public class MainActivity extends AppCompatActivity {
             public void run() {
                 try  {
                     //Your code goes here
-                    Name = new ArrayList<String>();
-                    Img = new ArrayList<String>();
                     // Print bucket names
                     //System.out.println("Buckets:");
-                    Name.add("account");
-                    Img.add(R.drawable.account);
 
                     System.out.println(Name);
 
@@ -160,9 +165,13 @@ public class MainActivity extends AppCompatActivity {
         MyDbHelper dbHelper = new MyDbHelper(this);
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         if (db != null) {
-            // Hacer las operaciones que queramos sobre la base de datos
-            db.execSQL("INSERT INTO account VALUES (\"test account\", \"https://object.asgardius.company\", \"asgardius\", \"DTMp5kftamr49Ke7\")");
-            System.out.println("Insert OK");
+            // Database Queries
+            try {
+                db.execSQL("INSERT INTO account VALUES (\"test account\", \""+endpoint+"\", \""+username+"\", \""+password+"\")");
+                System.out.println("Insert OK");
+            } catch (Exception e) {
+                System.out.println("Insert error");
+            }
         }
     }
 
