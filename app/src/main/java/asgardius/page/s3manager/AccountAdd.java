@@ -36,7 +36,9 @@ public class AccountAdd extends AppCompatActivity {
                 System.out.println("Password " + password);
                 MyDbHelper dbHelper = new MyDbHelper(AccountAdd.this);
                 SQLiteDatabase db = dbHelper.getWritableDatabase();
-                if (db != null) {
+                if (alias.equals("") || endpoint.equals("") || username.equals("") || password.equals("")) {
+                    Toast.makeText(getApplicationContext(),getResources().getString(R.string.accountadd_null), Toast.LENGTH_SHORT).show();
+                } else if (db != null) {
                     // Database Queries
                     try {
                         db.execSQL("INSERT INTO account VALUES (\""+alias+"\", \""+endpoint+"\", \""+username+"\", \""+password+"\")");
