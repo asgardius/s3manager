@@ -1,13 +1,5 @@
 package asgardius.page.s3manager;
 
-import static com.amazonaws.regions.RegionUtils.getRegion;
-import static com.amazonaws.regions.Regions.US_EAST_1;
-import static com.amazonaws.services.s3.S3ClientOptions.DEFAULT_PATH_STYLE_ACCESS;
-
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -16,23 +8,16 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.amazonaws.auth.AWSCredentials;
-import com.amazonaws.auth.BasicAWSCredentials;
-import com.amazonaws.regions.Region;
-import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.AmazonS3Client;
-import com.amazonaws.services.s3.S3ClientOptions;
-import com.amazonaws.services.s3.model.Bucket;
-import com.amazonaws.services.s3.model.GeneratePresignedUrlRequest;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
-import java.net.URL;
 import java.util.ArrayList;
-import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
     static boolean DEFAULT_PATH_STYLE_ACCESS = true;
-    String username, password, endpoint, aname;
+    String username, password, endpoint;
     RecyclerView recyclerView;
     ArrayList Name;
     ArrayList Img;
@@ -106,8 +91,7 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.addOnItemTouchListener(new RecyclerTouchListener(getApplicationContext(), recyclerView, new RecyclerTouchListener.ClickListener() {
             @Override
             public void onClick(View view, int position) {
-                //aname = Name.get(position).toString();
-                //System.out.println("Click on "+aname);
+                //System.out.println("Click on "+Name.get(position).toString());
                 if (db != null) {
                     // Database Queries
                     System.out.println("Database OK");
@@ -150,9 +134,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 //buttonaction
-                //explorer();
                 testaccount();
-                //videoplayer("https://video.asgardius.company/download/videos/41780585-a935-4d53-84c8-45ce97141231-480.mp4");
             }
         });
     }

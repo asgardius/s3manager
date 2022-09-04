@@ -11,6 +11,8 @@
     <string name="accountadd_endpoint">S3 Endpoint URL</string>
     <string name="accountadd_username">S3 Access Key</string>
     <string name="accountadd_password">S3 Secret Key</string>
+    <string name="accountadd_success">Account added successfully</string>
+    <string name="accountadd_fail">Check your account details</string>
     <string name="explorer_test_button">File Explorer Test</string>
     <string name="video_test_button">Video Test</string>
     <string name="media_conn_fail">Cannot retrieve media file</string>
