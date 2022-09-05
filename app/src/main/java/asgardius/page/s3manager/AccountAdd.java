@@ -2,6 +2,7 @@ package asgardius.page.s3manager;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.View;
@@ -30,24 +31,36 @@ public class AccountAdd extends AppCompatActivity {
                 endpoint = aepick.getText().toString();
                 username = aupick.getText().toString();
                 password = appick.getText().toString();
-                System.out.println("Alias " + alias);
-                System.out.println("Endpoint " + endpoint);
-                System.out.println("Username " + username);
-                System.out.println("Password " + password);
                 MyDbHelper dbHelper = new MyDbHelper(AccountAdd.this);
                 SQLiteDatabase db = dbHelper.getWritableDatabase();
                 if (alias.equals("") || endpoint.equals("") || username.equals("") || password.equals("")) {
                     Toast.makeText(getApplicationContext(),getResources().getString(R.string.accountadd_null), Toast.LENGTH_SHORT).show();
+                } else if (endpoint.startsWith("http://")) {
+                    Toast.makeText(getApplicationContext(),getResources().getString(R.string.nosslwarning), Toast.LENGTH_SHORT).show();
+                } else if (!endpoint.startsWith("https://")) {
+                    Toast.makeText(getApplicationContext(),getResources().getString(R.string.invalid_url), Toast.LENGTH_SHORT).show();
                 } else if (db != null) {
                     // Database Queries
                     try {
                         db.execSQL("INSERT INTO account VALUES (\""+alias+"\", \""+endpoint+"\", \""+username+"\", \""+password+"\")");
                         Toast.makeText(getApplicationContext(),getResources().getString(R.string.accountadd_success), Toast.LENGTH_SHORT).show();
+                        mainmenu();
                     } catch (Exception e) {
                         Toast.makeText(getApplicationContext(),getResources().getString(R.string.accountadd_fail), Toast.LENGTH_SHORT).show();
                     }
                 }
             }
+
         });
     }
+
+    private void mainmenu() {
+
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intent.putExtra("EXIT", true);
+        startActivity(intent);
+
+    }
+
 }

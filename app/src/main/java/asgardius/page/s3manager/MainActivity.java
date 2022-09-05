@@ -136,6 +136,7 @@ public class MainActivity extends AppCompatActivity {
                                 try {
                                     db.execSQL("DELETE FROM account where id=\""+ Name.get(position).toString()+ "\"");
                                     Toast.makeText(getApplicationContext(),getResources().getString(R.string.accountdel_success), Toast.LENGTH_SHORT).show();
+                                    mainmenu();
                                 } catch (Exception e) {
                                     Toast.makeText(getApplicationContext(),getResources().getString(R.string.accountadd_fail), Toast.LENGTH_SHORT).show();
                                 }
@@ -183,6 +184,15 @@ public class MainActivity extends AppCompatActivity {
     private void addaccount() {
 
         Intent intent = new Intent(this, AccountAdd.class);
+        startActivity(intent);
+
+    }
+
+    private void mainmenu() {
+
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intent.putExtra("EXIT", true);
         startActivity(intent);
 
     }
