@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.amazonaws.auth.AWSCredentials;
@@ -60,6 +61,7 @@ public class ObjectSelect extends AppCompatActivity {
         s3client.setS3ClientOptions(s3ClientOptions);
 
         recyclerView = findViewById(R.id.olist);
+        final ProgressBar simpleProgressBar = (ProgressBar) findViewById(R.id.simpleProgressBar);
 
         // layout for vertical orientation
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getApplicationContext());
@@ -146,6 +148,7 @@ public class ObjectSelect extends AppCompatActivity {
                         public void run() {
                             // Sending reference and data to Adapter
                             Adapter adapter = new Adapter(ObjectSelect.this, Img, Name);
+                            simpleProgressBar.setVisibility(View.INVISIBLE);
 
                             // Setting Adapter to RecyclerView
                             recyclerView.setAdapter(adapter);
