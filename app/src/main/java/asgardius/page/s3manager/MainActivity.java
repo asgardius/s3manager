@@ -128,7 +128,7 @@ public class MainActivity extends AppCompatActivity {
                         // Toast message on menu item clicked
                         //Toast.makeText(MainActivity.this, "You Clicked " + menuItem.getTitle(), Toast.LENGTH_SHORT).show();
                         if (menuItem.getTitle() == getResources().getString(R.string.accountedit_button)) {
-                            Toast.makeText(MainActivity.this, "Edit Account", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(MainActivity.this, "This feature is not yet implemented", Toast.LENGTH_SHORT).show();
                         }
                         else if (menuItem.getTitle() == getResources().getString(R.string.accountdel_button)) {
                             if (db != null) {
