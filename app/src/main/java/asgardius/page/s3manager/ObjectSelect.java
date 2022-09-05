@@ -73,7 +73,7 @@ public class ObjectSelect extends AppCompatActivity {
                 try  {
                     //Your code goes here
                     //List<Bucket> buckets = s3client.listBuckets();
-                    ListObjectsRequest orequest = new ListObjectsRequest().withBucketName(bucket).withPrefix(prefix).withMaxKeys(2000);
+                    ListObjectsRequest orequest = new ListObjectsRequest().withBucketName(bucket).withPrefix(prefix).withMaxKeys(8000);
                     //List<S3Object> objects = (List<S3Object>) s3client.listObjects(bucket, "/");
                     ObjectListing result = s3client.listObjects(orequest);
                     //System.out.println(objects);
@@ -109,6 +109,7 @@ public class ObjectSelect extends AppCompatActivity {
                     Name = new ArrayList<String>(object);
                     object.clear();
                     //Img.add(R.drawable.unknownfile);
+                    //This set object icon based on its filetype
                     int i = 0;
                     while(i<Name.size()) {
                         //Img.add(R.drawable.unknownfile);
@@ -216,27 +217,5 @@ public class ObjectSelect extends AppCompatActivity {
         intent.putExtra("treelevel", treelevel+1);
         startActivity(intent);
 
-    }
-
-    public void onBackPressed() {
-        if (treelevel >= 2) {
-            path = prefix.split("/");
-            prefix = "";
-            int i = 0;
-            //System.out.println("path "+i);
-            while(i <= path.length-2) {
-                prefix = prefix.concat(path[i]);
-                prefix = prefix.concat("/");
-                //System.out.println("position "+i);
-                i++;
-            }
-        }
-        else if (treelevel == 1) {
-            prefix = "";
-        }
-        treelevel --;
-        //System.out.println("tree "+treelevel);
-        //System.out.println("prefix "+prefix);
-        finish();
     }
 }

@@ -21,7 +21,6 @@
         android:layout_height="fill_parent"
         android:max="100"
         android:progress="50"
-        android:background="@color/design_default_color_background"
         android:padding="20dp"
         tools:ignore="MissingConstraints"
         android:indeterminate="true" />
