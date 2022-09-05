@@ -4,8 +4,10 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.PopupMenu;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -115,6 +117,36 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onLongClick(View view, int position) {
                 System.out.println("Long click on "+Name.get(position).toString());
+                // Initializing the popup menu and giving the reference as current context
+                PopupMenu popupMenu = new PopupMenu(MainActivity.this, recyclerView);
+
+                // Inflating popup menu from popup_menu.xml file
+                popupMenu.getMenuInflater().inflate(R.menu.popup_menu, popupMenu.getMenu());
+                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem menuItem) {
+                        // Toast message on menu item clicked
+                        //Toast.makeText(MainActivity.this, "You Clicked " + menuItem.getTitle(), Toast.LENGTH_SHORT).show();
+                        if (menuItem.getTitle() == getResources().getString(R.string.accountedit_button)) {
+                            Toast.makeText(MainActivity.this, "Edit Account", Toast.LENGTH_SHORT).show();
+                        }
+                        else if (menuItem.getTitle() == getResources().getString(R.string.accountdel_button)) {
+                            if (db != null) {
+                                // Database Queries
+                                try {
+                                    db.execSQL("DELETE FROM account where id=\""+ Name.get(position).toString()+ "\"");
+                                    Toast.makeText(getApplicationContext(),getResources().getString(R.string.accountdel_success), Toast.LENGTH_SHORT).show();
+                                } catch (Exception e) {
+                                    Toast.makeText(getApplicationContext(),getResources().getString(R.string.accountadd_fail), Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                            //Toast.makeText(MainActivity.this, "Delete Account", Toast.LENGTH_SHORT).show();
+                        }
+                        return true;
+                    }
+                });
+                // Showing the popup menu
+                popupMenu.show();
             }
         }));
 

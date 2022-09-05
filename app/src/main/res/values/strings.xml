@@ -10,6 +10,9 @@
     <string name="accountadd_success">Account added successfully</string>
     <string name="accountadd_fail">This alias is already in use</string>
     <string name="accountadd_null">All fields are required</string>
+    <string name="accountdel_button">Remove Account</string>
+    <string name="accountdel_success">Account removed successfully</string>
+    <string name="accountedit_button">Edit Account</string>
     <string name="explorer_test_button">File Explorer Test</string>
     <string name="video_test_button">Video Test</string>
     <string name="media_conn_fail">Cannot retrieve media file</string>
