@@ -8,7 +8,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.PopupMenu;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
@@ -201,7 +203,30 @@ public class ObjectSelect extends AppCompatActivity {
 
             @Override
             public void onLongClick(View view, int position) {
-                System.out.println("Long click on "+Name.get(position).toString());
+                //System.out.println("Long click on "+Name.get(position).toString());
+                if (Img.get(position).equals(R.drawable.folder)) {
+                    //go to subfolder
+                    //explorer(Name.get(position).toString());
+                } else {
+                    // Initializing the popup menu and giving the reference as current context
+                    PopupMenu popupMenu = new PopupMenu(ObjectSelect.this, recyclerView);
+
+                    // Inflating popup menu from popup_menu.xml file
+                    popupMenu.getMenuInflater().inflate(R.menu.object_menu, popupMenu.getMenu());
+                    popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                        @Override
+                        public boolean onMenuItemClick(MenuItem menuItem) {
+                            // Toast message on menu item clicked
+                            //Toast.makeText(MainActivity.this, "You Clicked " + menuItem.getTitle(), Toast.LENGTH_SHORT).show();
+                            if (menuItem.getTitle() == getResources().getString(R.string.dummy_button)) {
+                                Toast.makeText(ObjectSelect.this, "This feature is not yet implemented", Toast.LENGTH_SHORT).show();
+                            }
+                            return true;
+                        }
+                    });
+                    // Showing the popup menu
+                    popupMenu.show();
+                }
             }
         }));
     }
