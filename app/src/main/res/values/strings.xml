@@ -16,6 +16,7 @@
     <string name="nosslwarning">Connections without SSL are not allowed</string>
     <string name="invalid_url">Endpoint URL must start with https://</string>
     <string name="explorer_test_button">File Explorer Test</string>
+    <string name="unsupported_file">Unsupported media file</string>
     <string name="video_test_button">Video Test</string>
     <string name="media_conn_fail">Cannot retrieve media file</string>
     <string name="media_wrong_type">Invalid media file</string>

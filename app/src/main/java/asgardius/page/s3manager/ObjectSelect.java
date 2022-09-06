@@ -181,12 +181,13 @@ public class ObjectSelect extends AppCompatActivity {
                 if (Img.get(position).equals(R.drawable.folder)) {
                     //go to subfolder
                     explorer(Name.get(position).toString());
-                }
-                else {
+                } else if (Img.get(position).equals(R.drawable.audiofile) || Img.get(position).equals(R.drawable.videofile)) {
                     //load media file
                     GeneratePresignedUrlRequest request = new GeneratePresignedUrlRequest(bucket, prefix + Name.get(position).toString());
                     URL objectURL = s3client.generatePresignedUrl(request);
                     videoplayer(objectURL.toString());
+                }  else {
+                    Toast.makeText(ObjectSelect.this, getResources().getString(R.string.unsupported_file), Toast.LENGTH_SHORT).show();
                 }
             }
 
