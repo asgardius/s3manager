@@ -126,6 +126,9 @@ public class ObjectSelect extends AppCompatActivity {
                                 || Name.get(i).toString().endsWith(".webm") || Name.get(i).toString().endsWith(".m4v")) {
                             Img.add(R.drawable.videofile);
                         }
+                        else if (Name.get(i).toString().endsWith(".htm") || Name.get(i).toString().endsWith(".html")) {
+                            Img.add(R.drawable.webpage);
+                        }
                         else {
                             Img.add(R.drawable.unknownfile);
                         }
@@ -181,7 +184,12 @@ public class ObjectSelect extends AppCompatActivity {
                 if (Img.get(position).equals(R.drawable.folder)) {
                     //go to subfolder
                     explorer(Name.get(position).toString());
-                } else if (Img.get(position).equals(R.drawable.audiofile) || Img.get(position).equals(R.drawable.videofile)) {
+                } else if (Img.get(position).equals(R.drawable.webpage)) {
+                    //load media file
+                    GeneratePresignedUrlRequest request = new GeneratePresignedUrlRequest(bucket, prefix + Name.get(position).toString());
+                    URL objectURL = s3client.generatePresignedUrl(request);
+                    webbrowser(objectURL.toString());
+                }  else if (Img.get(position).equals(R.drawable.audiofile) || Img.get(position).equals(R.drawable.videofile)) {
                     //load media file
                     GeneratePresignedUrlRequest request = new GeneratePresignedUrlRequest(bucket, prefix + Name.get(position).toString());
                     URL objectURL = s3client.generatePresignedUrl(request);
@@ -202,6 +210,14 @@ public class ObjectSelect extends AppCompatActivity {
 
         Intent intent = new Intent(this, VideoPlayer.class);
         intent.putExtra("video_url", url);
+        startActivity(intent);
+
+    }
+
+    private void webbrowser (String url) {
+
+        Intent intent = new Intent(this, WebBrowser.class);
+        intent.putExtra("web_url", url);
         startActivity(intent);
 
     }
