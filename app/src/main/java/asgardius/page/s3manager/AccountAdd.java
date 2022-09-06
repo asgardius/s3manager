@@ -12,7 +12,8 @@ import android.widget.Toast;
 
 public class AccountAdd extends AppCompatActivity {
     EditText aapick, aupick, appick, aepick;
-    String alias, username, password, endpoint;
+    String alias, username, password, endpoint, id;
+    boolean edit;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,6 +24,19 @@ public class AccountAdd extends AppCompatActivity {
         aupick = (EditText)findViewById(R.id.username);
         appick = (EditText)findViewById(R.id.password);
         Button register = (Button)findViewById(R.id.addaccount);
+        edit = getIntent().getBooleanExtra("edit", false);
+        if (edit) {
+            register.setText(getResources().getString(R.string.accountsave_button));
+            id = getIntent().getStringExtra("alias");
+            endpoint = getIntent().getStringExtra("endpoint");
+            username = getIntent().getStringExtra("username");
+            password = getIntent().getStringExtra("password");
+            aapick.setText(id);
+            //aapick.setEnabled(false);
+            aepick.setText(endpoint);
+            aupick.setText(username);
+            appick.setText(password);
+        }
         register.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
@@ -42,8 +56,13 @@ public class AccountAdd extends AppCompatActivity {
                 } else if (db != null) {
                     // Database Queries
                     try {
-                        db.execSQL("INSERT INTO account VALUES (\""+alias+"\", \""+endpoint+"\", \""+username+"\", \""+password+"\")");
-                        Toast.makeText(getApplicationContext(),getResources().getString(R.string.accountadd_success), Toast.LENGTH_SHORT).show();
+                        if (edit) {
+                            db.execSQL("UPDATE account SET id=\""+id+"\", endpoint=\""+endpoint+"\", username=\""+username+"\", password=\""+password+"\" WHERE id=\""+id+"\"");
+                            Toast.makeText(getApplicationContext(),getResources().getString(R.string.accountsave_success), Toast.LENGTH_SHORT).show();
+                        } else {
+                            db.execSQL("INSERT INTO account VALUES (\""+alias+"\", \""+endpoint+"\", \""+username+"\", \""+password+"\")");
+                            Toast.makeText(getApplicationContext(),getResources().getString(R.string.accountadd_success), Toast.LENGTH_SHORT).show();
+                        }
                         mainmenu();
                     } catch (Exception e) {
                         Toast.makeText(getApplicationContext(),getResources().getString(R.string.accountadd_fail), Toast.LENGTH_SHORT).show();

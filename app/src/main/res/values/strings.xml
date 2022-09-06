@@ -13,6 +13,8 @@
     <string name="accountdel_button">Remove Account</string>
     <string name="accountdel_success">Account removed successfully</string>
     <string name="accountedit_button">Edit Account</string>
+    <string name="accountsave_button">Save Changes</string>
+    <string name="accountsave_success">Account edited successfully</string>
     <string name="nosslwarning">Connections without SSL are not allowed</string>
     <string name="invalid_url">Endpoint URL must start with https://</string>
     <string name="explorer_test_button">File Explorer Test</string>

@@ -19,7 +19,7 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity {
 
     static boolean DEFAULT_PATH_STYLE_ACCESS = true;
-    String username, password, endpoint;
+    String alias, username, password, endpoint;
     RecyclerView recyclerView;
     ArrayList Name;
     ArrayList Img;
@@ -128,7 +128,21 @@ public class MainActivity extends AppCompatActivity {
                         // Toast message on menu item clicked
                         //Toast.makeText(MainActivity.this, "You Clicked " + menuItem.getTitle(), Toast.LENGTH_SHORT).show();
                         if (menuItem.getTitle() == getResources().getString(R.string.accountedit_button)) {
-                            Toast.makeText(MainActivity.this, "This feature is not yet implemented", Toast.LENGTH_SHORT).show();
+                            try {
+                                String query = "SELECT id, endpoint, username, password FROM account where id=\""+ Name.get(position).toString()+ "\"";
+                                System.out.println(query);
+                                Cursor cursor = db.rawQuery(query,null);
+                                if (cursor.moveToNext()){
+                                    alias = cursor.getString(0);
+                                    endpoint = cursor.getString(1);
+                                    username = cursor.getString(2);
+                                    password = cursor.getString(3);
+                                }
+                                addaccount(true);
+                                //Toast.makeText(MainActivity.this, "This feature is not yet implemented", Toast.LENGTH_SHORT).show();
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
                         }
                         else if (menuItem.getTitle() == getResources().getString(R.string.accountdel_button)) {
                             if (db != null) {
@@ -157,7 +171,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 //buttonaction
-                addaccount();
+                addaccount(false);
             }
         });
 
@@ -181,9 +195,16 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void addaccount() {
+    private void addaccount(boolean edit) {
 
         Intent intent = new Intent(this, AccountAdd.class);
+        if (edit) {
+            intent.putExtra("alias", alias);
+            intent.putExtra("endpoint", endpoint);
+            intent.putExtra("username", username);
+            intent.putExtra("password", password);
+        }
+        intent.putExtra("edit", edit);
         startActivity(intent);
 
     }
