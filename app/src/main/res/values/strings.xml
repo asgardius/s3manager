@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">Asgardius S3 Manager</string>
     <string name="title_activity_video_player">VideoPlayer</string>
+    <string name="broken_database">Local database is corrupted. Please reinstall this app</string>
     <string name="accountselect">Please choose an account</string>
     <string name="accountadd_button">Add Account</string>
     <string name="accounttest_button">Test credentials</string>
@@ -14,6 +15,7 @@
     <string name="accountadd_null">All fields are required</string>
     <string name="accountdel_button">Remove Account</string>
     <string name="accountdel_success">Account removed successfully</string>
+    <string name="accountdel_confirm">Do you want to remove this accunt?</string>
     <string name="accountedit_button">Edit Account</string>
     <string name="accountsave_button">Save Changes</string>
     <string name="accountsave_success">Account edited successfully</string>

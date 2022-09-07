@@ -1,5 +1,6 @@
 package asgardius.page.s3manager;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -10,6 +11,7 @@ import android.widget.Button;
 import android.widget.PopupMenu;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -49,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
                 Img.add(R.drawable.account);
             }
         } else {
-            System.out.println("Database Missing");
+            Toast.makeText(getApplicationContext(),getResources().getString(R.string.broken_database), Toast.LENGTH_SHORT).show();
         }
 
         Thread listaccount = new Thread(new Runnable() {
@@ -79,7 +81,7 @@ public class MainActivity extends AppCompatActivity {
 
                         @Override
                         public void run() {
-                            Toast.makeText(getApplicationContext(),getResources().getString(R.string.media_list_fail), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getApplicationContext(),getResources().getString(R.string.broken_database), Toast.LENGTH_SHORT).show();
                         }
                     });
                     //Toast.makeText(getApplicationContext(),getResources().getString(R.string.media_list_fail), Toast.LENGTH_SHORT).show();
@@ -145,16 +147,35 @@ public class MainActivity extends AppCompatActivity {
                             }
                         }
                         else if (menuItem.getTitle() == getResources().getString(R.string.accountdel_button)) {
-                            if (db != null) {
-                                // Database Queries
-                                try {
-                                    db.execSQL("DELETE FROM account where id=\""+ Name.get(position).toString()+ "\"");
-                                    Toast.makeText(getApplicationContext(),getResources().getString(R.string.accountdel_success), Toast.LENGTH_SHORT).show();
-                                    mainmenu();
-                                } catch (Exception e) {
-                                    Toast.makeText(getApplicationContext(),getResources().getString(R.string.accountadd_fail), Toast.LENGTH_SHORT).show();
+                            AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                            builder.setCancelable(true);
+                            builder.setTitle(getResources().getString(R.string.accountdel_button));
+                            builder.setMessage(getResources().getString(R.string.accountdel_confirm));
+                            builder.setPositiveButton(android.R.string.ok,
+                                    new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            if (db != null) {
+                                                // Database Queries
+                                                try {
+                                                    db.execSQL("DELETE FROM account where id=\""+ Name.get(position).toString()+ "\"");
+                                                    Toast.makeText(getApplicationContext(),getResources().getString(R.string.accountdel_success), Toast.LENGTH_SHORT).show();
+                                                    mainmenu();
+                                                } catch (Exception e) {
+                                                    Toast.makeText(getApplicationContext(),getResources().getString(R.string.broken_database), Toast.LENGTH_SHORT).show();
+                                                }
+                                            }
+                                        }
+                                    });
+                            builder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
                                 }
-                            }
+                            });
+
+                            AlertDialog dialog = builder.create();
+                            dialog.show();
+                            /**/
                             //Toast.makeText(MainActivity.this, "Delete Account", Toast.LENGTH_SHORT).show();
                         }
                         return true;
