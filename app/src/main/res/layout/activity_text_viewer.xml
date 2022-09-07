@@ -17,4 +17,14 @@
         tools:ignore="MissingConstraints"
         tools:layout_editor_absoluteX="79dp"
         tools:layout_editor_absoluteY="25dp" />
+
+    <ProgressBar
+        android:id="@+id/simpleProgressBar"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:max="100"
+        android:progress="50"
+        android:padding="20dp"
+        tools:ignore="MissingConstraints"
+        android:indeterminate="true" />
 </androidx.constraintlayout.widget.ConstraintLayout>

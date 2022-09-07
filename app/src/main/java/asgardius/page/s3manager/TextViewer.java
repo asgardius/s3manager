@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.amazonaws.services.s3.model.ListObjectsRequest;
@@ -29,6 +30,7 @@ public class TextViewer extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_text_viewer);
         filecontent = (EditText)findViewById(R.id.textShow);
+        final ProgressBar simpleProgressBar = (ProgressBar) findViewById(R.id.simpleProgressBar);
 
         String videoURL = getIntent().getStringExtra("video_url");
         Thread textread = new Thread(new Runnable() {
@@ -49,6 +51,7 @@ public class TextViewer extends AppCompatActivity {
                         @Override
                         public void run() {
                             // Sending reference and data to Adapter
+                            simpleProgressBar.setVisibility(View.INVISIBLE);
                             filecontent.setText(str);
 
                         }
