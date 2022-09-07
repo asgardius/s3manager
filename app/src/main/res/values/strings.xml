@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Asgardius S3 Manager</string>
+    <string name="app_name">S3 Manager</string>
     <string name="title_activity_video_player">VideoPlayer</string>
     <string name="broken_database">Local database is corrupted. Please reinstall this app</string>
     <string name="accountselect">Please choose an account</string>
