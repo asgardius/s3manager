@@ -23,6 +23,7 @@ public class MainActivity extends AppCompatActivity {
     static boolean DEFAULT_PATH_STYLE_ACCESS = true;
     String alias, username, password, endpoint;
     RecyclerView recyclerView;
+    SQLiteDatabase db;
     ArrayList Name;
     ArrayList Img;
 
@@ -38,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(linearLayoutManager);
 
         MyDbHelper dbHelper = new MyDbHelper(this);
-        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        db = dbHelper.getWritableDatabase();
         if (db != null) {
             // Database Queries
             System.out.println("Database OK");
@@ -50,6 +51,7 @@ public class MainActivity extends AppCompatActivity {
                 Name.add(cursor.getString(0));
                 Img.add(R.drawable.account);
             }
+            db.close();
         } else {
             Toast.makeText(getApplicationContext(),getResources().getString(R.string.broken_database), Toast.LENGTH_SHORT).show();
         }
@@ -96,6 +98,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view, int position) {
                 //System.out.println("Click on "+Name.get(position).toString());
+                db = dbHelper.getWritableDatabase();
                 if (db != null) {
                     // Database Queries
                     System.out.println("Database OK");
@@ -107,6 +110,7 @@ public class MainActivity extends AppCompatActivity {
                             endpoint = cursor.getString(0);
                             username = cursor.getString(1);
                             password = cursor.getString(2);
+                            db.close();
                             explorer();
                         }
                     } catch (Exception e) {
