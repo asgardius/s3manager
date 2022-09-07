@@ -226,8 +226,8 @@ public class ObjectSelect extends AppCompatActivity {
                         public boolean onMenuItemClick(MenuItem menuItem) {
                             // Toast message on menu item clicked
                             //Toast.makeText(MainActivity.this, "You Clicked " + menuItem.getTitle(), Toast.LENGTH_SHORT).show();
-                            if (menuItem.getTitle() == getResources().getString(R.string.dummy_button)) {
-                                Toast.makeText(ObjectSelect.this, "This feature is not yet implemented", Toast.LENGTH_SHORT).show();
+                            if (menuItem.getTitle() == getResources().getString(R.string.file_share)) {
+                                share(Name.get(position).toString());
                             }
                             return true;
                         }
@@ -272,6 +272,20 @@ public class ObjectSelect extends AppCompatActivity {
         intent.putExtra("bucket", bucket);
         intent.putExtra("prefix", prefix + object);
         intent.putExtra("treelevel", treelevel+1);
+        startActivity(intent);
+
+    }
+
+    private void share(String object) {
+
+        Toast.makeText(ObjectSelect.this, "This feature is not yet implemented", Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(this, FileShare.class);
+        intent.putExtra("endpoint", endpoint);
+        intent.putExtra("username", username);
+        intent.putExtra("password", password);
+        intent.putExtra("bucket", bucket);
+        intent.putExtra("prefix", prefix + object);
+        //intent.putExtra("treelevel", treelevel+1);
         startActivity(intent);
 
     }
