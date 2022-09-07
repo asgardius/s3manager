@@ -3,6 +3,8 @@
     <string name="title_activity_video_player">VideoPlayer</string>
     <string name="accountselect">Please choose an account</string>
     <string name="accountadd_button">Add Account</string>
+    <string name="accounttest_button">Test credentials</string>
+    <string name="accounttest_success">Credentials are correct</string>
     <string name="accountadd_alias">Account Alias</string>
     <string name="accountadd_endpoint">S3 Endpoint URL</string>
     <string name="accountadd_username">S3 Access Key</string>

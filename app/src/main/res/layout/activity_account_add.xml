@@ -81,6 +81,14 @@
             android:text="@string/accountadd_button"
             tools:ignore="MissingConstraints" />
 
+        <Button
+            android:id="@+id/testaccount"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="@string/accounttest_button"
+            tools:ignore="MissingConstraints" />
+
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
