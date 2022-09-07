@@ -11,6 +11,7 @@ android {
         targetSdk 32
         versionCode 1
         versionName "0.1.0"
+        setProperty("archivesBaseName", "s3-manager-$versionName")
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
