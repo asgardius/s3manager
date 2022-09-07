@@ -7,7 +7,7 @@ android {
 
     defaultConfig {
         applicationId "asgardius.page.s3manager"
-        minSdk 23
+        minSdk 24
         targetSdk 32
         versionCode 1
         versionName "0.1.0"

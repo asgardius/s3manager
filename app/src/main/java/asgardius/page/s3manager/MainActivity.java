@@ -135,6 +135,7 @@ public class MainActivity extends AppCompatActivity {
                         //Toast.makeText(MainActivity.this, "You Clicked " + menuItem.getTitle(), Toast.LENGTH_SHORT).show();
                         if (menuItem.getTitle() == getResources().getString(R.string.accountedit_button)) {
                             try {
+                                db = dbHelper.getWritableDatabase();
                                 String query = "SELECT id, endpoint, username, password FROM account where id=\""+ Name.get(position).toString()+ "\"";
                                 System.out.println(query);
                                 Cursor cursor = db.rawQuery(query,null);
@@ -144,6 +145,7 @@ public class MainActivity extends AppCompatActivity {
                                     username = cursor.getString(2);
                                     password = cursor.getString(3);
                                 }
+                                db.close();
                                 addaccount(true);
                                 //Toast.makeText(MainActivity.this, "This feature is not yet implemented", Toast.LENGTH_SHORT).show();
                             } catch (Exception e) {
@@ -159,12 +161,14 @@ public class MainActivity extends AppCompatActivity {
                                     new DialogInterface.OnClickListener() {
                                         @Override
                                         public void onClick(DialogInterface dialog, int which) {
+                                            db = dbHelper.getWritableDatabase();
                                             if (db != null) {
                                                 // Database Queries
                                                 try {
                                                     db.execSQL("DELETE FROM account where id=\""+ Name.get(position).toString()+ "\"");
                                                     Toast.makeText(getApplicationContext(),getResources().getString(R.string.accountdel_success), Toast.LENGTH_SHORT).show();
                                                     mainmenu();
+                                                    db.close();
                                                 } catch (Exception e) {
                                                     Toast.makeText(getApplicationContext(),getResources().getString(R.string.broken_database), Toast.LENGTH_SHORT).show();
                                                 }
