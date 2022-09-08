@@ -127,7 +127,7 @@ public class ObjectSelect extends AppCompatActivity {
                         else if (Name.get(i).toString().endsWith(".txt") || Name.get(i).toString().endsWith(".md")) {
                             Img.add(R.drawable.textfile);
                         }
-                        else if (Name.get(i).toString().endsWith(".jpg") || Name.get(i).toString().endsWith(".png") || Name.get(i).toString().endsWith(".gif")) {
+                        else if (Name.get(i).toString().endsWith(".jpg") || Name.get(i).toString().endsWith(".jpeg") || Name.get(i).toString().endsWith(".png") || Name.get(i).toString().endsWith(".gif")) {
                             Img.add(R.drawable.imagefile);
                         }
                         else if (Name.get(i).toString().endsWith(".opus") || Name.get(i).toString().endsWith(".ogg")
