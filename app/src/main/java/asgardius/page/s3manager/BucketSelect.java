@@ -41,7 +41,7 @@ public class BucketSelect extends AppCompatActivity {
         location = getIntent().getStringExtra("region");
         prefix = "";
         setContentView(R.layout.activity_bucket_select);
-        Region region = Region.getRegion(location);
+        Region region = Region.getRegion("us-east-1");
         S3ClientOptions s3ClientOptions = S3ClientOptions.builder().build();
         if (!endpoint.contains(getResources().getString(R.string.aws_endpoint))) {
             s3ClientOptions.setPathStyleAccess(true);
