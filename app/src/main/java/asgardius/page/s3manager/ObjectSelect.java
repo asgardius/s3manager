@@ -43,7 +43,7 @@ public class ObjectSelect extends AppCompatActivity {
     RecyclerView recyclerView;
     String username, password, endpoint, bucket, prefix, location;
     int treelevel;
-    String[] filename, path;
+    String[] filename;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,52 +52,20 @@ public class ObjectSelect extends AppCompatActivity {
         username = getIntent().getStringExtra("username");
         password = getIntent().getStringExtra("password");
         bucket = getIntent().getStringExtra("bucket");
+        location = getIntent().getStringExtra("region");
         prefix = getIntent().getStringExtra("prefix");
         treelevel = getIntent().getIntExtra("treelevel", 0);
         setContentView(R.layout.activity_object_select);
-        Region region = Region.getRegion(US_EAST_1);
+        Region region = Region.getRegion(location);
         S3ClientOptions s3ClientOptions = S3ClientOptions.builder().build();
-        if (!endpoint.contains(getResources().getString(R.string.aws_endpoint))) {
-            s3ClientOptions.setPathStyleAccess(true);
-        }
         AWSCredentials myCredentials = new BasicAWSCredentials(username, password);
         AmazonS3 s3client = new AmazonS3Client(myCredentials, region);
         s3client.setEndpoint(endpoint);
-        s3client.setS3ClientOptions(s3ClientOptions);
-        if (endpoint.contains(getResources().getString(R.string.aws_endpoint))) {
-            Thread getlocation = new Thread(new Runnable() {
-
-                @Override
-                public void run() {
-                    try  {
-                        //Your code goes here
-                        location = s3client.getBucketLocation(bucket);
-                        System.out.println(location);
-                        Region region = Region.getRegion(location);
-                        s3client.setRegion(region);
-
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                        runOnUiThread(new Runnable() {
-
-                            @Override
-                            public void run() {
-                                Toast.makeText(getApplicationContext(),getResources().getString(R.string.media_list_fail), Toast.LENGTH_SHORT).show();
-                            }
-                        });
-                        //Toast.makeText(getApplicationContext(),getResources().getString(R.string.media_list_fail), Toast.LENGTH_SHORT).show();
-                        finish();
-                    }
-                }
-            });
-            getlocation.start();
-            try {
-                getlocation.join();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-
+        if (!endpoint.contains(getResources().getString(R.string.aws_endpoint))) {
+            s3ClientOptions.setPathStyleAccess(true);
         }
+
+        s3client.setS3ClientOptions(s3ClientOptions);
 
 
         recyclerView = findViewById(R.id.olist);
@@ -312,6 +280,7 @@ public class ObjectSelect extends AppCompatActivity {
         intent.putExtra("bucket", bucket);
         intent.putExtra("prefix", prefix + object);
         intent.putExtra("treelevel", treelevel+1);
+        intent.putExtra("region", location);
         startActivity(intent);
 
     }

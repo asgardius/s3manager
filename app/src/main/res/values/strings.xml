@@ -10,6 +10,7 @@
     <string name="accounttest_success">Credentials are correct</string>
     <string name="accountadd_alias">Account Alias</string>
     <string name="accountadd_endpoint">S3 Endpoint URL</string>
+    <string name="accountadd_region">S3 Region</string>
     <string name="accountadd_username">S3 Access Key</string>
     <string name="accountadd_password">S3 Secret Key</string>
     <string name="accountadd_success">Account added successfully</string>

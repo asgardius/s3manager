@@ -24,10 +24,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AccountAdd extends AppCompatActivity {
-    EditText aapick, aupick, appick, aepick;
-    String alias, username, password, endpoint, id;
+    EditText aapick, aupick, appick, aepick, arpick;
+    String alias, username, password, endpoint, id, location;
     AWSCredentials myCredentials;
     AmazonS3 s3client;
+    Region region;
     boolean edit;
 
     @Override
@@ -36,23 +37,25 @@ public class AccountAdd extends AppCompatActivity {
         setContentView(R.layout.activity_account_add);
         aapick = (EditText)findViewById(R.id.alias);
         aepick = (EditText)findViewById(R.id.endpoint);
+        arpick = (EditText)findViewById(R.id.region);
         aupick = (EditText)findViewById(R.id.username);
         appick = (EditText)findViewById(R.id.password);
         Button register = (Button)findViewById(R.id.addaccount);
         Button accounttest = (Button)findViewById(R.id.testaccount);
         edit = getIntent().getBooleanExtra("edit", false);
-        Region region = Region.getRegion(US_EAST_1);
         if (edit) {
             register.setText(getResources().getString(R.string.accountsave_button));
             id = getIntent().getStringExtra("alias");
             endpoint = getIntent().getStringExtra("endpoint");
             username = getIntent().getStringExtra("username");
             password = getIntent().getStringExtra("password");
+            location = getIntent().getStringExtra("region");
             aapick.setText(id);
             //aapick.setEnabled(false);
             aepick.setText(endpoint);
             aupick.setText(username);
             appick.setText(password);
+            arpick.setText(location);
         }
 
 
@@ -63,6 +66,7 @@ public class AccountAdd extends AppCompatActivity {
                 //buttonaction
                 alias = aapick.getText().toString();
                 endpoint = aepick.getText().toString();
+                location = arpick.getText().toString();
                 username = aupick.getText().toString();
                 password = appick.getText().toString();
                 MyDbHelper dbHelper = new MyDbHelper(AccountAdd.this);
@@ -76,11 +80,14 @@ public class AccountAdd extends AppCompatActivity {
                 } else if (db != null) {
                     // Database Queries
                     try {
+                        if (location.equals("")) {
+                            location = "us-east-1";
+                        }
                         if (edit) {
-                            db.execSQL("UPDATE account SET id=\""+id+"\", endpoint=\""+endpoint+"\", username=\""+username+"\", password=\""+password+"\" WHERE id=\""+id+"\"");
+                            db.execSQL("UPDATE account SET id=\""+id+"\", endpoint=\""+endpoint+"\", username=\""+username+"\", password=\""+password+"\", region=\""+location+"\" WHERE id=\""+id+"\"");
                             Toast.makeText(getApplicationContext(),getResources().getString(R.string.accountsave_success), Toast.LENGTH_SHORT).show();
                         } else {
-                            db.execSQL("INSERT INTO account VALUES (\""+alias+"\", \""+endpoint+"\", \""+username+"\", \""+password+"\")");
+                            db.execSQL("INSERT INTO account VALUES (\""+alias+"\", \""+endpoint+"\", \""+username+"\", \""+password+"\", \""+location+"\")");
                             Toast.makeText(getApplicationContext(),getResources().getString(R.string.accountadd_success), Toast.LENGTH_SHORT).show();
                         }
                         mainmenu();
@@ -100,6 +107,7 @@ public class AccountAdd extends AppCompatActivity {
                 endpoint = aepick.getText().toString();
                 username = aupick.getText().toString();
                 password = appick.getText().toString();
+                location = arpick.getText().toString();
                 if (alias.equals("") || endpoint.equals("") || username.equals("") || password.equals("")) {
                     Toast.makeText(getApplicationContext(),getResources().getString(R.string.accountadd_null), Toast.LENGTH_SHORT).show();
                 } else if (endpoint.startsWith("http://")) {
@@ -113,6 +121,10 @@ public class AccountAdd extends AppCompatActivity {
                         public void run() {
                             try  {
                                 //Your code goes here
+                                if (location.equals("")) {
+                                    location = "us-east-1";
+                                }
+                                region = Region.getRegion(location);
                                 S3ClientOptions s3ClientOptions = S3ClientOptions.builder().build();
                                 if (!endpoint.contains(getResources().getString(R.string.aws_endpoint))) {
                                     s3ClientOptions.setPathStyleAccess(true);

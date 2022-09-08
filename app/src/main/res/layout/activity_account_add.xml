@@ -20,19 +20,42 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="MissingConstraints" />
 
-    <EditText
-        android:id="@+id/endpoint"
+    <LinearLayout
+        android:id="@+id/endpointLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginTop="48dp"
-        android:focusable="true"
-        android:hint="@string/accountadd_endpoint"
-        android:importantForAutofill="no"
-        android:inputType="textUri"
+        android:layout_height="52dp"
+        android:layout_marginTop="44dp"
+        android:orientation="horizontal"
+        android:padding="10dp"
         app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="MissingConstraints" />
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteX="20dp">
+
+        <EditText
+            android:id="@+id/endpoint"
+            android:layout_width="wrap_content"
+            android:layout_height="46dp"
+            android:layout_weight="1"
+            android:focusable="true"
+            android:hint="@string/accountadd_endpoint"
+            android:importantForAutofill="no"
+            android:inputType="textUri"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="MissingConstraints" />
+
+        <EditText
+            android:id="@+id/region"
+            android:layout_width="wrap_content"
+            android:layout_height="46dp"
+            android:layout_weight="1"
+            android:focusable="true"
+            android:hint="@string/accountadd_region"
+            android:importantForAutofill="no"
+            android:inputType="textUri"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="MissingConstraints" />
+
+    </LinearLayout>
 
     <EditText
         android:id="@+id/username"
@@ -40,7 +63,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
-        android:layout_marginTop="94dp"
+        android:layout_marginTop="96dp"
         android:autofillHints="username"
         android:focusable="true"
         android:hint="@string/accountadd_username"
@@ -54,7 +77,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
-        android:layout_marginTop="140dp"
+        android:layout_marginTop="142dp"
         android:autofillHints="username"
         android:focusable="true"
         android:hint="@string/accountadd_password"
@@ -65,11 +88,10 @@
     <LinearLayout
         android:id="@+id/linearLayout"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:layout_marginTop="160dp"
+        android:layout_height="80dp"
         android:orientation="horizontal"
         android:padding="10dp"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/password"
         tools:ignore="MissingConstraints"
         tools:layout_editor_absoluteX="20dp">
 

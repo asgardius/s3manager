@@ -5,7 +5,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 public class MyDbHelper extends SQLiteOpenHelper {
-    private static final String atcreate = "CREATE TABLE IF NOT EXISTS account(id text UNIQUE, endpoint text, username text, password text)";
+    private static final String atcreate = "CREATE TABLE IF NOT EXISTS account(id text UNIQUE, endpoint text, username text, password text, region text)";
     private static final String dbname = "accounts.sqlite3";
     private static final int dbversion = 3;
     public MyDbHelper(Context context) {

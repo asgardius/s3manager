@@ -21,7 +21,7 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity {
 
     static boolean DEFAULT_PATH_STYLE_ACCESS = true;
-    String alias, username, password, endpoint;
+    String alias, username, password, endpoint, location;
     RecyclerView recyclerView;
     SQLiteDatabase db;
     ArrayList Name;
@@ -103,13 +103,14 @@ public class MainActivity extends AppCompatActivity {
                     // Database Queries
                     System.out.println("Database OK");
                     try {
-                        String query = "SELECT endpoint, username, password FROM account where id=\""+ Name.get(position).toString()+ "\"";
+                        String query = "SELECT endpoint, username, password, region FROM account where id=\""+ Name.get(position).toString()+ "\"";
                         System.out.println(query);
                         Cursor cursor = db.rawQuery(query,null);
                         if (cursor.moveToNext()){
                             endpoint = cursor.getString(0);
                             username = cursor.getString(1);
                             password = cursor.getString(2);
+                            location = cursor.getString(3);
                             db.close();
                             explorer();
                         }
@@ -136,7 +137,7 @@ public class MainActivity extends AppCompatActivity {
                         if (menuItem.getTitle() == getResources().getString(R.string.accountedit_button)) {
                             try {
                                 db = dbHelper.getWritableDatabase();
-                                String query = "SELECT id, endpoint, username, password FROM account where id=\""+ Name.get(position).toString()+ "\"";
+                                String query = "SELECT id, endpoint, username, password, region FROM account where id=\""+ Name.get(position).toString()+ "\"";
                                 System.out.println(query);
                                 Cursor cursor = db.rawQuery(query,null);
                                 if (cursor.moveToNext()){
@@ -144,6 +145,7 @@ public class MainActivity extends AppCompatActivity {
                                     endpoint = cursor.getString(1);
                                     username = cursor.getString(2);
                                     password = cursor.getString(3);
+                                    location = cursor.getString(4);
                                 }
                                 db.close();
                                 addaccount(true);
@@ -220,6 +222,7 @@ public class MainActivity extends AppCompatActivity {
         intent.putExtra("endpoint", endpoint);
         intent.putExtra("username", username);
         intent.putExtra("password", password);
+        intent.putExtra("region", location);
         startActivity(intent);
 
     }
@@ -232,6 +235,7 @@ public class MainActivity extends AppCompatActivity {
             intent.putExtra("endpoint", endpoint);
             intent.putExtra("username", username);
             intent.putExtra("password", password);
+            intent.putExtra("region", location);
         }
         intent.putExtra("edit", edit);
         startActivity(intent);
