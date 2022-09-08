@@ -16,6 +16,9 @@
         android:theme="@style/Theme.AsgardiusS3Manager"
         tools:targetApi="31">
         <activity
+            android:name=".ImageViewer"
+            android:exported="false" />
+        <activity
             android:name=".TextViewer"
             android:exported="false" />
         <activity
