@@ -229,7 +229,9 @@ public class ObjectSelect extends AppCompatActivity {
                             // Toast message on menu item clicked
                             //Toast.makeText(MainActivity.this, "You Clicked " + menuItem.getTitle(), Toast.LENGTH_SHORT).show();
                             if (menuItem.getTitle() == getResources().getString(R.string.file_share)) {
-                                share(Name.get(position).toString());
+                                GeneratePresignedUrlRequest request = new GeneratePresignedUrlRequest(bucket, prefix + Name.get(position).toString());
+                                URL objectURL = s3client.generatePresignedUrl(request);
+                                share(objectURL.toString());
                             }
                             return true;
                         }
@@ -280,15 +282,16 @@ public class ObjectSelect extends AppCompatActivity {
 
     private void share(String object) {
 
-        Toast.makeText(ObjectSelect.this, "This feature is not yet implemented", Toast.LENGTH_SHORT).show();
-        Intent intent = new Intent(this, FileShare.class);
-        intent.putExtra("endpoint", endpoint);
-        intent.putExtra("username", username);
-        intent.putExtra("password", password);
-        intent.putExtra("bucket", bucket);
-        intent.putExtra("prefix", prefix + object);
-        //intent.putExtra("treelevel", treelevel+1);
-        startActivity(intent);
+        try {
+
+            Intent shareIntent = new Intent(Intent.ACTION_SEND);
+            shareIntent.setType("text/plain");
+            shareIntent.putExtra(Intent.EXTRA_SUBJECT, "Share Link");
+            shareIntent.putExtra(Intent.EXTRA_TEXT, object);
+            startActivity(Intent.createChooser(shareIntent, "choose one"));
+        } catch(Exception e) {
+            Toast.makeText(getApplicationContext(),getResources().getString(R.string.media_list_fail), Toast.LENGTH_SHORT).show();
+        }
 
     }
 }

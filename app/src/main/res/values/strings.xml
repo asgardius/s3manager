@@ -3,7 +3,7 @@
     <string name="aws_endpoint">.amazonaws.com</string>
     <string name="title_activity_video_player">VideoPlayer</string>
     <string name="broken_database">Local database is corrupted. Please reinstall this app</string>
-    <string name="file_share">Share file</string>
+    <string name="file_share">Get object link</string>
     <string name="accountselect">Please choose an account</string>
     <string name="accountadd_button">Add Account</string>
     <string name="accounttest_button">Test credentials</string>
