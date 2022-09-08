@@ -1,6 +1,7 @@
 package asgardius.page.s3manager;
 
 import static com.amazonaws.regions.Regions.US_EAST_1;
+import static com.amazonaws.regions.Regions.US_WEST_1;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -40,7 +41,7 @@ public class ObjectSelect extends AppCompatActivity {
     ArrayList Img;
     //ArrayList object;
     RecyclerView recyclerView;
-    String username, password, endpoint, bucket, prefix;
+    String username, password, endpoint, bucket, prefix, location;
     int treelevel;
     String[] filename, path;
 
@@ -63,6 +64,41 @@ public class ObjectSelect extends AppCompatActivity {
         AmazonS3 s3client = new AmazonS3Client(myCredentials, region);
         s3client.setEndpoint(endpoint);
         s3client.setS3ClientOptions(s3ClientOptions);
+        if (endpoint.contains(getResources().getString(R.string.aws_endpoint))) {
+            Thread getlocation = new Thread(new Runnable() {
+
+                @Override
+                public void run() {
+                    try  {
+                        //Your code goes here
+                        location = s3client.getBucketLocation(bucket);
+                        System.out.println(location);
+                        Region region = Region.getRegion(location);
+                        s3client.setRegion(region);
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        runOnUiThread(new Runnable() {
+
+                            @Override
+                            public void run() {
+                                Toast.makeText(getApplicationContext(),getResources().getString(R.string.media_list_fail), Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                        //Toast.makeText(getApplicationContext(),getResources().getString(R.string.media_list_fail), Toast.LENGTH_SHORT).show();
+                        finish();
+                    }
+                }
+            });
+            getlocation.start();
+            try {
+                getlocation.join();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+        }
+
 
         recyclerView = findViewById(R.id.olist);
         final ProgressBar simpleProgressBar = (ProgressBar) findViewById(R.id.simpleProgressBar);
