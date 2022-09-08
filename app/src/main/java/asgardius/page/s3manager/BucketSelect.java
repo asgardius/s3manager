@@ -42,7 +42,9 @@ public class BucketSelect extends AppCompatActivity {
         setContentView(R.layout.activity_bucket_select);
         Region region = Region.getRegion(US_EAST_1);
         S3ClientOptions s3ClientOptions = S3ClientOptions.builder().build();
-        s3ClientOptions.setPathStyleAccess(true);
+        if (!endpoint.contains(getResources().getString(R.string.aws_endpoint))) {
+            s3ClientOptions.setPathStyleAccess(true);
+        }
         AWSCredentials myCredentials = new BasicAWSCredentials(username, password);
         AmazonS3 s3client = new AmazonS3Client(myCredentials, region);
         s3client.setEndpoint(endpoint);

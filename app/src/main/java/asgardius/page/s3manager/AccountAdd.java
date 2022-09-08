@@ -42,8 +42,6 @@ public class AccountAdd extends AppCompatActivity {
         Button accounttest = (Button)findViewById(R.id.testaccount);
         edit = getIntent().getBooleanExtra("edit", false);
         Region region = Region.getRegion(US_EAST_1);
-        S3ClientOptions s3ClientOptions = S3ClientOptions.builder().build();
-        s3ClientOptions.setPathStyleAccess(true);
         if (edit) {
             register.setText(getResources().getString(R.string.accountsave_button));
             id = getIntent().getStringExtra("alias");
@@ -115,6 +113,10 @@ public class AccountAdd extends AppCompatActivity {
                         public void run() {
                             try  {
                                 //Your code goes here
+                                S3ClientOptions s3ClientOptions = S3ClientOptions.builder().build();
+                                if (!endpoint.contains(getResources().getString(R.string.aws_endpoint))) {
+                                    s3ClientOptions.setPathStyleAccess(true);
+                                }
                                 myCredentials = new BasicAWSCredentials(username, password);
                                 s3client = new AmazonS3Client(myCredentials, region);
                                 s3client.setEndpoint(endpoint);
