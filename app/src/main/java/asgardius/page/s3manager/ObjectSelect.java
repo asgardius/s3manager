@@ -228,7 +228,24 @@ public class ObjectSelect extends AppCompatActivity {
                 //System.out.println("Long click on "+Name.get(position).toString());
                 if (Img.get(position).equals(R.drawable.folder)) {
                     //go to subfolder
-                    //explorer(Name.get(position).toString());
+                    /// Initializing the popup menu and giving the reference as current context
+                    PopupMenu popupMenu = new PopupMenu(ObjectSelect.this, recyclerView);
+
+                    // Inflating popup menu from popup_menu.xml file
+                    popupMenu.getMenuInflater().inflate(R.menu.folder_menu, popupMenu.getMenu());
+                    popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                        @Override
+                        public boolean onMenuItemClick(MenuItem menuItem) {
+                            // Toast message on menu item clicked
+                            //Toast.makeText(MainActivity.this, "You Clicked " + menuItem.getTitle(), Toast.LENGTH_SHORT).show();
+                            if (menuItem.getTitle() == getResources().getString(R.string.file_del)) {
+                                Toast.makeText(ObjectSelect.this, getResources().getString(R.string.pending_feature), Toast.LENGTH_SHORT).show();
+                            }
+                            return true;
+                        }
+                    });
+                    // Showing the popup menu
+                    popupMenu.show();
                 } else {
                     // Initializing the popup menu and giving the reference as current context
                     PopupMenu popupMenu = new PopupMenu(ObjectSelect.this, recyclerView);
@@ -244,6 +261,8 @@ public class ObjectSelect extends AppCompatActivity {
                                 GeneratePresignedUrlRequest request = new GeneratePresignedUrlRequest(bucket, prefix + Name.get(position).toString());
                                 URL objectURL = s3client.generatePresignedUrl(request);
                                 share(objectURL.toString());
+                            } else if (menuItem.getTitle() == getResources().getString(R.string.file_del)) {
+                                Toast.makeText(ObjectSelect.this, getResources().getString(R.string.pending_feature), Toast.LENGTH_SHORT).show();
                             }
                             return true;
                         }
