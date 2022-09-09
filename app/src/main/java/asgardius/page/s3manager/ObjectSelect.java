@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -257,7 +258,7 @@ public class ObjectSelect extends AppCompatActivity {
                         public boolean onMenuItemClick(MenuItem menuItem) {
                             // Toast message on menu item clicked
                             //Toast.makeText(MainActivity.this, "You Clicked " + menuItem.getTitle(), Toast.LENGTH_SHORT).show();
-                            if (menuItem.getTitle() == getResources().getString(R.string.file_share)) {
+                            if (menuItem.getTitle() == getResources().getString(R.string.file_external)) {
                                 GeneratePresignedUrlRequest request = new GeneratePresignedUrlRequest(bucket, prefix + Name.get(position).toString());
                                 URL objectURL = s3client.generatePresignedUrl(request);
                                 share(objectURL.toString());
@@ -324,10 +325,8 @@ public class ObjectSelect extends AppCompatActivity {
 
         try {
 
-            Intent shareIntent = new Intent(Intent.ACTION_SEND);
-            shareIntent.setType("text/plain");
-            shareIntent.putExtra(Intent.EXTRA_SUBJECT, "Share Link");
-            shareIntent.putExtra(Intent.EXTRA_TEXT, object);
+            Intent shareIntent = new Intent(Intent.ACTION_VIEW);
+            shareIntent.setData(Uri.parse(object));
             startActivity(Intent.createChooser(shareIntent, "choose one"));
         } catch(Exception e) {
             Toast.makeText(getApplicationContext(),getResources().getString(R.string.media_list_fail), Toast.LENGTH_SHORT).show();

@@ -4,7 +4,7 @@
     <string name="title_activity_video_player">VideoPlayer</string>
     <string name="broken_database">Local database is corrupted. Please reinstall this app</string>
     <string name="pending_feature">This feature is not implemented yet</string>
-    <string name="file_share">Get link</string>
+    <string name="file_external">Open in</string>
     <string name="file_del">Delete</string>
     <string name="accountselect">Please choose an account</string>
     <string name="accountadd_button">Add Account</string>
