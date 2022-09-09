@@ -88,6 +88,12 @@ public class VideoPlayer extends AppCompatActivity {
 
     }
 
+    public void onDestroy() {
+        player.release();
+        super.onDestroy();
+
+    }
+
     public void onBackPressed() {
         player.release();
         finish();
