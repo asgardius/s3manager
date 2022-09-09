@@ -17,24 +17,29 @@
         tools:targetApi="31">
         <activity
             android:name=".ImageViewer"
+            android:configChanges="orientation|keyboardHidden|screenSize"
             android:exported="false" />
         <activity
             android:name=".TextViewer"
+            android:configChanges="orientation|keyboardHidden|screenSize"
             android:exported="false" />
         <activity
             android:name=".WebBrowser"
+            android:configChanges="orientation|keyboardHidden|screenSize"
             android:exported="false" />
         <activity
             android:name=".AccountAdd"
             android:exported="false" />
         <activity
             android:name=".ObjectSelect"
+            android:configChanges="orientation|keyboardHidden|screenSize"
             android:exported="false" />
         <activity
             android:name=".list_item"
             android:exported="false" />
         <activity
             android:name=".BucketSelect"
+            android:configChanges="orientation|keyboardHidden|screenSize"
             android:exported="false" />
         <activity
             android:name=".VideoPlayer"
