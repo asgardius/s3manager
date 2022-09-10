@@ -26,6 +26,7 @@ import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.S3ClientOptions;
 import com.amazonaws.services.s3.model.Bucket;
 import com.amazonaws.services.s3.model.DeleteObjectRequest;
+import com.amazonaws.services.s3.model.DeleteObjectsRequest;
 import com.amazonaws.services.s3.model.GeneratePresignedUrlRequest;
 import com.amazonaws.services.s3.model.ListObjectsRequest;
 import com.amazonaws.services.s3.model.ListObjectsV2Request;
@@ -373,10 +374,10 @@ public class ObjectSelect extends AppCompatActivity {
                                     //Your code goes here
                                     //List<Bucket> buckets = s3client.listBuckets();
                                     if (folder) {
-                                        ListObjectsRequest orequest = new ListObjectsRequest().withBucketName(bucket).withPrefix(object).withMaxKeys(2);
+                                        ListObjectsRequest orequest = new ListObjectsRequest().withBucketName(bucket).withPrefix(object).withMaxKeys(8000);
                                         //List<S3Object> objects = (List<S3Object>) s3client.listObjects(bucket, "/");
                                         ObjectListing result = s3client.listObjects(orequest);
-                                        ArrayList<String> object = new ArrayList<String>();
+                                        ArrayList<String> objectl = new ArrayList<String>();
                                         List<S3ObjectSummary> objects = result.getObjectSummaries();
                                         boolean nextbatch = false;
                                         while (result.isTruncated() || !nextbatch) {
@@ -387,16 +388,18 @@ public class ObjectSelect extends AppCompatActivity {
                                                 nextbatch = true;
                                             }
                                             for (S3ObjectSummary os : objects) {
-                                                object.add(os.getKey());
+                                                objectl.add(os.getKey());
 
                                                 //i++;
                                             }
 
                                         }
                                         //System.out.println(object);
+                                        DeleteObjectsRequest deleteObjectsRequest = new DeleteObjectsRequest(bucket).withKeys(objectl.toArray(new String[0]));
+                                        s3client.deleteObjects(deleteObjectsRequest);
 
                                     } else {
-                                        DeleteObjectRequest deleteObjectRequest =new DeleteObjectRequest(bucket, object);
+                                        DeleteObjectRequest deleteObjectRequest = new DeleteObjectRequest(bucket, object);
                                         s3client.deleteObject(deleteObjectRequest);
                                     }
 
