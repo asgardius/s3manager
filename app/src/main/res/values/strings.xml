@@ -1,6 +1,9 @@
 <resources>
     <string name="app_name">S3 Manager</string>
     <string name="aws_endpoint">.amazonaws.com</string>
+    <string name="endpoint_url">https://object.asgardius.company</string>
+    <string name="access_key">asgardius</string>
+    <string name="secret_key">DTMp5kftamr49Ke7</string>
     <string name="title_activity_video_player">VideoPlayer</string>
     <string name="account_list">Account list</string>
     <string name="bucket_list">Bucket list</string>
@@ -32,7 +35,7 @@
     <string name="invalid_url">Endpoint URL must start with https://</string>
     <string name="explorer_test_button">File Explorer Test</string>
     <string name="unsupported_file">Unsupported file type</string>
-    <string name="video_test_button">Video Test</string>
+    <string name="test_server_button">Connect to test server</string>
     <string name="media_conn_fail">Cannot retrieve remote file</string>
     <string name="media_wrong_type">Invalid media file</string>
     <string name="media_list_fail">Cannot connect to server</string>

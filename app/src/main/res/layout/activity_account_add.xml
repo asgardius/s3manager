@@ -10,7 +10,7 @@
     <EditText
         android:id="@+id/alias"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="48dp"
         android:focusable="true"
         android:hint="@string/accountadd_alias"
         android:importantForAutofill="no"
@@ -30,7 +30,7 @@
         <EditText
             android:id="@+id/endpoint"
             android:layout_width="wrap_content"
-            android:layout_height="46dp"
+            android:layout_height="48dp"
             android:layout_weight="1"
             android:focusable="true"
             android:hint="@string/accountadd_endpoint"
@@ -42,7 +42,7 @@
         <EditText
             android:id="@+id/region"
             android:layout_width="wrap_content"
-            android:layout_height="46dp"
+            android:layout_height="48dp"
             android:layout_weight="1"
             android:focusable="true"
             android:hint="@string/accountadd_region"
@@ -56,7 +56,7 @@
     <EditText
         android:id="@+id/username"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="48dp"
         android:autofillHints="username"
         android:focusable="true"
         android:hint="@string/accountadd_username"
@@ -67,7 +67,7 @@
     <EditText
         android:id="@+id/password"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="48dp"
         android:autofillHints="username"
         android:focusable="true"
         android:hint="@string/accountadd_password"

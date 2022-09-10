@@ -31,7 +31,7 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text="@string/dummy_button"
+            android:text="@string/test_server_button"
             tools:ignore="MissingConstraints"
             style="?android:attr/buttonStyle" />
 
@@ -48,6 +48,7 @@
         android:id="@+id/alist"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:contentDescription="@string/account_list"
         tools:layout_editor_absoluteX="27dp" />
 
 </LinearLayout>
