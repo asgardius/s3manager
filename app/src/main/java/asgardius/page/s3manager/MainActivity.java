@@ -125,7 +125,7 @@ public class MainActivity extends AppCompatActivity {
             public void onLongClick(View view, int position) {
                 //System.out.println("Long click on "+Name.get(position).toString());
                 // Initializing the popup menu and giving the reference as current context
-                PopupMenu popupMenu = new PopupMenu(MainActivity.this, recyclerView);
+                PopupMenu popupMenu = new PopupMenu(recyclerView.getContext(), view);
 
                 // Inflating popup menu from popup_menu.xml file
                 popupMenu.getMenuInflater().inflate(R.menu.account_menu, popupMenu.getMenu());

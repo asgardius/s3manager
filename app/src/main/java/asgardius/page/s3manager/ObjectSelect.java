@@ -230,7 +230,7 @@ public class ObjectSelect extends AppCompatActivity {
                 if (Img.get(position).equals(R.drawable.folder)) {
                     //go to subfolder
                     /// Initializing the popup menu and giving the reference as current context
-                    PopupMenu popupMenu = new PopupMenu(ObjectSelect.this, recyclerView);
+                    PopupMenu popupMenu = new PopupMenu(recyclerView.getContext(), view);
 
                     // Inflating popup menu from popup_menu.xml file
                     popupMenu.getMenuInflater().inflate(R.menu.folder_menu, popupMenu.getMenu());
@@ -249,7 +249,7 @@ public class ObjectSelect extends AppCompatActivity {
                     popupMenu.show();
                 } else {
                     // Initializing the popup menu and giving the reference as current context
-                    PopupMenu popupMenu = new PopupMenu(ObjectSelect.this, recyclerView);
+                    PopupMenu popupMenu = new PopupMenu(recyclerView.getContext(), view);
 
                     // Inflating popup menu from popup_menu.xml file
                     popupMenu.getMenuInflater().inflate(R.menu.object_menu, popupMenu.getMenu());
