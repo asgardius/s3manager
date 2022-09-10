@@ -10,10 +10,11 @@
         android:id="@+id/imageViewer"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
+        android:contentDescription="@string/Image"
         app:srcCompat="@drawable/empty"
+        tools:ignore="MissingConstraints"
         tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="82dp"
-        tools:ignore="MissingConstraints" />
+        tools:layout_editor_absoluteY="82dp" />
 
     <ProgressBar
         android:id="@+id/simpleProgressBar"

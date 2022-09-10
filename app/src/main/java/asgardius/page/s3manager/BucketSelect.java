@@ -112,13 +112,13 @@ public class BucketSelect extends AppCompatActivity {
         recyclerView.addOnItemTouchListener(new RecyclerTouchListener(getApplicationContext(), recyclerView, new RecyclerTouchListener.ClickListener() {
             @Override
             public void onClick(View view, int position) {
-                System.out.println("Click on "+Name.get(position).toString());
+                //System.out.println("Click on "+Name.get(position).toString());
                 explorer(Name.get(position).toString());
             }
 
             @Override
             public void onLongClick(View view, int position) {
-                System.out.println("Long click on "+Name.get(position).toString());
+                //System.out.println("Long click on "+Name.get(position).toString());
             }
         }));
     }

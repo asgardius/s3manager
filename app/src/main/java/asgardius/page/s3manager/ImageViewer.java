@@ -23,7 +23,7 @@ public class ImageViewer extends AppCompatActivity {
         final ProgressBar simpleProgressBar = (ProgressBar) findViewById(R.id.simpleProgressBar);
         String videoURL = getIntent().getStringExtra("video_url");
         ImageView iv=(ImageView) findViewById(R.id.imageViewer);
-        System.out.println(videoURL);
+        //System.out.println(videoURL);
         Thread imgread = new Thread(new Runnable() {
 
             @Override

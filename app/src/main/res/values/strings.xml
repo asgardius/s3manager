@@ -5,6 +5,7 @@
     <string name="account_list">Account list</string>
     <string name="bucket_list">Bucket list</string>
     <string name="object_list">Object list</string>
+    <string name="Image">Image</string>
     <string name="broken_database">Local database is corrupted. Please reinstall this app</string>
     <string name="pending_feature">This feature is not implemented yet</string>
     <string name="file_external">Open in</string>

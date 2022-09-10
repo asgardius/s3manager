@@ -42,7 +42,6 @@ public class MainActivity extends AppCompatActivity {
         db = dbHelper.getWritableDatabase();
         if (db != null) {
             // Database Queries
-            System.out.println("Database OK");
             Name = new ArrayList<String>();
             Img = new ArrayList<String>();
             String query = "SELECT id FROM account";
@@ -62,9 +61,6 @@ public class MainActivity extends AppCompatActivity {
             public void run() {
                 try  {
                     //Your code goes here
-
-                    System.out.println(Name);
-
                     runOnUiThread(new Runnable() {
 
                         @Override
@@ -101,10 +97,8 @@ public class MainActivity extends AppCompatActivity {
                 db = dbHelper.getWritableDatabase();
                 if (db != null) {
                     // Database Queries
-                    System.out.println("Database OK");
                     try {
                         String query = "SELECT endpoint, username, password, region FROM account where id=\""+ Name.get(position).toString()+ "\"";
-                        System.out.println(query);
                         Cursor cursor = db.rawQuery(query,null);
                         if (cursor.moveToNext()){
                             endpoint = cursor.getString(0);

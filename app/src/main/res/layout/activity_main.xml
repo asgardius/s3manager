@@ -7,12 +7,6 @@
     android:orientation="vertical"
     tools:context=".MainActivity">
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/accountselect"
-        android:textAlignment="center"
-        android:textSize="25sp" />
 
     <LinearLayout
         android:id="@+id/linearLayout"
@@ -42,6 +36,13 @@
             style="?android:attr/buttonStyle" />
 
     </LinearLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/accountselect"
+        android:textAlignment="center"
+        android:textSize="25sp" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/alist"
