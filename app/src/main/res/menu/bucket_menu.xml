@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/upload"
+        android:title="@string/file_upload" />
+
+    <item
+        android:id="@+id/deletefolder"
+        android:title="@string/file_del" />
+
+</menu>

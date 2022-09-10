@@ -1,5 +1,6 @@
 package asgardius.page.s3manager;
 
+import static android.media.MediaExtractor.MetricsConstants.MIME_TYPE;
 import static com.amazonaws.regions.Regions.US_EAST_1;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -8,8 +9,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.PopupMenu;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
@@ -29,7 +33,7 @@ public class BucketSelect extends AppCompatActivity {
     ArrayList Name;
     ArrayList Img;
     RecyclerView recyclerView;
-    String username, password, endpoint, prefix, location;
+    String username, password, endpoint, prefix, location, file;
     int treelevel;
 
     @Override
@@ -119,6 +123,35 @@ public class BucketSelect extends AppCompatActivity {
             @Override
             public void onLongClick(View view, int position) {
                 //System.out.println("Long click on "+Name.get(position).toString());
+                PopupMenu popupMenu = new PopupMenu(recyclerView.getContext(), view);
+
+                // Inflating popup menu from popup_menu.xml file
+                popupMenu.getMenuInflater().inflate(R.menu.bucket_menu, popupMenu.getMenu());
+                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem menuItem) {
+                        // Toast message on menu item clicked
+                        //Toast.makeText(MainActivity.this, "You Clicked " + menuItem.getTitle(), Toast.LENGTH_SHORT).show();
+                        if (menuItem.getTitle() == getResources().getString(R.string.file_upload)) {
+                            Toast.makeText(BucketSelect.this, getResources().getString(R.string.pending_feature), Toast.LENGTH_SHORT).show();
+                            //upload();
+                            file = upload().getData() != null ? upload().getData().toString() : null;
+                            //System.out.println(file);
+                            //Toast.makeText(BucketSelect.this, intent.getData().toString(), Toast.LENGTH_SHORT).show();
+
+                        } else if (menuItem.getTitle() == getResources().getString(R.string.file_del)) {
+                            Toast.makeText(BucketSelect.this, getResources().getString(R.string.pending_feature), Toast.LENGTH_SHORT).show();
+                            /*if (Name.size() == 1 && treelevel >= 1) {
+                                Toast.makeText(BucketSelect.this, getResources().getString(R.string.only_item_onlist), Toast.LENGTH_SHORT).show();
+                            } else {
+                                delete(prefix + Name.get(position).toString(), true);
+                            }*/
+                        }
+                        return true;
+                    }
+                });
+                // Showing the popup menu
+                popupMenu.show();
             }
         }));
     }
@@ -137,4 +170,12 @@ public class BucketSelect extends AppCompatActivity {
         startActivity(intent);
 
     }
+
+    private Intent upload() {
+        Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+        intent.setType("*/*");
+        startActivityForResult(intent, 100);
+        return intent;
+    }
+
 }
