@@ -248,8 +248,9 @@ public class ObjectSelect extends AppCompatActivity {
                         public boolean onMenuItemClick(MenuItem menuItem) {
                             // Toast message on menu item clicked
                             //Toast.makeText(MainActivity.this, "You Clicked " + menuItem.getTitle(), Toast.LENGTH_SHORT).show();
-                            if (menuItem.getTitle() == getResources().getString(R.string.upload_here)) {
-                                upload(Name.get(position).toString());
+                            if (menuItem.getTitle() == getResources().getString(R.string.upload_file_here)) {
+                                Toast.makeText(ObjectSelect.this, getResources().getString(R.string.pending_feature), Toast.LENGTH_SHORT).show();
+                                //upload(Name.get(position).toString(), false);
                             } else if (menuItem.getTitle() == getResources().getString(R.string.file_del)) {
                                 if (Name.size() == 1 && treelevel >= 1) {
                                     Toast.makeText(ObjectSelect.this, getResources().getString(R.string.only_item_onlist), Toast.LENGTH_SHORT).show();
@@ -273,8 +274,9 @@ public class ObjectSelect extends AppCompatActivity {
                         public boolean onMenuItemClick(MenuItem menuItem) {
                             // Toast message on menu item clicked
                             //Toast.makeText(MainActivity.this, "You Clicked " + menuItem.getTitle(), Toast.LENGTH_SHORT).show();
-                            if (menuItem.getTitle() == getResources().getString(R.string.upload_here)) {
-                                upload(Name.get(position).toString());
+                            if (menuItem.getTitle() == getResources().getString(R.string.upload_file_here)) {
+                                Toast.makeText(ObjectSelect.this, getResources().getString(R.string.pending_feature), Toast.LENGTH_SHORT).show();
+                                //upload(Name.get(position).toString(), false);
                             } else if (menuItem.getTitle() == getResources().getString(R.string.file_external)) {
                                 GeneratePresignedUrlRequest request = new GeneratePresignedUrlRequest(bucket, prefix + Name.get(position).toString());
                                 URL objectURL = s3client.generatePresignedUrl(request);
@@ -454,7 +456,7 @@ public class ObjectSelect extends AppCompatActivity {
         dialog.show();
     }
 
-    private void upload(String object) {
+    private void upload(String object, boolean isfolder) {
         Intent intent = new Intent(this, Uploader.class);
         intent.putExtra("endpoint", endpoint);
         intent.putExtra("username", username);
@@ -462,6 +464,7 @@ public class ObjectSelect extends AppCompatActivity {
         intent.putExtra("bucket", bucket);
         intent.putExtra("prefix", prefix + object);
         intent.putExtra("region", location);
+        intent.putExtra("isfolder", isfolder);
         startActivity(intent);
     }
 }

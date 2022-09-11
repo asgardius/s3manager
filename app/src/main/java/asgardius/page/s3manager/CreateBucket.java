@@ -51,7 +51,7 @@ public class CreateBucket extends AppCompatActivity {
         s3client = new AmazonS3Client(myCredentials, region);
         s3client.setEndpoint(endpoint);
         s3client.setS3ClientOptions(s3ClientOptions);
-        bname  = (EditText)findViewById(R.id.bname);
+        bname = (EditText)findViewById(R.id.bname);
         Button cbucket = (Button)findViewById(R.id.cbucket);
         simpleProgressBar = (ProgressBar) findViewById(R.id.simpleProgressBar);
         cbucket.setOnClickListener(new View.OnClickListener(){

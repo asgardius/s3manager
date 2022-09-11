@@ -2,8 +2,8 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/upload"
-        android:title="@string/upload_here" />
+        android:id="@+id/upload_file"
+        android:title="@string/upload_file_here" />
     <item
         android:id="@+id/sharefile"
         android:title="@string/file_external" />

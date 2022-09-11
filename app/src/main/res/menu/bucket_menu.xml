@@ -2,8 +2,8 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/upload"
-        android:title="@string/upload_tobucket" />
+        android:id="@+id/upload_file"
+        android:title="@string/upload_file_tobucket" />
 
     <item
         android:id="@+id/newbucket"
