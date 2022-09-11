@@ -53,6 +53,7 @@ public class ObjectSelect extends AppCompatActivity {
     S3ClientOptions s3ClientOptions;
     AWSCredentials myCredentials;
     AmazonS3 s3client;
+    ProgressBar simpleProgressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,7 +79,7 @@ public class ObjectSelect extends AppCompatActivity {
 
 
         recyclerView = findViewById(R.id.olist);
-        final ProgressBar simpleProgressBar = (ProgressBar) findViewById(R.id.simpleProgressBar);
+        simpleProgressBar = (ProgressBar) findViewById(R.id.simpleProgressBar);
 
         // layout for vertical orientation
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getApplicationContext());
@@ -370,7 +371,7 @@ public class ObjectSelect extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         //Toast.makeText(ObjectSelect.this, getResources().getString(R.string.pending_feature), Toast.LENGTH_SHORT).show();
-                        Thread deleteobject = new Thread(new Runnable() {
+                        Thread deleteObject = new Thread(new Runnable() {
 
                             @Override
                             public void run() {
@@ -440,7 +441,8 @@ public class ObjectSelect extends AppCompatActivity {
                                 }
                             }
                         });
-                        deleteobject.start();
+                        simpleProgressBar.setVisibility(View.VISIBLE);
+                        deleteObject.start();
                     }
                 });
         builder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
