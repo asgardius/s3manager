@@ -294,9 +294,13 @@ public class ObjectSelect extends AppCompatActivity {
                                 Toast.makeText(ObjectSelect.this, getResources().getString(R.string.pending_feature), Toast.LENGTH_SHORT).show();
                                 //upload(Name.get(position).toString(), false);
                             } else if (menuItem.getTitle() == getResources().getString(R.string.file_external)) {
-                                GeneratePresignedUrlRequest request = new GeneratePresignedUrlRequest(bucket, prefix + Name.get(position).toString());
-                                URL objectURL = s3client.generatePresignedUrl(request);
-                                share(objectURL.toString());
+                                try {
+                                    GeneratePresignedUrlRequest request = new GeneratePresignedUrlRequest(bucket, prefix + Name.get(position).toString());
+                                    URL objectURL = s3client.generatePresignedUrl(request);
+                                    share(objectURL.toString());
+                                } catch (Exception e) {
+                                    Toast.makeText(getApplicationContext(),getResources().getString(R.string.media_list_fail), Toast.LENGTH_SHORT).show();
+                                }
                             } else if (menuItem.getTitle() == getResources().getString(R.string.file_del)) {
                                 if (menuItem.getTitle() == getResources().getString(R.string.file_del)) {
                                     if (Name.size() == 1 && treelevel >= 1) {
