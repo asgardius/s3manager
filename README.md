@@ -10,6 +10,10 @@ Current feature list
 * Webpage viewer (htm, html)
 * Multiple account support
 * Open object in external web browser
+* Create buckets
+* Delete buckets
+* Delete files
+* Delete folders
 
 Known supported providers
 

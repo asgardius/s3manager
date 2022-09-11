@@ -210,24 +210,40 @@ public class ObjectSelect extends AppCompatActivity {
                     explorer(Name.get(position).toString());
                 } else if (Img.get(position).equals(R.drawable.imagefile)) {
                     //load media file
-                    GeneratePresignedUrlRequest request = new GeneratePresignedUrlRequest(bucket, prefix + Name.get(position).toString());
-                    URL objectURL = s3client.generatePresignedUrl(request);
-                    imageviewer(objectURL.toString());
+                    try {
+                        GeneratePresignedUrlRequest request = new GeneratePresignedUrlRequest(bucket, prefix + Name.get(position).toString());
+                        URL objectURL = s3client.generatePresignedUrl(request);
+                        imageviewer(objectURL.toString());
+                    } catch (Exception e) {
+                        Toast.makeText(getApplicationContext(),getResources().getString(R.string.media_list_fail), Toast.LENGTH_SHORT).show();
+                    }
                 } else if (Img.get(position).equals(R.drawable.textfile)) {
                     //load media file
-                    GeneratePresignedUrlRequest request = new GeneratePresignedUrlRequest(bucket, prefix + Name.get(position).toString());
-                    URL objectURL = s3client.generatePresignedUrl(request);
-                    textviewer(objectURL.toString());
+                    try {
+                        GeneratePresignedUrlRequest request = new GeneratePresignedUrlRequest(bucket, prefix + Name.get(position).toString());
+                        URL objectURL = s3client.generatePresignedUrl(request);
+                        textviewer(objectURL.toString());
+                    } catch (Exception e) {
+                        Toast.makeText(getApplicationContext(),getResources().getString(R.string.media_list_fail), Toast.LENGTH_SHORT).show();
+                    }
                 } else if (Img.get(position).equals(R.drawable.webpage)) {
                     //load media file
-                    GeneratePresignedUrlRequest request = new GeneratePresignedUrlRequest(bucket, prefix + Name.get(position).toString());
-                    URL objectURL = s3client.generatePresignedUrl(request);
-                    webbrowser(objectURL.toString());
+                    try {
+                        GeneratePresignedUrlRequest request = new GeneratePresignedUrlRequest(bucket, prefix + Name.get(position).toString());
+                        URL objectURL = s3client.generatePresignedUrl(request);
+                        webbrowser(objectURL.toString());
+                    } catch (Exception e) {
+                        Toast.makeText(getApplicationContext(),getResources().getString(R.string.media_list_fail), Toast.LENGTH_SHORT).show();
+                    }
                 } else if (Img.get(position).equals(R.drawable.audiofile) || Img.get(position).equals(R.drawable.videofile)) {
                     //load media file
-                    GeneratePresignedUrlRequest request = new GeneratePresignedUrlRequest(bucket, prefix + Name.get(position).toString());
-                    URL objectURL = s3client.generatePresignedUrl(request);
-                    videoplayer(objectURL.toString());
+                    try {
+                        GeneratePresignedUrlRequest request = new GeneratePresignedUrlRequest(bucket, prefix + Name.get(position).toString());
+                        URL objectURL = s3client.generatePresignedUrl(request);
+                        videoplayer(objectURL.toString());
+                    } catch (Exception e) {
+                        Toast.makeText(getApplicationContext(),getResources().getString(R.string.media_list_fail), Toast.LENGTH_SHORT).show();
+                    }
                 }  else {
                     Toast.makeText(ObjectSelect.this, getResources().getString(R.string.unsupported_file), Toast.LENGTH_SHORT).show();
                 }
