@@ -206,11 +206,6 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 //buttonaction
-                endpoint = getResources().getString(R.string.endpoint_url);
-                username = getResources().getString(R.string.access_key);
-                password = getResources().getString(R.string.secret_key);
-                location = "us-east-1";
-                explorer();
             }
         });
     }

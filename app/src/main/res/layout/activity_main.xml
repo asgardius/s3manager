@@ -31,7 +31,7 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text="@string/test_server_button"
+            android:text="@string/dummy_button"
             tools:ignore="MissingConstraints"
             style="?android:attr/buttonStyle" />
 

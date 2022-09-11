@@ -132,10 +132,9 @@ public class BucketSelect extends AppCompatActivity {
                     public boolean onMenuItemClick(MenuItem menuItem) {
                         // Toast message on menu item clicked
                         //Toast.makeText(MainActivity.this, "You Clicked " + menuItem.getTitle(), Toast.LENGTH_SHORT).show();
-                        if (menuItem.getTitle() == getResources().getString(R.string.file_upload)) {
-                            Toast.makeText(BucketSelect.this, getResources().getString(R.string.pending_feature), Toast.LENGTH_SHORT).show();
+                        if (menuItem.getTitle() == getResources().getString(R.string.upload_tobucket)) {
                             //upload();
-                            file = upload().getData() != null ? upload().getData().toString() : null;
+                            upload(Name.get(position).toString());
                             //System.out.println(file);
                             //Toast.makeText(BucketSelect.this, intent.getData().toString(), Toast.LENGTH_SHORT).show();
 
@@ -171,11 +170,15 @@ public class BucketSelect extends AppCompatActivity {
 
     }
 
-    private Intent upload() {
-        Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
-        intent.setType("*/*");
-        startActivityForResult(intent, 100);
-        return intent;
+    private void upload(String bucket) {
+        Intent intent = new Intent(this, Uploader.class);
+        intent.putExtra("endpoint", endpoint);
+        intent.putExtra("username", username);
+        intent.putExtra("password", password);
+        intent.putExtra("bucket", bucket);
+        intent.putExtra("prefix", prefix);
+        intent.putExtra("region", location);
+        startActivity(intent);
     }
 
 }

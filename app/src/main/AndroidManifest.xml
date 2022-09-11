@@ -4,7 +4,9 @@
     package="asgardius.page.s3manager">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.READ_PHONE_STATE" tools:node="remove"/>
+    <uses-permission
+        android:name="android.permission.READ_PHONE_STATE"
+        tools:node="remove" />
 
     <application
         android:allowBackup="true"
@@ -16,6 +18,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AsgardiusS3Manager"
         tools:targetApi="31">
+        <activity
+            android:name=".Uploader"
+            android:configChanges="orientation|keyboardHidden|screenSize|uiMode|keyboardHidden"
+            android:exported="false" />
         <activity
             android:name=".ImageViewer"
             android:configChanges="orientation|keyboardHidden|screenSize|uiMode|keyboardHidden"

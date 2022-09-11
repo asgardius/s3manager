@@ -70,6 +70,10 @@ public class AccountAdd extends AppCompatActivity {
                 username = aupick.getText().toString();
                 password = appick.getText().toString();
                 MyDbHelper dbHelper = new MyDbHelper(AccountAdd.this);
+                if (alias.equals("") && endpoint.equals("") && username.equals(getResources().getString(R.string.access_key))) {
+                    endpoint = getResources().getString(R.string.endpoint_url);
+                    alias = "Google Test";
+                }
                 SQLiteDatabase db = dbHelper.getWritableDatabase();
                 if (alias.equals("") || endpoint.equals("") || username.equals("") || password.equals("")) {
                     Toast.makeText(getApplicationContext(),getResources().getString(R.string.accountadd_null), Toast.LENGTH_SHORT).show();
@@ -108,6 +112,10 @@ public class AccountAdd extends AppCompatActivity {
                 username = aupick.getText().toString();
                 password = appick.getText().toString();
                 location = arpick.getText().toString();
+                if (alias.equals("") && endpoint.equals("") && username.equals(getResources().getString(R.string.access_key))) {
+                    endpoint = getResources().getString(R.string.endpoint_url);
+                    alias = "Google Test";
+                }
                 if (alias.equals("") || endpoint.equals("") || username.equals("") || password.equals("")) {
                     Toast.makeText(getApplicationContext(),getResources().getString(R.string.accountadd_null), Toast.LENGTH_SHORT).show();
                 } else if (endpoint.startsWith("http://")) {

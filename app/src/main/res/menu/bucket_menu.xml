@@ -3,7 +3,7 @@
 
     <item
         android:id="@+id/upload"
-        android:title="@string/file_upload" />
+        android:title="@string/upload_tobucket" />
 
     <item
         android:id="@+id/deletefolder"
