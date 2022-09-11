@@ -7,6 +7,7 @@
         <entry key="app/src/main/res/drawable/ic_launcher_background.xml" value="0.195" />
         <entry key="app/src/main/res/layout/activity_account_add.xml" value="0.25" />
         <entry key="app/src/main/res/layout/activity_bucket_select.xml" value="0.2" />
+        <entry key="app/src/main/res/layout/activity_create_bucket.xml" value="0.20260416666666667" />
         <entry key="app/src/main/res/layout/activity_file_share.xml" value="0.19610507246376813" />
         <entry key="app/src/main/res/layout/activity_image_viewer.xml" value="0.19610507246376813" />
         <entry key="app/src/main/res/layout/activity_list_item.xml" value="0.19610507246376813" />

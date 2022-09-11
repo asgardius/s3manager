@@ -161,6 +161,12 @@ public class BucketSelect extends AppCompatActivity {
                                 //System.out.println(file);
                                 //Toast.makeText(BucketSelect.this, intent.getData().toString(), Toast.LENGTH_SHORT).show();
 
+                            } else if (menuItem.getTitle() == getResources().getString(R.string.create_bucket)) {
+                                //upload();
+                                newBucket();
+                                //System.out.println(file);
+                                //Toast.makeText(BucketSelect.this, intent.getData().toString(), Toast.LENGTH_SHORT).show();
+
                             } else if (menuItem.getTitle() == getResources().getString(R.string.file_del)) {
                                 //Toast.makeText(BucketSelect.this, getResources().getString(R.string.pending_feature), Toast.LENGTH_SHORT).show();
                                 delete(prefix + Name.get(position).toString());
@@ -282,13 +288,12 @@ public class BucketSelect extends AppCompatActivity {
     }
 
     private void newBucket() {
-        Toast.makeText(BucketSelect.this, getResources().getString(R.string.pending_feature), Toast.LENGTH_SHORT).show();
-        /*Intent intent = new Intent(this, Uploader.class);
+        Intent intent = new Intent(this, CreateBucket.class);
         intent.putExtra("endpoint", endpoint);
         intent.putExtra("username", username);
         intent.putExtra("password", password);
         intent.putExtra("region", location);
-        startActivity(intent);*/
+        startActivity(intent);
     }
 
 }

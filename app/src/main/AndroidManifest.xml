@@ -19,6 +19,9 @@
         android:theme="@style/Theme.AsgardiusS3Manager"
         tools:targetApi="31">
         <activity
+            android:name=".CreateBucket"
+            android:exported="false" />
+        <activity
             android:name=".Uploader"
             android:configChanges="orientation|keyboardHidden|screenSize|uiMode|keyboardHidden"
             android:exported="false" />
