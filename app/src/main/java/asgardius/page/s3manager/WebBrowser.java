@@ -9,15 +9,21 @@ import android.webkit.WebViewClient;
 public class WebBrowser extends AppCompatActivity {
 
     private WebView npw;
+    String webURL;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_web_browser);
-        String webURL = getIntent().getStringExtra("web_url");
         //This initializes webview object
-        npw =(WebView)findViewById(R.id.webview);
-        npw.setWebViewClient(new MyBrowser());
-        npw.loadUrl(webURL);
+        try {
+            webURL = getIntent().getStringExtra("web_url");
+            npw =(WebView)findViewById(R.id.webview);
+            npw.setWebViewClient(new MyBrowser());
+            npw.loadUrl(webURL);
+        } catch (Exception e) {
+            e.printStackTrace();
+            finish();
+        }
     }
 
     private class MyBrowser extends WebViewClient {
