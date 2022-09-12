@@ -201,11 +201,12 @@ public class MainActivity extends AppCompatActivity {
         });
 
         //This is to launch file explorer test
-        Button explorertest = (Button)findViewById(R.id.ltest);
-        explorertest.setOnClickListener(new View.OnClickListener(){
+        Button about = (Button)findViewById(R.id.ltest);
+        about.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
                 //buttonaction
+                aboutPage();
             }
         });
     }
@@ -232,6 +233,14 @@ public class MainActivity extends AppCompatActivity {
             intent.putExtra("region", location);
         }
         intent.putExtra("edit", edit);
+        startActivity(intent);
+
+    }
+
+    private void aboutPage () {
+
+        Intent intent = new Intent(this, WebBrowser.class);
+        intent.putExtra("web_url", "file:///android_asset/about.htm");
         startActivity(intent);
 
     }

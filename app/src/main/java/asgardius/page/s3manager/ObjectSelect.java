@@ -1,8 +1,5 @@
 package asgardius.page.s3manager;
 
-import static com.amazonaws.regions.Regions.US_EAST_1;
-import static com.amazonaws.regions.Regions.US_WEST_1;
-
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -24,15 +21,11 @@ import com.amazonaws.regions.Region;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.S3ClientOptions;
-import com.amazonaws.services.s3.model.Bucket;
 import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.DeleteObjectsRequest;
 import com.amazonaws.services.s3.model.GeneratePresignedUrlRequest;
 import com.amazonaws.services.s3.model.ListObjectsRequest;
-import com.amazonaws.services.s3.model.ListObjectsV2Request;
-import com.amazonaws.services.s3.model.ListObjectsV2Result;
 import com.amazonaws.services.s3.model.ObjectListing;
-import com.amazonaws.services.s3.model.S3Object;
 import com.amazonaws.services.s3.model.S3ObjectSummary;
 
 import java.net.URL;
@@ -213,7 +206,7 @@ public class ObjectSelect extends AppCompatActivity {
                     try {
                         GeneratePresignedUrlRequest request = new GeneratePresignedUrlRequest(bucket, prefix + Name.get(position).toString());
                         URL objectURL = s3client.generatePresignedUrl(request);
-                        imageviewer(objectURL.toString());
+                        imageViewer(objectURL.toString());
                     } catch (Exception e) {
                         Toast.makeText(getApplicationContext(),getResources().getString(R.string.media_list_fail), Toast.LENGTH_SHORT).show();
                     }
@@ -222,7 +215,7 @@ public class ObjectSelect extends AppCompatActivity {
                     try {
                         GeneratePresignedUrlRequest request = new GeneratePresignedUrlRequest(bucket, prefix + Name.get(position).toString());
                         URL objectURL = s3client.generatePresignedUrl(request);
-                        textviewer(objectURL.toString());
+                        textViewer(objectURL.toString());
                     } catch (Exception e) {
                         Toast.makeText(getApplicationContext(),getResources().getString(R.string.media_list_fail), Toast.LENGTH_SHORT).show();
                     }
@@ -231,7 +224,7 @@ public class ObjectSelect extends AppCompatActivity {
                     try {
                         GeneratePresignedUrlRequest request = new GeneratePresignedUrlRequest(bucket, prefix + Name.get(position).toString());
                         URL objectURL = s3client.generatePresignedUrl(request);
-                        webbrowser(objectURL.toString());
+                        webBrowser(objectURL.toString());
                     } catch (Exception e) {
                         Toast.makeText(getApplicationContext(),getResources().getString(R.string.media_list_fail), Toast.LENGTH_SHORT).show();
                     }
@@ -240,7 +233,7 @@ public class ObjectSelect extends AppCompatActivity {
                     try {
                         GeneratePresignedUrlRequest request = new GeneratePresignedUrlRequest(bucket, prefix + Name.get(position).toString());
                         URL objectURL = s3client.generatePresignedUrl(request);
-                        videoplayer(objectURL.toString());
+                        videoPlayer(objectURL.toString());
                     } catch (Exception e) {
                         Toast.makeText(getApplicationContext(),getResources().getString(R.string.media_list_fail), Toast.LENGTH_SHORT).show();
                     }
@@ -320,14 +313,14 @@ public class ObjectSelect extends AppCompatActivity {
         }));
     }
 
-    private void videoplayer(String url) {
+    private void videoPlayer(String url) {
 
         Intent intent = new Intent(this, VideoPlayer.class);
         intent.putExtra("video_url", url);
         startActivity(intent);
 
     }
-    private void textviewer(String url) {
+    private void textViewer(String url) {
 
         Intent intent = new Intent(this, TextViewer.class);
         intent.putExtra("video_url", url);
@@ -335,7 +328,7 @@ public class ObjectSelect extends AppCompatActivity {
 
     }
 
-    private void imageviewer(String url) {
+    private void imageViewer(String url) {
 
         Intent intent = new Intent(this, ImageViewer.class);
         intent.putExtra("video_url", url);
@@ -343,7 +336,7 @@ public class ObjectSelect extends AppCompatActivity {
 
     }
 
-    private void webbrowser (String url) {
+    private void webBrowser(String url) {
 
         Intent intent = new Intent(this, WebBrowser.class);
         intent.putExtra("web_url", url);
