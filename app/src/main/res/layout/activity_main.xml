@@ -27,7 +27,7 @@
             style="?android:attr/buttonStyle" />
 
         <Button
-            android:id="@+id/ltest"
+            android:id="@+id/about_button"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"

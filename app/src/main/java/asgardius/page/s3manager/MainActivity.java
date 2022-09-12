@@ -201,7 +201,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         //This is to launch file explorer test
-        Button about = (Button)findViewById(R.id.ltest);
+        Button about = (Button)findViewById(R.id.about_button);
         about.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
