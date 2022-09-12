@@ -15,14 +15,15 @@ import java.net.URL;
 import java.util.stream.Collectors;
 
 public class ImageViewer extends AppCompatActivity {
+    String videoURL;
+    ImageView iv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_image_viewer);
         final ProgressBar simpleProgressBar = (ProgressBar) findViewById(R.id.simpleProgressBar);
-        String videoURL = getIntent().getStringExtra("video_url");
-        ImageView iv=(ImageView) findViewById(R.id.imageViewer);
+        iv = (ImageView) findViewById(R.id.imageViewer);
         //System.out.println(videoURL);
         Thread imgread = new Thread(new Runnable() {
 
@@ -30,6 +31,7 @@ public class ImageViewer extends AppCompatActivity {
             public void run() {
                 try  {
                     //Your code goes here
+                    videoURL = getIntent().getStringExtra("video_url");
                     URL thumb_u = new URL(videoURL);
                     Drawable thumb_d = Drawable.createFromStream(thumb_u.openStream(), "src");
 
