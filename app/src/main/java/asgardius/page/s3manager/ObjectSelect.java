@@ -258,8 +258,8 @@ public class ObjectSelect extends AppCompatActivity {
                             // Toast message on menu item clicked
                             //Toast.makeText(MainActivity.this, "You Clicked " + menuItem.getTitle(), Toast.LENGTH_SHORT).show();
                             if (menuItem.getTitle() == getResources().getString(R.string.upload_file_here)) {
-                                //Toast.makeText(ObjectSelect.this, getResources().getString(R.string.pending_feature), Toast.LENGTH_SHORT).show();
-                                upload(false);
+                                Toast.makeText(ObjectSelect.this, getResources().getString(R.string.pending_feature), Toast.LENGTH_SHORT).show();
+                                //upload(false);
                             } else if (menuItem.getTitle() == getResources().getString(R.string.file_del)) {
                                 if (Name.size() == 1 && treelevel >= 1) {
                                     Toast.makeText(ObjectSelect.this, getResources().getString(R.string.only_item_onlist), Toast.LENGTH_SHORT).show();
@@ -284,8 +284,8 @@ public class ObjectSelect extends AppCompatActivity {
                             // Toast message on menu item clicked
                             //Toast.makeText(MainActivity.this, "You Clicked " + menuItem.getTitle(), Toast.LENGTH_SHORT).show();
                             if (menuItem.getTitle() == getResources().getString(R.string.upload_file_here)) {
-                                //Toast.makeText(ObjectSelect.this, getResources().getString(R.string.pending_feature), Toast.LENGTH_SHORT).show();
-                                upload(false);
+                                Toast.makeText(ObjectSelect.this, getResources().getString(R.string.pending_feature), Toast.LENGTH_SHORT).show();
+                                //upload(false);
                             } else if (menuItem.getTitle() == getResources().getString(R.string.file_external)) {
                                 try {
                                     GeneratePresignedUrlRequest request = new GeneratePresignedUrlRequest(bucket, prefix + Name.get(position).toString());

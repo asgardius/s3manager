@@ -60,7 +60,7 @@ public class Uploader extends AppCompatActivity {
         simpleProgressBar = (ProgressBar) findViewById(R.id.simpleProgressBar);
         //Toast.makeText(Uploader.this, getResources().getString(R.string.pending_feature), Toast.LENGTH_SHORT).show();
         performFileSearch("Select file to upload");
-        //fprefix.setText(prefix);
+        fprefix.setText(prefix);
         /*if (isfolder) {
             folder = uploadFolder();
         } else {
@@ -75,7 +75,7 @@ public class Uploader extends AppCompatActivity {
                 } else {
                     //Toast.makeText(CreateBucket.this, getResources().getString(R.string.pending_feature), Toast.LENGTH_SHORT).show();
                     //System.out.println(file.getPath());
-                    System.out.println(filename[filename.length-1]);
+                    System.out.println(fprefix.getText().toString()+filename[filename.length-1]);
                     Thread uploadFile = new Thread(new Runnable() {
 
                         @Override

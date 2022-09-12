@@ -15,7 +15,7 @@
         android:textSize="30sp" />
 
     <EditText
-        android:id="@+id/fprefix"
+        android:id="@+id/bname"
         android:layout_width="match_parent"
         android:layout_height="48dp"
         android:focusable="true"

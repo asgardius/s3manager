@@ -156,8 +156,8 @@ public class BucketSelect extends AppCompatActivity {
                             // Toast message on menu item clicked
                             //Toast.makeText(MainActivity.this, "You Clicked " + menuItem.getTitle(), Toast.LENGTH_SHORT).show();
                             if (menuItem.getTitle() == getResources().getString(R.string.upload_file_tobucket)) {
-                                //Toast.makeText(BucketSelect.this, getResources().getString(R.string.pending_feature), Toast.LENGTH_SHORT).show();
-                                upload(Name.get(position).toString(), false);
+                                Toast.makeText(BucketSelect.this, getResources().getString(R.string.pending_feature), Toast.LENGTH_SHORT).show();
+                                //upload(Name.get(position).toString(), false);
 
                             } else if (menuItem.getTitle() == getResources().getString(R.string.create_bucket)) {
                                 //upload();
@@ -231,8 +231,10 @@ public class BucketSelect extends AppCompatActivity {
 
                                     }
                                     //System.out.println(object);
-                                    DeleteObjectsRequest deleteObjectsRequest = new DeleteObjectsRequest(bucket).withKeys(objectl.toArray(new String[0]));
-                                    s3client.deleteObjects(deleteObjectsRequest);
+                                    if (objectl.size() >= 1) {
+                                        DeleteObjectsRequest deleteObjectsRequest = new DeleteObjectsRequest(bucket).withKeys(objectl.toArray(new String[0]));
+                                        s3client.deleteObjects(deleteObjectsRequest);
+                                    }
                                     s3client.deleteBucket(bucket);
                                     runOnUiThread(new Runnable() {
 
