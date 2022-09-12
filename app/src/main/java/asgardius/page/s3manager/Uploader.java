@@ -33,6 +33,7 @@ public class Uploader extends AppCompatActivity {
     AWSCredentials myCredentials;
     AmazonS3 s3client;
     ProgressBar simpleProgressBar;
+    String[] filename;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +46,7 @@ public class Uploader extends AppCompatActivity {
         location = getIntent().getStringExtra("region");
         prefix = getIntent().getStringExtra("prefix");
         isfolder = getIntent().getBooleanExtra("isfolder", false);
+        fprefix = (EditText)findViewById(R.id.fprefix);
         region = Region.getRegion(location);
         s3ClientOptions = S3ClientOptions.builder().build();
         if (!endpoint.contains(getResources().getString(R.string.aws_endpoint))) {
@@ -54,10 +56,11 @@ public class Uploader extends AppCompatActivity {
         s3client = new AmazonS3Client(myCredentials, region);
         s3client.setEndpoint(endpoint);
         s3client.setS3ClientOptions(s3ClientOptions);
-        fprefix = (EditText)findViewById(R.id.fprefix);
         Button fileUpload = (Button)findViewById(R.id.fileupload);
         simpleProgressBar = (ProgressBar) findViewById(R.id.simpleProgressBar);
-        Toast.makeText(Uploader.this, getResources().getString(R.string.pending_feature), Toast.LENGTH_SHORT).show();
+        //Toast.makeText(Uploader.this, getResources().getString(R.string.pending_feature), Toast.LENGTH_SHORT).show();
+        performFileSearch("Select file to upload");
+        //fprefix.setText(prefix);
         /*if (isfolder) {
             folder = uploadFolder();
         } else {
@@ -71,7 +74,8 @@ public class Uploader extends AppCompatActivity {
                     Toast.makeText(Uploader.this, getResources().getString(R.string.no_file_selected), Toast.LENGTH_SHORT).show();
                 } else {
                     //Toast.makeText(CreateBucket.this, getResources().getString(R.string.pending_feature), Toast.LENGTH_SHORT).show();
-                    System.out.println(file.getPath());
+                    //System.out.println(file.getPath());
+                    System.out.println(filename[filename.length-1]);
                     Thread uploadFile = new Thread(new Runnable() {
 
                         @Override
@@ -112,46 +116,49 @@ public class Uploader extends AppCompatActivity {
 
         });
     }
-/*
-    private Uri uploadFolder() {
-        StorageManager sm = (StorageManager) this.getSystemService(Context.STORAGE_SERVICE);
 
-        Intent intent = sm.getPrimaryStorageVolume().createOpenDocumentTreeIntent();
-        String startDir = "Documents";
+    private void performFileSearch(String messageTitle) {
+        Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+        intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION);
+        intent.setType("*/*");
+        /*String[] mimeTypes = new String[]{"application/x-binary,application/octet-stream"};
+        if (mimeTypes.length > 0) {
+            intent.putExtra(Intent.EXTRA_MIME_TYPES, mimeTypes);
+        }*/
 
-        Uri uri = intent.getParcelableExtra("android.provider.extra.INITIAL_URI");
-
-        String scheme = uri.toString();
-
-        scheme = scheme.replace("/root/", "/document/");
-
-        scheme += "%3A" + startDir;
-
-        uri = Uri.parse(scheme);
-
-        intent.putExtra("android.provider.extra.INITIAL_URI", uri);
-        ((Activity) this).startActivityForResult(intent,100);
-        return uri;
+        if (intent.resolveActivity(getPackageManager()) != null) {
+            startActivityForResult(Intent.createChooser(intent, messageTitle), 100);
+        } else {
+            Toast.makeText(Uploader.this, getResources().getString(R.string.file_choose_fail), Toast.LENGTH_SHORT).show();
+            finish();
+        }
     }
 
-    private Uri uploadFile() {
-        StorageManager sm = (StorageManager) this.getSystemService(Context.STORAGE_SERVICE);
-
-        Intent intent = sm.getPrimaryStorageVolume().createOpenDocumentTreeIntent();
-        String startDir = "Documents";
-
-        Uri uri = intent.getParcelableExtra("android.provider.extra.INITIAL_URI");
-
-        String scheme = uri.toString();
-
-        scheme = scheme.replace("/root/", "/document/");
-
-        scheme += "%3A" + startDir;
-
-        uri = Uri.parse(scheme);
-
-        intent.putExtra("android.provider.extra.INITIAL_URI", uri);
-        ((Activity) this).startActivityForResult(intent,100);
-        return uri;
-    }*/
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, final Intent resultData) {
+        // The ACTION_OPEN_DOCUMENT intent was sent with the request code OPEN_DIRECTORY_REQUEST_CODE.
+        // If the request code seen here doesn't match, it's the response to some other intent,
+        // and the below code shouldn't run at all.
+        super.onActivityResult(requestCode, resultCode, resultData);
+        if (requestCode == 100) {
+            if (resultCode == Activity.RESULT_OK) {
+                // The document selected by the user won't be returned in the intent.
+                // Instead, a URI to that document will be contained in the return intent
+                // provided to this method as a parameter.  Pull that uri using "resultData.getData()"
+                if (resultData != null && resultData.getData() != null) {
+                    file = resultData.getData();
+                    filename = file.getPath().split("/");
+                    System.out.println("File selected successfully");
+                        System.out.println("Prefix "+prefix);
+                } else {
+                    Toast.makeText(Uploader.this, getResources().getString(R.string.file_path_fail), Toast.LENGTH_SHORT).show();
+                    finish();
+                }
+            } else {
+                System.out.println("User cancelled file browsing {}");
+                finish();
+            }
+        }
+    }
 }
