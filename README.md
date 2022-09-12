@@ -15,12 +15,23 @@ Current feature list
 * Delete files
 * Delete folders
 
+Planned feature list
+
+* File upload
+* File download
+
+This app is a work in progress, so it have some bugs that need to be fixed
+
+Knnown issues
+
+* Object listing can be slow on buckets with a lot of objects (4000+)
+
 Known supported providers
 
 * Amazon Web Services
 * Scaleway Elements
 * Oracle Cloud
-*MinIO
+* MinIO
 
 Known not supported providers
 
