@@ -5,7 +5,6 @@ import static android.content.ContentValues.TAG;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
-import android.content.ContentResolver;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
@@ -31,11 +30,12 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.concurrent.TimeUnit;
 
 public class Uploader extends AppCompatActivity {
     String  username, password, endpoint, bucket, prefix, location, fkey;
     boolean isfolder;
-    Uri file, folder;
+    Uri fileuri, folder;
     EditText fprefix;
     Region region;
     S3ClientOptions s3ClientOptions;
@@ -79,7 +79,7 @@ public class Uploader extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 //buttonaction
-                if (file == null && folder == null) {
+                if (fileuri == null && folder == null) {
                     Toast.makeText(Uploader.this, getResources().getString(R.string.no_file_selected), Toast.LENGTH_SHORT).show();
                 } else {
                     //Toast.makeText(CreateBucket.this, getResources().getString(R.string.pending_feature), Toast.LENGTH_SHORT).show();
@@ -97,17 +97,28 @@ public class Uploader extends AppCompatActivity {
                             try  {
                                 //Your code goes here
                                 //s3client.createBucket(bucket, location);
-                                System.out.println(fkey);
-                                ContentResolver cr = getContentResolver();
-                                InputStream is = cr.openInputStream(file);
-                                File ufile = readContentToFile(file);
+                                //System.out.println(fkey);
+                                File ufile = readContentToFile(fileuri);
+                                long filesize =ufile.length();
                                 PutObjectResult upload = s3client.putObject(bucket, fkey, ufile);
                                 runOnUiThread(new Runnable() {
 
                                     @Override
                                     public void run() {
+                                        simpleProgressBar.setVisibility(View.VISIBLE);
+                                        while (upload.getMetadata().getContentLength() <= filesize-1) {
+                                            if(upload.getMetadata().getContentLength() != 0) {
+                                                simpleProgressBar.setProgress(((int)filesize / (int)upload.getMetadata().getContentLength())*100);
+                                            }
+                                            try {
+                                                TimeUnit.SECONDS.sleep(1);
+                                            } catch (InterruptedException e) {
+                                                e.printStackTrace();
+                                            }
+                                        }
+                                        simpleProgressBar.setProgress(100);
                                         // Sending reference and data to Adapter
-                                        //Toast.makeText(getApplicationContext(),getResources().getString(R.string.upload_success), Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(getApplicationContext(),getResources().getString(R.string.upload_success), Toast.LENGTH_SHORT).show();
                                         //simpleProgressBar.setVisibility(View.INVISIBLE);
                                     }
                                 });
@@ -166,16 +177,16 @@ public class Uploader extends AppCompatActivity {
                 // Instead, a URI to that document will be contained in the return intent
                 // provided to this method as a parameter.  Pull that uri using "resultData.getData()"
                 if (resultData != null && resultData.getData() != null) {
-                    file = resultData.getData();
-                    filename = file.getPath().split("/");
-                    System.out.println("File selected successfully");
-                        System.out.println("content://com.android.externalstorage.documents"+file.getPath());
+                    fileuri = resultData.getData();
+                    filename = fileuri.getPath().split("/");
+                    //System.out.println("File selected successfully");
+                    //System.out.println("content://com.android.externalstorage.documents"+file.getPath());
                 } else {
                     Toast.makeText(Uploader.this, getResources().getString(R.string.file_path_fail), Toast.LENGTH_SHORT).show();
                     finish();
                 }
             } else {
-                System.out.println("User cancelled file browsing {}");
+                //System.out.println("User cancelled file browsing {}");
                 finish();
             }
         }
