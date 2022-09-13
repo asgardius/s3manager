@@ -210,7 +210,7 @@ public class ObjectSelect extends AppCompatActivity {
                     } catch (Exception e) {
                         Toast.makeText(getApplicationContext(),getResources().getString(R.string.media_list_fail), Toast.LENGTH_SHORT).show();
                     }
-                } else if (Img.get(position).equals(R.drawable.textfile)) {
+                } /*else if (Img.get(position).equals(R.drawable.textfile)) {
                     //load media file
                     try {
                         GeneratePresignedUrlRequest request = new GeneratePresignedUrlRequest(bucket, prefix + Name.get(position).toString());
@@ -219,7 +219,7 @@ public class ObjectSelect extends AppCompatActivity {
                     } catch (Exception e) {
                         Toast.makeText(getApplicationContext(),getResources().getString(R.string.media_list_fail), Toast.LENGTH_SHORT).show();
                     }
-                } else if (Img.get(position).equals(R.drawable.webpage)) {
+                }*/ else if (Img.get(position).equals(R.drawable.webpage) || Img.get(position).equals(R.drawable.textfile)) {
                     //load media file
                     try {
                         GeneratePresignedUrlRequest request = new GeneratePresignedUrlRequest(bucket, prefix + Name.get(position).toString());
