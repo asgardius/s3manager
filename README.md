@@ -25,6 +25,7 @@ This app is a work in progress, so it have some bugs that need to be fixed
 Knnown issues
 
 * Object listing can be slow on buckets with a lot of objects (4000+)
+* Slow user interface on some low-end devices
 
 Known supported providers
 
