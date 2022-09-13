@@ -1,11 +1,17 @@
 package asgardius.page.s3manager;
 
+import static android.content.ContentValues.TAG;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
+import android.content.ContentResolver;
 import android.content.Intent;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -21,6 +27,10 @@ import com.amazonaws.services.s3.S3ClientOptions;
 import com.amazonaws.services.s3.model.PutObjectResult;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 
 public class Uploader extends AppCompatActivity {
     String  username, password, endpoint, bucket, prefix, location, fkey;
@@ -88,7 +98,9 @@ public class Uploader extends AppCompatActivity {
                                 //Your code goes here
                                 //s3client.createBucket(bucket, location);
                                 System.out.println(fkey);
-                                File ufile = new File(file.toString());
+                                ContentResolver cr = getContentResolver();
+                                InputStream is = cr.openInputStream(file);
+                                File ufile = readContentToFile(file);
                                 PutObjectResult upload = s3client.putObject(bucket, fkey, ufile);
                                 runOnUiThread(new Runnable() {
 
@@ -157,7 +169,7 @@ public class Uploader extends AppCompatActivity {
                     file = resultData.getData();
                     filename = file.getPath().split("/");
                     System.out.println("File selected successfully");
-                        System.out.println(file.toString());
+                        System.out.println("content://com.android.externalstorage.documents"+file.getPath());
                 } else {
                     Toast.makeText(Uploader.this, getResources().getString(R.string.file_path_fail), Toast.LENGTH_SHORT).show();
                     finish();
@@ -168,4 +180,34 @@ public class Uploader extends AppCompatActivity {
             }
         }
     }
+
+    private File readContentToFile(Uri uri) throws IOException {
+        final File file = new File(getCacheDir(), getDisplayName(uri));
+        try (
+                final InputStream in = getContentResolver().openInputStream(uri);
+                final OutputStream out = new FileOutputStream(file, false);
+        ) {
+            byte[] buffer = new byte[1024];
+            for (int len; (len = in.read(buffer)) != -1; ) {
+                out.write(buffer, 0, len);
+            }
+            return file;
+        }
+    }
+
+    private String getDisplayName(Uri uri) {
+        final String[] projection = { MediaStore.Images.Media.DISPLAY_NAME };
+        try (
+                Cursor cursor = getContentResolver().query(uri, projection, null, null, null);
+        ){
+            int columnIndex = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DISPLAY_NAME);
+            if (cursor.moveToFirst()) {
+                return cursor.getString(columnIndex);
+            }
+        }
+        // If the display name is not found for any reason, use the Uri path as a fallback.
+        Log.w(TAG, "Couldnt determine DISPLAY_NAME for Uri.  Falling back to Uri path: " + uri.getPath());
+        return uri.getPath();
+    }
+
 }
