@@ -32,6 +32,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Locale;
 
 public class ObjectSelect extends AppCompatActivity {
 
@@ -127,23 +128,23 @@ public class ObjectSelect extends AppCompatActivity {
                         if (Name.get(i).toString().endsWith("/")) {
                             Img.add(R.drawable.folder);
                         }
-                        else if (Name.get(i).toString().endsWith(".txt") || Name.get(i).toString().endsWith(".md")) {
+                        else if (Name.get(i).toString().toLowerCase(Locale.ROOT).endsWith(".txt") || Name.get(i).toString().toLowerCase(Locale.ROOT).endsWith(".md")) {
                             Img.add(R.drawable.textfile);
                         }
-                        else if (Name.get(i).toString().endsWith(".jpg") || Name.get(i).toString().endsWith(".jpeg") || Name.get(i).toString().endsWith(".png") || Name.get(i).toString().endsWith(".gif")) {
+                        else if (Name.get(i).toString().toLowerCase(Locale.ROOT).endsWith(".jpg") || Name.get(i).toString().toLowerCase(Locale.ROOT).endsWith(".jpeg") || Name.get(i).toString().toLowerCase(Locale.ROOT).endsWith(".png") || Name.get(i).toString().toLowerCase(Locale.ROOT).endsWith(".gif")) {
                             Img.add(R.drawable.imagefile);
                         }
-                        else if (Name.get(i).toString().endsWith(".opus") || Name.get(i).toString().endsWith(".ogg")
-                                || Name.get(i).toString().endsWith(".oga") || Name.get(i).toString().endsWith(".mp3")
-                                || Name.get(i).toString().endsWith(".m4a") || Name.get(i).toString().endsWith(".flac")
-                                || Name.get(i).toString().endsWith(".mka")) {
+                        else if (Name.get(i).toString().toLowerCase(Locale.ROOT).endsWith(".opus") || Name.get(i).toString().toLowerCase(Locale.ROOT).endsWith(".ogg")
+                                || Name.get(i).toString().toLowerCase(Locale.ROOT).endsWith(".oga") || Name.get(i).toString().toLowerCase(Locale.ROOT).endsWith(".mp3")
+                                || Name.get(i).toString().toLowerCase(Locale.ROOT).endsWith(".m4a") || Name.get(i).toString().toLowerCase(Locale.ROOT).endsWith(".flac")
+                                || Name.get(i).toString().toLowerCase(Locale.ROOT).endsWith(".mka")) {
                             Img.add(R.drawable.audiofile);
                         }
-                        else if(Name.get(i).toString().endsWith(".mp4") || Name.get(i).toString().endsWith(".mkv")
+                        else if(Name.get(i).toString().toLowerCase(Locale.ROOT).endsWith(".mp4") || Name.get(i).toString().toLowerCase(Locale.ROOT).endsWith(".mkv")
                                 || Name.get(i).toString().endsWith(".webm") || Name.get(i).toString().endsWith(".m4v")) {
                             Img.add(R.drawable.videofile);
                         }
-                        else if (Name.get(i).toString().endsWith(".htm") || Name.get(i).toString().endsWith(".html")) {
+                        else if (Name.get(i).toString().toLowerCase(Locale.ROOT).endsWith(".htm") || Name.get(i).toString().toLowerCase(Locale.ROOT).endsWith(".html")) {
                             Img.add(R.drawable.webpage);
                         }
                         else {
