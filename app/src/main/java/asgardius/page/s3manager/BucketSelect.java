@@ -128,8 +128,7 @@ public class BucketSelect extends AppCompatActivity {
         });
 
         listbucket.start();
-        //listbucket list = new listbucket();
-        //list.execute("test");
+
         recyclerView.addOnItemTouchListener(new RecyclerTouchListener(getApplicationContext(), recyclerView, new RecyclerTouchListener.ClickListener() {
             @Override
             public void onClick(View view, int position) {
@@ -156,8 +155,8 @@ public class BucketSelect extends AppCompatActivity {
                             // Toast message on menu item clicked
                             //Toast.makeText(MainActivity.this, "You Clicked " + menuItem.getTitle(), Toast.LENGTH_SHORT).show();
                             if (menuItem.getTitle() == getResources().getString(R.string.upload_file_tobucket)) {
-                                Toast.makeText(BucketSelect.this, getResources().getString(R.string.pending_feature), Toast.LENGTH_SHORT).show();
-                                //upload(Name.get(position).toString(), false);
+                                //Toast.makeText(BucketSelect.this, getResources().getString(R.string.pending_feature), Toast.LENGTH_SHORT).show();
+                                upload(Name.get(position).toString(), false);
 
                             } else if (menuItem.getTitle() == getResources().getString(R.string.create_bucket)) {
                                 //upload();

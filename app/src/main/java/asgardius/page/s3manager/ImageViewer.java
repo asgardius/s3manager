@@ -39,14 +39,11 @@ public class ImageViewer extends AppCompatActivity {
 
                         @Override
                         public void run() {
-                            // Sending reference and data to Adapter
                             simpleProgressBar.setVisibility(View.INVISIBLE);
                             iv.setImageDrawable(thumb_d);
 
                         }
                     });
-                    //System.out.println("tree "+treelevel);
-                    //System.out.println("prefix "+prefix);
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -58,7 +55,6 @@ public class ImageViewer extends AppCompatActivity {
                             finish();
                         }
                     });
-                    //Toast.makeText(getApplicationContext(),getResources().getString(R.string.media_list_fail), Toast.LENGTH_SHORT).show();
                     finish();
                 }
             }

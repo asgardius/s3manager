@@ -16,10 +16,10 @@
     <string name="file_external">Open in</string>
     <string name="upload_file_tobucket">Upload file to this bucket</string>
     <string name="upload_folder_tobucket">Upload folder to this bucket</string>
-    <string name="file_choose_fail">Could not open file choose screen</string>
+    <string name="feature_not_supported">Your device is not compatible with this feature</string>
     <string name="file_path_fail">File uri not found</string>
     <string name="upload_button">Upload file</string>
-    <string name="upload_prefix">Upload prefix</string>
+    <string name="upload_prefix">Object prefix</string>
     <string name="no_file_selected">Please select a file</string>
     <string name="upload_success">File uploaded successfully</string>
     <string name="create_bucket">Create new bucket</string>

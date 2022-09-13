@@ -3,11 +3,9 @@ package asgardius.page.s3manager;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.storage.StorageManager;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -20,11 +18,12 @@ import com.amazonaws.regions.Region;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.S3ClientOptions;
+import com.amazonaws.services.s3.model.PutObjectResult;
 
-import java.net.URL;
+import java.io.File;
 
 public class Uploader extends AppCompatActivity {
-    String  username, password, endpoint, bucket, prefix, location;
+    String  username, password, endpoint, bucket, prefix, location, fkey;
     boolean isfolder;
     Uri file, folder;
     EditText fprefix;
@@ -75,7 +74,12 @@ public class Uploader extends AppCompatActivity {
                 } else {
                     //Toast.makeText(CreateBucket.this, getResources().getString(R.string.pending_feature), Toast.LENGTH_SHORT).show();
                     //System.out.println(file.getPath());
-                    System.out.println(fprefix.getText().toString()+filename[filename.length-1]);
+                    if (fprefix.getText().toString().endsWith("/") || fprefix.getText().toString().equals("")) {
+                        fkey = fprefix.getText().toString()+filename[filename.length-1];
+                    } else {
+                        fkey = fprefix.getText().toString()+"/"+filename[filename.length-1];
+                    }
+                    System.out.println(fkey);
                     Thread uploadFile = new Thread(new Runnable() {
 
                         @Override
@@ -83,13 +87,16 @@ public class Uploader extends AppCompatActivity {
                             try  {
                                 //Your code goes here
                                 //s3client.createBucket(bucket, location);
+                                System.out.println(fkey);
+                                File ufile = new File(file.toString());
+                                PutObjectResult upload = s3client.putObject(bucket, fkey, ufile);
                                 runOnUiThread(new Runnable() {
 
                                     @Override
                                     public void run() {
                                         // Sending reference and data to Adapter
-                                        Toast.makeText(getApplicationContext(),getResources().getString(R.string.upload_success), Toast.LENGTH_SHORT).show();
-                                        simpleProgressBar.setVisibility(View.INVISIBLE);
+                                        //Toast.makeText(getApplicationContext(),getResources().getString(R.string.upload_success), Toast.LENGTH_SHORT).show();
+                                        //simpleProgressBar.setVisibility(View.INVISIBLE);
                                     }
                                 });
                                 //System.out.println("tree "+treelevel);
@@ -110,7 +117,7 @@ public class Uploader extends AppCompatActivity {
                         }
                     });
                     //simpleProgressBar.setVisibility(View.VISIBLE);
-                    //uploadFile.start();
+                    uploadFile.start();
                 }
             }
 
@@ -130,7 +137,7 @@ public class Uploader extends AppCompatActivity {
         if (intent.resolveActivity(getPackageManager()) != null) {
             startActivityForResult(Intent.createChooser(intent, messageTitle), 100);
         } else {
-            Toast.makeText(Uploader.this, getResources().getString(R.string.file_choose_fail), Toast.LENGTH_SHORT).show();
+            Toast.makeText(Uploader.this, getResources().getString(R.string.feature_not_supported), Toast.LENGTH_SHORT).show();
             finish();
         }
     }
@@ -150,7 +157,7 @@ public class Uploader extends AppCompatActivity {
                     file = resultData.getData();
                     filename = file.getPath().split("/");
                     System.out.println("File selected successfully");
-                        System.out.println("Prefix "+prefix);
+                        System.out.println(file.toString());
                 } else {
                     Toast.makeText(Uploader.this, getResources().getString(R.string.file_path_fail), Toast.LENGTH_SHORT).show();
                     finish();
