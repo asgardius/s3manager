@@ -23,14 +23,22 @@ import com.amazonaws.regions.Region;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.S3ClientOptions;
+import com.amazonaws.services.s3.model.CompleteMultipartUploadRequest;
+import com.amazonaws.services.s3.model.InitiateMultipartUploadRequest;
+import com.amazonaws.services.s3.model.InitiateMultipartUploadResult;
+import com.amazonaws.services.s3.model.PartETag;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.amazonaws.services.s3.model.PutObjectResult;
+import com.amazonaws.services.s3.model.UploadPartRequest;
+import com.amazonaws.services.s3.model.UploadPartResult;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 public class Uploader extends AppCompatActivity {
@@ -47,6 +55,7 @@ public class Uploader extends AppCompatActivity {
     String[] filename;
     PutObjectResult upload;
     long filesize;
+    private static final long MAX_SINGLE_PART_UPLOAD_BYTES = 5 * 1024 * 1024;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,8 +118,9 @@ public class Uploader extends AppCompatActivity {
                                 //System.out.println(fkey);
                                 File ufile = readContentToFile(fileuri);
                                 filesize = ufile.length();
-                                PutObjectRequest request = new PutObjectRequest(bucket, fkey, ufile);
-                                upload = s3client.putObject(request);
+                                //PutObjectRequest request = new PutObjectRequest(bucket, fkey, ufile);
+                                //upload = s3client.putObject(request);
+                                putS3Object(bucket, fkey, ufile);
                                 runOnUiThread(new Runnable() {
 
                                     @Override
@@ -237,6 +247,59 @@ public class Uploader extends AppCompatActivity {
         // If the display name is not found for any reason, use the Uri path as a fallback.
         Log.w(TAG, "Couldnt determine DISPLAY_NAME for Uri.  Falling back to Uri path: " + uri.getPath());
         return uri.getPath();
+    }
+
+    public void putS3Object(String bucket, String objectKey, File file) {
+        if (file.length() <= MAX_SINGLE_PART_UPLOAD_BYTES) {
+            putS3ObjectSinglePart(bucket, objectKey, file);
+        } else {
+            putS3ObjectMultiPart(bucket, objectKey, file);
+        }
+    }
+
+    private void putS3ObjectSinglePart(String bucket, String objectKey, File file) {
+        PutObjectRequest request = new PutObjectRequest(bucket, objectKey, file);
+        PutObjectResult result = s3client.putObject(request);
+        long bytesPushed = result.getMetadata().getContentLength();
+        //LOGGER.info("Pushed {} bytes to s3://{}/{}", bytesPushed, bucket, objectKey);
+    }
+
+    private void putS3ObjectMultiPart(String bucket, String objectKey, File file) {
+        long contentLength = file.length();
+        long partSize = MAX_SINGLE_PART_UPLOAD_BYTES;
+        List<PartETag> partETags = new ArrayList<>();
+
+        // Initiate the multipart upload.
+        InitiateMultipartUploadRequest initRequest = new InitiateMultipartUploadRequest(bucket, objectKey);
+        InitiateMultipartUploadResult initResponse = s3client.initiateMultipartUpload(initRequest);
+
+        // Upload the file parts.
+        long fileOffset = 0;
+        for (int partNumber = 1; fileOffset < contentLength; ++partNumber) {
+            // Because the last part could be less than 5 MB, adjust the part size as needed.
+            partSize = Math.min(partSize, (contentLength - fileOffset));
+
+            // Create the request to upload a part.
+            UploadPartRequest uploadRequest = new UploadPartRequest()
+                    .withBucketName(bucket)
+                    .withKey(objectKey)
+                    .withUploadId(initResponse.getUploadId())
+                    .withPartNumber(partNumber)
+                    .withFileOffset(fileOffset)
+                    .withFile(file)
+                    .withPartSize(partSize);
+
+            // Upload the part and add the response's ETag to our list.
+            UploadPartResult uploadResult = s3client.uploadPart(uploadRequest);
+            //LOGGER.info("Uploading part {} of Object s3://{}/{}", partNumber, bucket, objectKey);
+            partETags.add(uploadResult.getPartETag());
+
+            fileOffset += partSize;
+        }
+
+        // Complete the multipart upload.
+        CompleteMultipartUploadRequest compRequest = new CompleteMultipartUploadRequest(bucket, objectKey, initResponse.getUploadId(), partETags);
+        s3client.completeMultipartUpload(compRequest);
     }
 
 }
