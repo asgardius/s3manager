@@ -54,6 +54,7 @@ public class Uploader extends AppCompatActivity {
     ProgressBar simpleProgressBar;
     String[] filename;
     long filesize;
+    File ufile;
     private static final long MAX_SINGLE_PART_UPLOAD_BYTES = 5 * 1024 * 1024;
 
     @Override
@@ -99,23 +100,23 @@ public class Uploader extends AppCompatActivity {
                     simpleProgressBar.setVisibility(View.VISIBLE);
                     fileUpload.setEnabled(false);
                     fileUpload.setText(getResources().getString(R.string.wait));
-                    if (fprefix.getText().toString().endsWith("/") || fprefix.getText().toString().equals("")) {
-                        fkey = fprefix.getText().toString()+filename[filename.length-1];
-                    } else {
-                        fkey = fprefix.getText().toString()+"/"+filename[filename.length-1];
-                    }
-                    //System.out.println(fkey);
-                    progress = 0;
-                    filesize = 0;
                     Thread uploadFile = new Thread(new Runnable() {
 
                         @Override
                         public void run() {
+                            if (fprefix.getText().toString().endsWith("/") || fprefix.getText().toString().equals("")) {
+                                fkey = fprefix.getText().toString()+filename[filename.length-1];
+                            } else {
+                                fkey = fprefix.getText().toString()+"/"+filename[filename.length-1];
+                            }
+                            //System.out.println(fkey);
+                            progress = 0;
+                            filesize = 0;
                             try  {
                                 //Your code goes here
                                 //s3client.createBucket(bucket, location);
                                 //System.out.println(fkey);
-                                File ufile = readContentToFile(fileuri);
+                                ufile = readContentToFile(fileuri);
                                 filesize = ufile.length();
                                 //PutObjectRequest request = new PutObjectRequest(bucket, fkey, ufile);
                                 //upload = s3client.putObject(request);
