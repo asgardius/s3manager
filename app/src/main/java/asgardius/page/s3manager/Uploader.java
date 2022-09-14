@@ -23,6 +23,7 @@ import com.amazonaws.regions.Region;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.S3ClientOptions;
+import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.amazonaws.services.s3.model.PutObjectResult;
 
 import java.io.File;
@@ -35,6 +36,7 @@ import java.util.concurrent.TimeUnit;
 public class Uploader extends AppCompatActivity {
     String  username, password, endpoint, bucket, prefix, location, fkey;
     boolean isfolder;
+    int progress;
     Uri fileuri, folder;
     EditText fprefix;
     Region region;
@@ -43,6 +45,8 @@ public class Uploader extends AppCompatActivity {
     AmazonS3 s3client;
     ProgressBar simpleProgressBar;
     String[] filename;
+    PutObjectResult upload;
+    long filesize;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,12 +88,17 @@ public class Uploader extends AppCompatActivity {
                 } else {
                     //Toast.makeText(CreateBucket.this, getResources().getString(R.string.pending_feature), Toast.LENGTH_SHORT).show();
                     //System.out.println(file.getPath());
+                    simpleProgressBar.setVisibility(View.VISIBLE);
+                    fileUpload.setEnabled(false);
+                    fileUpload.setText(getResources().getString(R.string.wait));
                     if (fprefix.getText().toString().endsWith("/") || fprefix.getText().toString().equals("")) {
                         fkey = fprefix.getText().toString()+filename[filename.length-1];
                     } else {
                         fkey = fprefix.getText().toString()+"/"+filename[filename.length-1];
                     }
                     System.out.println(fkey);
+                    progress = 0;
+                    filesize = 0;
                     Thread uploadFile = new Thread(new Runnable() {
 
                         @Override
@@ -99,25 +108,16 @@ public class Uploader extends AppCompatActivity {
                                 //s3client.createBucket(bucket, location);
                                 //System.out.println(fkey);
                                 File ufile = readContentToFile(fileuri);
-                                long filesize =ufile.length();
-                                PutObjectResult upload = s3client.putObject(bucket, fkey, ufile);
+                                filesize = ufile.length();
+                                PutObjectRequest request = new PutObjectRequest(bucket, fkey, ufile);
+                                upload = s3client.putObject(request);
                                 runOnUiThread(new Runnable() {
 
                                     @Override
                                     public void run() {
-                                        simpleProgressBar.setVisibility(View.VISIBLE);
-                                        while (upload.getMetadata().getContentLength() <= filesize-1) {
-                                            if(upload.getMetadata().getContentLength() != 0) {
-                                                simpleProgressBar.setProgress(((int)filesize / (int)upload.getMetadata().getContentLength())*100);
-                                            }
-                                            try {
-                                                TimeUnit.SECONDS.sleep(1);
-                                            } catch (InterruptedException e) {
-                                                e.printStackTrace();
-                                            }
-                                        }
-                                        simpleProgressBar.setProgress(100);
-                                        // Sending reference and data to Adapter
+                                        //simpleProgressBar.setProgress(100);
+                                        simpleProgressBar.setVisibility(View.INVISIBLE);
+                                        fileUpload.setText(getResources().getString(R.string.success));
                                         Toast.makeText(getApplicationContext(),getResources().getString(R.string.upload_success), Toast.LENGTH_SHORT).show();
                                         //simpleProgressBar.setVisibility(View.INVISIBLE);
                                     }
@@ -131,16 +131,34 @@ public class Uploader extends AppCompatActivity {
 
                                     @Override
                                     public void run() {
+                                        fileUpload.setEnabled(true);
+                                        fileUpload.setText(getResources().getString(R.string.retry));
                                         Toast.makeText(getApplicationContext(),getResources().getString(R.string.media_list_fail), Toast.LENGTH_SHORT).show();
                                     }
                                 });
                                 //Toast.makeText(getApplicationContext(),getResources().getString(R.string.media_list_fail), Toast.LENGTH_SHORT).show();
-                                finish();
+                                //finish();
                             }
                         }
                     });
                     //simpleProgressBar.setVisibility(View.VISIBLE);
                     uploadFile.start();
+                    /*while (progress <= 99) {
+                        System.out.println("Upload in progress");
+                        if (upload != null) {
+                            System.out.println(upload.getMetadata().getContentLength());
+                            if(upload.getMetadata().getContentLength() != 0) {
+                                progress = (int) (((int)filesize / (int)upload.getMetadata().getContentLength())*100);
+                                simpleProgressBar.setProgress(progress);
+                            }
+                        }
+                        System.out.println(filesize);
+                        try {
+                            TimeUnit.SECONDS.sleep(1);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }*/
                 }
             }
 
