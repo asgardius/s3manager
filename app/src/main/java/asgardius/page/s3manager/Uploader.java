@@ -53,7 +53,6 @@ public class Uploader extends AppCompatActivity {
     AmazonS3 s3client;
     ProgressBar simpleProgressBar;
     String[] filename;
-    PutObjectResult upload;
     long filesize;
     private static final long MAX_SINGLE_PART_UPLOAD_BYTES = 5 * 1024 * 1024;
 
@@ -105,7 +104,7 @@ public class Uploader extends AppCompatActivity {
                     } else {
                         fkey = fprefix.getText().toString()+"/"+filename[filename.length-1];
                     }
-                    System.out.println(fkey);
+                    //System.out.println(fkey);
                     progress = 0;
                     filesize = 0;
                     Thread uploadFile = new Thread(new Runnable() {
@@ -176,15 +175,11 @@ public class Uploader extends AppCompatActivity {
     }
 
     private void performFileSearch(String messageTitle) {
-        Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+        Intent intent = new Intent();
+        intent.setAction(Intent.ACTION_OPEN_DOCUMENT);
         intent.addCategory(Intent.CATEGORY_OPENABLE);
-        intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION);
+        intent.putExtra(Intent.EXTRA_LOCAL_ONLY, true);
         intent.setType("*/*");
-        /*String[] mimeTypes = new String[]{"application/x-binary,application/octet-stream"};
-        if (mimeTypes.length > 0) {
-            intent.putExtra(Intent.EXTRA_MIME_TYPES, mimeTypes);
-        }*/
-
         if (intent.resolveActivity(getPackageManager()) != null) {
             startActivityForResult(Intent.createChooser(intent, messageTitle), 100);
         } else {
