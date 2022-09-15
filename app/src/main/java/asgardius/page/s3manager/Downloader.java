@@ -26,6 +26,7 @@ import com.amazonaws.regions.Region;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.S3ClientOptions;
+import com.amazonaws.services.s3.model.S3Object;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.io.File;
@@ -50,19 +51,21 @@ public class Downloader extends AppCompatActivity {
     Intent intent;
     Button fileDownload;
     Thread downloadFile;
-    DownloadManager downloadManager;
+    S3Object object;
+    InputStream in;
+    OutputStream out;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_downloader);
-        filekey = getIntent().getStringExtra("file_url");
-        filename = getIntent().getStringExtra("file_name");
+        filename = getIntent().getStringExtra("filename");
         endpoint = getIntent().getStringExtra("endpoint");
         username = getIntent().getStringExtra("username");
         password = getIntent().getStringExtra("password");
         bucket = getIntent().getStringExtra("bucket");
         location = getIntent().getStringExtra("region");
+        prefix = getIntent().getStringExtra("prefix");
         simpleProgressBar = (ProgressBar) findViewById(R.id.simpleProgressBar);
         fileDownload = (Button)findViewById(R.id.filedownload);
         region = Region.getRegion(location);
@@ -80,6 +83,7 @@ public class Downloader extends AppCompatActivity {
             public void onClick(View view) {
                 //buttonaction
                 simpleProgressBar.setVisibility(View.VISIBLE);
+                fileDownload.setEnabled(false);
                 fileDownload.setText(getResources().getString(R.string.download_in_progress));
                 downloadFile = new Thread(new Runnable() {
 
@@ -90,13 +94,15 @@ public class Downloader extends AppCompatActivity {
                             //Your code goes here
                             //s3client.createBucket(bucket, location);
                             //System.out.println(fkey);
+                            object = s3client.getObject(bucket, prefix+filename);
+                            writeContentToFile(fileuri);
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
                                     //simpleProgressBar.setProgress(100);
                                     simpleProgressBar.setVisibility(View.INVISIBLE);
                                     fileDownload.setText(getResources().getString(R.string.download_success));
-                                    Toast.makeText(getApplicationContext(),getResources().getString(R.string.upload_success), Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(getApplicationContext(),getResources().getString(R.string.download_success), Toast.LENGTH_SHORT).show();
                                     //simpleProgressBar.setVisibility(View.INVISIBLE);
                                 }
                             });
@@ -110,7 +116,7 @@ public class Downloader extends AppCompatActivity {
                                 @Override
                                 public void run() {
                                     simpleProgressBar.setVisibility(View.INVISIBLE);
-                                    fileDownload.setText(getResources().getString(R.string.retry));
+                                    fileDownload.setText(getResources().getString(R.string.download_failed));
                                     Toast.makeText(getApplicationContext(),getResources().getString(R.string.media_list_fail), Toast.LENGTH_SHORT).show();
                                 }
                             });
@@ -164,17 +170,15 @@ public class Downloader extends AppCompatActivity {
         }
     }
 
-    private File writeContentToFile(Uri uri) throws IOException {
-        final File file = new File(getCacheDir(), getDisplayName(uri));
+    private void writeContentToFile(Uri uri) throws IOException {
         try (
-                final InputStream in = new FileInputStream(file);
+                final InputStream in = object.getObjectContent();
                 final OutputStream out = getContentResolver().openOutputStream(uri);
         ) {
             byte[] buffer = new byte[1024];
             for (int len; (len = in.read(buffer)) != -1; ) {
                 out.write(buffer, 0, len);
             }
-            return file;
         }
     }
 

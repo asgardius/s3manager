@@ -156,7 +156,7 @@ public class BucketSelect extends AppCompatActivity {
                             //Toast.makeText(MainActivity.this, "You Clicked " + menuItem.getTitle(), Toast.LENGTH_SHORT).show();
                             if (menuItem.getTitle() == getResources().getString(R.string.upload_file_tobucket)) {
                                 //Toast.makeText(BucketSelect.this, getResources().getString(R.string.pending_feature), Toast.LENGTH_SHORT).show();
-                                upload(Name.get(position).toString(), false);
+                                upload(Name.get(position).toString());
 
                             } else if (menuItem.getTitle() == getResources().getString(R.string.create_bucket)) {
                                 //upload();
@@ -275,7 +275,7 @@ public class BucketSelect extends AppCompatActivity {
         dialog.show();
     }
 
-    private void upload(String bucket, boolean isfolder) {
+    private void upload(String bucket) {
         Intent intent = new Intent(this, Uploader.class);
         intent.putExtra("endpoint", endpoint);
         intent.putExtra("username", username);
@@ -283,7 +283,6 @@ public class BucketSelect extends AppCompatActivity {
         intent.putExtra("bucket", bucket);
         intent.putExtra("prefix", prefix);
         intent.putExtra("region", location);
-        intent.putExtra("isfolder", isfolder);
         startActivity(intent);
     }
 

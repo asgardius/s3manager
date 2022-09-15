@@ -20,6 +20,7 @@
         tools:targetApi="31">
         <activity
             android:name=".Downloader"
+            android:configChanges="orientation|keyboardHidden|screenSize|uiMode|keyboardHidden"
             android:exported="false" />
         <activity
             android:name=".CreateBucket"

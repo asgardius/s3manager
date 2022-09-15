@@ -43,9 +43,8 @@ import java.util.List;
 
 public class Uploader extends AppCompatActivity {
     String  username, password, endpoint, bucket, prefix, location, fkey;
-    //boolean isfolder;
     int progress;
-    Uri fileuri, folder, uri;
+    Uri fileuri, folder;
     EditText fprefix;
     Region region;
     S3ClientOptions s3ClientOptions;
@@ -56,6 +55,7 @@ public class Uploader extends AppCompatActivity {
     File ufile;
     Intent intent;
     Button fileUpload;
+    Thread uploadFile;
     private static final long MAX_SINGLE_PART_UPLOAD_BYTES = 5 * 1024 * 1024;
 
     @Override
@@ -68,7 +68,6 @@ public class Uploader extends AppCompatActivity {
         bucket = getIntent().getStringExtra("bucket");
         location = getIntent().getStringExtra("region");
         prefix = getIntent().getStringExtra("prefix");
-        //isfolder = getIntent().getBooleanExtra("isfolder", false);
         fprefix = (EditText)findViewById(R.id.fprefix);
         region = Region.getRegion(location);
         s3ClientOptions = S3ClientOptions.builder().build();
@@ -101,7 +100,7 @@ public class Uploader extends AppCompatActivity {
                     simpleProgressBar.setVisibility(View.VISIBLE);
                     fileUpload.setEnabled(false);
                     fileUpload.setText(getResources().getString(R.string.upload_in_progress));
-                    Thread uploadFile = new Thread(new Runnable() {
+                    uploadFile = new Thread(new Runnable() {
 
                         @Override
                         public void run() {

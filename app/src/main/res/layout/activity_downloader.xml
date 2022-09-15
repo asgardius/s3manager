@@ -7,13 +7,6 @@
     android:orientation="vertical"
     tools:context=".Downloader">
 
-    <TextView
-        android:id="@+id/download_indicator"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textAlignment="center"
-        android:textSize="25sp" />
-
     <LinearLayout
         android:id="@+id/linearLayout"
         android:layout_width="match_parent"
