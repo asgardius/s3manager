@@ -54,7 +54,6 @@ public class Uploader extends AppCompatActivity {
     ProgressBar simpleProgressBar;
     long filesize;
     File ufile;
-    StorageManager sm;
     Intent intent;
     private static final long MAX_SINGLE_PART_UPLOAD_BYTES = 5 * 1024 * 1024;
 
