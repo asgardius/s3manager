@@ -52,7 +52,6 @@ public class Uploader extends AppCompatActivity {
     AWSCredentials myCredentials;
     AmazonS3 s3client;
     ProgressBar simpleProgressBar;
-    String[] filename;
     long filesize;
     File ufile;
     private static final long MAX_SINGLE_PART_UPLOAD_BYTES = 5 * 1024 * 1024;
@@ -105,9 +104,9 @@ public class Uploader extends AppCompatActivity {
                         @Override
                         public void run() {
                             if (fprefix.getText().toString().endsWith("/") || fprefix.getText().toString().equals("")) {
-                                fkey = fprefix.getText().toString()+filename[filename.length-1];
+                                fkey = fprefix.getText().toString()+getDisplayName(fileuri);
                             } else {
-                                fkey = fprefix.getText().toString()+"/"+filename[filename.length-1];
+                                fkey = fprefix.getText().toString()+"/"+getDisplayName(fileuri);
                             }
                             //System.out.println(fkey);
                             progress = 0;
@@ -202,7 +201,6 @@ public class Uploader extends AppCompatActivity {
                 // provided to this method as a parameter.  Pull that uri using "resultData.getData()"
                 if (resultData != null && resultData.getData() != null) {
                     fileuri = resultData.getData();
-                    filename = fileuri.getPath().split("/");
                     //System.out.println("File selected successfully");
                     //System.out.println("content://com.android.externalstorage.documents"+file.getPath());
                 } else {
