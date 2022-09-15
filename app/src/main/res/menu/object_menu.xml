@@ -4,6 +4,11 @@
     <item
         android:id="@+id/upload_file"
         android:title="@string/upload_file_here" />
+
+    <item
+        android:id="@+id/download_file"
+        android:title="@string/download_file" />
+
     <item
         android:id="@+id/sharefile"
         android:title="@string/file_external" />

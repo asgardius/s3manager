@@ -14,6 +14,9 @@
     <string name="bucket_name">Bucket name</string>
     <string name="bucket_name_empty">A bucket name is required</string>
     <string name="file_external">Open in</string>
+    <string name="download_file">Download file</string>
+    <string name="download_in_progress">Download in progress</string>
+    <string name="download_success">File downloaded successfully</string>
     <string name="upload_file_tobucket">Upload file to this bucket</string>
     <string name="upload_folder_tobucket">Upload folder to this bucket</string>
     <string name="feature_not_supported">Your device is not compatible with this feature</string>

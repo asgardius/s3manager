@@ -43,7 +43,7 @@ import java.util.List;
 
 public class Uploader extends AppCompatActivity {
     String  username, password, endpoint, bucket, prefix, location, fkey;
-    boolean isfolder;
+    //boolean isfolder;
     int progress;
     Uri fileuri, folder, uri;
     EditText fprefix;
@@ -55,6 +55,7 @@ public class Uploader extends AppCompatActivity {
     long filesize;
     File ufile;
     Intent intent;
+    Button fileUpload;
     private static final long MAX_SINGLE_PART_UPLOAD_BYTES = 5 * 1024 * 1024;
 
     @Override
@@ -67,7 +68,7 @@ public class Uploader extends AppCompatActivity {
         bucket = getIntent().getStringExtra("bucket");
         location = getIntent().getStringExtra("region");
         prefix = getIntent().getStringExtra("prefix");
-        isfolder = getIntent().getBooleanExtra("isfolder", false);
+        //isfolder = getIntent().getBooleanExtra("isfolder", false);
         fprefix = (EditText)findViewById(R.id.fprefix);
         region = Region.getRegion(location);
         s3ClientOptions = S3ClientOptions.builder().build();
@@ -78,7 +79,7 @@ public class Uploader extends AppCompatActivity {
         s3client = new AmazonS3Client(myCredentials, region);
         s3client.setEndpoint(endpoint);
         s3client.setS3ClientOptions(s3ClientOptions);
-        Button fileUpload = (Button)findViewById(R.id.fileupload);
+        fileUpload = (Button)findViewById(R.id.fileupload);
         simpleProgressBar = (ProgressBar) findViewById(R.id.simpleProgressBar);
         //Toast.makeText(Uploader.this, getResources().getString(R.string.pending_feature), Toast.LENGTH_SHORT).show();
         performFileSearch("Select file to upload");

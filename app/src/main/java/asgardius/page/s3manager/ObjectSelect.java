@@ -273,7 +273,12 @@ public class ObjectSelect extends AppCompatActivity {
                         public boolean onMenuItemClick(MenuItem menuItem) {
                             // Toast message on menu item clicked
                             //Toast.makeText(MainActivity.this, "You Clicked " + menuItem.getTitle(), Toast.LENGTH_SHORT).show();
-                            if (menuItem.getTitle() == getResources().getString(R.string.upload_file_here)) {
+                            if (menuItem.getTitle() == getResources().getString(R.string.download_file)) {
+                                Toast.makeText(ObjectSelect.this, getResources().getString(R.string.pending_feature), Toast.LENGTH_SHORT).show();
+                                //GeneratePresignedUrlRequest request = new GeneratePresignedUrlRequest(bucket, prefix + Name.get(position).toString());
+                                //URL objectURL = s3client.generatePresignedUrl(request);
+                                //download(objectURL.toString(), Name.get(position).toString());
+                            } else if (menuItem.getTitle() == getResources().getString(R.string.upload_file_here)) {
                                 //Toast.makeText(ObjectSelect.this, getResources().getString(R.string.pending_feature), Toast.LENGTH_SHORT).show();
                                 upload(false);
                             } else if (menuItem.getTitle() == getResources().getString(R.string.file_external)) {
@@ -468,6 +473,18 @@ public class ObjectSelect extends AppCompatActivity {
         intent.putExtra("prefix", prefix);
         intent.putExtra("region", location);
         intent.putExtra("isfolder", isfolder);
+        startActivity(intent);
+    }
+
+    private void download(String url, String filename) {
+
+        Intent intent = new Intent(this, Downloader.class);
+        intent.putExtra("file_url", url);
+        intent.putExtra("file_name", filename);
+        intent.putExtra("endpoint", endpoint);
+        intent.putExtra("username", username);
+        intent.putExtra("password", password);
+        intent.putExtra("bucket", bucket);
         startActivity(intent);
     }
 }
