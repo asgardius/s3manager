@@ -179,37 +179,14 @@ public class Uploader extends AppCompatActivity {
     }
 
     private void performFileSearch(String messageTitle) {
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
-            sm = (StorageManager) this.getSystemService(Context.STORAGE_SERVICE);
-            intent = sm.getPrimaryStorageVolume().createOpenDocumentTreeIntent();
-            uri = intent.getParcelableExtra("android.provider.extra.INITIAL_URI");
-
-            String scheme = uri.toString();
-
-            Log.d(TAG, "INITIAL_URI scheme: " + scheme);
-
-            scheme = scheme.replace("/root/", "/document/");
-
-            scheme += "%3A" + "Documents";
-
-            uri = Uri.parse(scheme);
-
-            intent.putExtra("android.provider.extra.INITIAL_URI", uri);
-        } else {
-            intent = new Intent();
-            intent.setAction(Intent.ACTION_OPEN_DOCUMENT);
-            intent.addCategory(Intent.CATEGORY_OPENABLE);
-            intent.putExtra(Intent.EXTRA_LOCAL_ONLY, true);
-
-            intent.setType("*/*");
-        }
-
-        if (intent.resolveActivity(getPackageManager()) != null) {
-            startActivityForResult(Intent.createChooser(intent, messageTitle), 100);
-        } else {
-            Toast.makeText(Uploader.this, getResources().getString(R.string.feature_not_supported), Toast.LENGTH_SHORT).show();
-            finish();
-        }
+        //uri = Uri.parse("content://com.android.externalstorage.documents/document/home");
+        intent = new Intent();
+        intent.setAction(Intent.ACTION_OPEN_DOCUMENT);
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+        //intent.putExtra(Intent.EXTRA_LOCAL_ONLY, true);
+        //intent.putExtra("android.provider.extra.INITIAL_URI", uri);
+        intent.setType("*/*");
+        ((Activity) this).startActivityForResult(intent, 100);
     }
 
     @Override
@@ -225,6 +202,7 @@ public class Uploader extends AppCompatActivity {
                 // provided to this method as a parameter.  Pull that uri using "resultData.getData()"
                 if (resultData != null && resultData.getData() != null) {
                     fileuri = resultData.getData();
+                    System.out.println(fileuri.toString());
                     //System.out.println("File selected successfully");
                     //System.out.println("content://com.android.externalstorage.documents"+file.getPath());
                 } else {
