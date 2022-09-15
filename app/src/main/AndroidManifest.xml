@@ -19,6 +19,9 @@
         android:theme="@style/Theme.AsgardiusS3Manager"
         tools:targetApi="31">
         <activity
+            android:name=".Downloader"
+            android:exported="false" />
+        <activity
             android:name=".CreateBucket"
             android:exported="false" />
         <activity

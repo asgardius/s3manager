@@ -22,7 +22,7 @@
     <string name="upload_prefix">Object prefix</string>
     <string name="no_file_selected">Please select a file</string>
     <string name="upload_success">File uploaded successfully</string>
-    <string name="wait">Wait</string>
+    <string name="upload_in_progress">Upload in progress</string>
     <string name="retry">Retry</string>
     <string name="success">Success</string>
     <string name="create_bucket">Create new bucket</string>

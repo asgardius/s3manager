@@ -5,7 +5,6 @@ import static android.content.ContentValues.TAG;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
@@ -41,7 +40,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 public class Uploader extends AppCompatActivity {
     String  username, password, endpoint, bucket, prefix, location, fkey;
@@ -102,7 +100,7 @@ public class Uploader extends AppCompatActivity {
                     //System.out.println(file.getPath());
                     simpleProgressBar.setVisibility(View.VISIBLE);
                     fileUpload.setEnabled(false);
-                    fileUpload.setText(getResources().getString(R.string.wait));
+                    fileUpload.setText(getResources().getString(R.string.upload_in_progress));
                     Thread uploadFile = new Thread(new Runnable() {
 
                         @Override
@@ -130,7 +128,7 @@ public class Uploader extends AppCompatActivity {
                                     public void run() {
                                         //simpleProgressBar.setProgress(100);
                                         simpleProgressBar.setVisibility(View.INVISIBLE);
-                                        fileUpload.setText(getResources().getString(R.string.success));
+                                        fileUpload.setText(getResources().getString(R.string.upload_success));
                                         Toast.makeText(getApplicationContext(),getResources().getString(R.string.upload_success), Toast.LENGTH_SHORT).show();
                                         //simpleProgressBar.setVisibility(View.INVISIBLE);
                                     }
@@ -144,6 +142,7 @@ public class Uploader extends AppCompatActivity {
 
                                     @Override
                                     public void run() {
+                                        simpleProgressBar.setVisibility(View.INVISIBLE);
                                         fileUpload.setEnabled(true);
                                         fileUpload.setText(getResources().getString(R.string.retry));
                                         Toast.makeText(getApplicationContext(),getResources().getString(R.string.media_list_fail), Toast.LENGTH_SHORT).show();
