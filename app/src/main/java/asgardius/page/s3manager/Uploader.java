@@ -5,10 +5,12 @@ import static android.content.ContentValues.TAG;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.storage.StorageManager;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
@@ -45,7 +47,7 @@ public class Uploader extends AppCompatActivity {
     String  username, password, endpoint, bucket, prefix, location, fkey;
     boolean isfolder;
     int progress;
-    Uri fileuri, folder;
+    Uri fileuri, folder, uri;
     EditText fprefix;
     Region region;
     S3ClientOptions s3ClientOptions;
@@ -54,6 +56,8 @@ public class Uploader extends AppCompatActivity {
     ProgressBar simpleProgressBar;
     long filesize;
     File ufile;
+    StorageManager sm;
+    Intent intent;
     private static final long MAX_SINGLE_PART_UPLOAD_BYTES = 5 * 1024 * 1024;
 
     @Override
@@ -175,11 +179,31 @@ public class Uploader extends AppCompatActivity {
     }
 
     private void performFileSearch(String messageTitle) {
-        Intent intent = new Intent();
-        intent.setAction(Intent.ACTION_OPEN_DOCUMENT);
-        intent.addCategory(Intent.CATEGORY_OPENABLE);
-        intent.putExtra(Intent.EXTRA_LOCAL_ONLY, true);
-        intent.setType("*/*");
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
+            sm = (StorageManager) this.getSystemService(Context.STORAGE_SERVICE);
+            intent = sm.getPrimaryStorageVolume().createOpenDocumentTreeIntent();
+            uri = intent.getParcelableExtra("android.provider.extra.INITIAL_URI");
+
+            String scheme = uri.toString();
+
+            Log.d(TAG, "INITIAL_URI scheme: " + scheme);
+
+            scheme = scheme.replace("/root/", "/document/");
+
+            scheme += "%3A" + "Documents";
+
+            uri = Uri.parse(scheme);
+
+            intent.putExtra("android.provider.extra.INITIAL_URI", uri);
+        } else {
+            intent = new Intent();
+            intent.setAction(Intent.ACTION_OPEN_DOCUMENT);
+            intent.addCategory(Intent.CATEGORY_OPENABLE);
+            intent.putExtra(Intent.EXTRA_LOCAL_ONLY, true);
+
+            intent.setType("*/*");
+        }
+
         if (intent.resolveActivity(getPackageManager()) != null) {
             startActivityForResult(Intent.createChooser(intent, messageTitle), 100);
         } else {
