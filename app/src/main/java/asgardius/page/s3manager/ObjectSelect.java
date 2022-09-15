@@ -274,7 +274,7 @@ public class ObjectSelect extends AppCompatActivity {
                             // Toast message on menu item clicked
                             //Toast.makeText(MainActivity.this, "You Clicked " + menuItem.getTitle(), Toast.LENGTH_SHORT).show();
                             if (menuItem.getTitle() == getResources().getString(R.string.download_file)) {
-                                Toast.makeText(ObjectSelect.this, getResources().getString(R.string.pending_feature), Toast.LENGTH_SHORT).show();
+                                //Toast.makeText(ObjectSelect.this, getResources().getString(R.string.pending_feature), Toast.LENGTH_SHORT).show();
                                 //GeneratePresignedUrlRequest request = new GeneratePresignedUrlRequest(bucket, prefix + Name.get(position).toString());
                                 //URL objectURL = s3client.generatePresignedUrl(request);
                                 //download(objectURL.toString(), Name.get(position).toString());
@@ -484,6 +484,7 @@ public class ObjectSelect extends AppCompatActivity {
         intent.putExtra("endpoint", endpoint);
         intent.putExtra("username", username);
         intent.putExtra("password", password);
+        intent.putExtra("region", location);
         intent.putExtra("bucket", bucket);
         startActivity(intent);
     }
