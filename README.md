@@ -14,11 +14,12 @@ Current feature list
 * Delete buckets
 * Delete files
 * Delete folders
+* File upload
+* File download
 
 Planned feature list
 
-* File upload
-* File download
+* file sharing links
 
 This app is a work in progress, so it have some bugs that need to be fixed
 
