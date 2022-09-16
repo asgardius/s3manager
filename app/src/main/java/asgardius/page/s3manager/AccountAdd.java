@@ -44,6 +44,7 @@ public class AccountAdd extends AppCompatActivity {
         Button accounttest = (Button)findViewById(R.id.testaccount);
         edit = getIntent().getBooleanExtra("edit", false);
         if (edit) {
+            getSupportActionBar().setTitle(getResources().getString(R.string.accountedit_button));
             register.setText(getResources().getString(R.string.accountsave_button));
             id = getIntent().getStringExtra("alias");
             endpoint = getIntent().getStringExtra("endpoint");
@@ -56,6 +57,8 @@ public class AccountAdd extends AppCompatActivity {
             aupick.setText(username);
             appick.setText(password);
             arpick.setText(location);
+        } else{
+            getSupportActionBar().setTitle(getResources().getString(R.string.accountadd_button));
         }
 
 

@@ -1,9 +1,8 @@
 <resources>
-    <string name="app_name">S3 Manager</string>
-    <string name="aws_endpoint">.amazonaws.com</string>
-    <string name="endpoint_url">https://object.asgardius.company</string>
-    <string name="access_key">google</string>
-    <string name="title_activity_video_player">VideoPlayer</string>
+    <string name="app_name" translatable="false">S3 Manager</string>
+    <string name="aws_endpoint" translatable="false">.amazonaws.com</string>
+    <string name="endpoint_url" translatable="false">https://object.asgardius.company</string>
+    <string name="access_key" translatable="false">google</string>
     <string name="account_list">Account list</string>
     <string name="bucket_list">Bucket list</string>
     <string name="object_list">Object list</string>

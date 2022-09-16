@@ -23,6 +23,11 @@ Planned feature list
 
 This app is a work in progress, so it have some bugs that need to be fixed
 
+Supported languages
+
+* English
+* Spanish
+
 Knnown issues
 
 * Object listing can be slow on buckets with a lot of objects (4000+)

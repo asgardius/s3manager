@@ -241,6 +241,7 @@ public class MainActivity extends AppCompatActivity {
 
         Intent intent = new Intent(this, WebBrowser.class);
         intent.putExtra("web_url", "file:///android_asset/about.htm");
+        intent.putExtra("title", getResources().getString(R.string.about_button));
         startActivity(intent);
 
     }

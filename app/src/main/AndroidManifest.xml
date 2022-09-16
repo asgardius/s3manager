@@ -21,14 +21,17 @@
         <activity
             android:name=".Downloader"
             android:configChanges="orientation|keyboardHidden|screenSize|uiMode|keyboardHidden"
-            android:exported="false" />
+            android:exported="false"
+            android:label="@string/download_file" />
         <activity
             android:name=".CreateBucket"
-            android:exported="false" />
+            android:exported="false"
+            android:label="@string/create_bucket" />
         <activity
             android:name=".Uploader"
             android:configChanges="orientation|keyboardHidden|screenSize|uiMode|keyboardHidden"
-            android:exported="false" />
+            android:exported="false"
+            android:label="@string/upload_button" />
         <activity
             android:name=".ImageViewer"
             android:configChanges="orientation|keyboardHidden|screenSize|uiMode|keyboardHidden"
@@ -54,12 +57,12 @@
         <activity
             android:name=".BucketSelect"
             android:configChanges="orientation|keyboardHidden|screenSize|uiMode|keyboardHidden"
-            android:exported="false" />
+            android:exported="false"
+            android:label="@string/bucket_list" />
         <activity
             android:name=".VideoPlayer"
             android:configChanges="orientation|keyboardHidden|screenSize|uiMode|keyboardHidden"
             android:exported="false"
-            android:label="@string/title_activity_video_player"
             android:theme="@style/Theme.AsgardiusS3Manager.Fullscreen" />
         <activity
             android:name=".MainActivity"

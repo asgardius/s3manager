@@ -60,6 +60,7 @@ public class ObjectSelect extends AppCompatActivity {
         prefix = getIntent().getStringExtra("prefix");
         treelevel = getIntent().getIntExtra("treelevel", 0);
         setContentView(R.layout.activity_object_select);
+        getSupportActionBar().setTitle(bucket+"/"+prefix);
         region = Region.getRegion(location);
         s3ClientOptions = S3ClientOptions.builder().build();
         myCredentials = new BasicAWSCredentials(username, password);
@@ -214,7 +215,7 @@ public class ObjectSelect extends AppCompatActivity {
                     try {
                         GeneratePresignedUrlRequest request = new GeneratePresignedUrlRequest(bucket, prefix + Name.get(position).toString());
                         URL objectURL = s3client.generatePresignedUrl(request);
-                        webBrowser(objectURL.toString());
+                        webBrowser(objectURL.toString(), Name.get(position).toString());
                     } catch (Exception e) {
                         Toast.makeText(getApplicationContext(),getResources().getString(R.string.media_list_fail), Toast.LENGTH_SHORT).show();
                     }
@@ -329,10 +330,11 @@ public class ObjectSelect extends AppCompatActivity {
 
     }
 
-    private void webBrowser(String url) {
+    private void webBrowser(String url, String pagetitle) {
 
         Intent intent = new Intent(this, WebBrowser.class);
         intent.putExtra("web_url", url);
+        intent.putExtra("title", pagetitle);
         startActivity(intent);
 
     }
