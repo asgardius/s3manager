@@ -24,8 +24,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AccountAdd extends AppCompatActivity {
-    EditText aapick, aupick, appick, aepick, arpick;
-    String alias, username, password, endpoint, id, location;
+    EditText aapick, aupick, appick, aepick, arpick, pdfpick;
+    String alias, username, password, endpoint, id, location, pdfendpoint;
     AWSCredentials myCredentials;
     AmazonS3 s3client;
     Region region;
@@ -36,6 +36,7 @@ public class AccountAdd extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_account_add);
         aapick = (EditText)findViewById(R.id.alias);
+        pdfpick = (EditText)findViewById(R.id.pdfendpoint);
         aepick = (EditText)findViewById(R.id.endpoint);
         arpick = (EditText)findViewById(R.id.region);
         aupick = (EditText)findViewById(R.id.username);
@@ -51,12 +52,14 @@ public class AccountAdd extends AppCompatActivity {
             username = getIntent().getStringExtra("username");
             password = getIntent().getStringExtra("password");
             location = getIntent().getStringExtra("region");
+            pdfendpoint = getIntent().getStringExtra("pdfendpoint");
             aapick.setText(id);
             //aapick.setEnabled(false);
             aepick.setText(endpoint);
             aupick.setText(username);
             appick.setText(password);
             arpick.setText(location);
+            pdfpick.setText(pdfendpoint);
         } else{
             getSupportActionBar().setTitle(getResources().getString(R.string.accountadd_button));
         }
@@ -68,6 +71,7 @@ public class AccountAdd extends AppCompatActivity {
             public void onClick(View view) {
                 //buttonaction
                 alias = aapick.getText().toString();
+                pdfendpoint = pdfpick.getText().toString();
                 endpoint = aepick.getText().toString();
                 location = arpick.getText().toString();
                 username = aupick.getText().toString();
@@ -76,11 +80,12 @@ public class AccountAdd extends AppCompatActivity {
                 if (alias.equals("") && endpoint.equals("") && username.equals(getResources().getString(R.string.access_key))) {
                     endpoint = getResources().getString(R.string.endpoint_url);
                     alias = "Google Test";
+                    pdfendpoint = getResources().getString(R.string.pdf_reader);
                 }
                 SQLiteDatabase db = dbHelper.getWritableDatabase();
                 if (alias.equals("") || endpoint.equals("") || username.equals("") || password.equals("")) {
                     Toast.makeText(getApplicationContext(),getResources().getString(R.string.accountadd_null), Toast.LENGTH_SHORT).show();
-                } else if (endpoint.startsWith("http://")) {
+                } else if (endpoint.startsWith("http://") || pdfendpoint.startsWith("http://")) {
                     Toast.makeText(getApplicationContext(),getResources().getString(R.string.nosslwarning), Toast.LENGTH_SHORT).show();
                 } else if (!endpoint.startsWith("https://")) {
                     Toast.makeText(getApplicationContext(),getResources().getString(R.string.invalid_url), Toast.LENGTH_SHORT).show();
@@ -91,10 +96,10 @@ public class AccountAdd extends AppCompatActivity {
                             location = "us-east-1";
                         }
                         if (edit) {
-                            db.execSQL("UPDATE account SET id=\""+id+"\", endpoint=\""+endpoint+"\", username=\""+username+"\", password=\""+password+"\", region=\""+location+"\" WHERE id=\""+id+"\"");
+                            db.execSQL("UPDATE account SET id=\""+id+"\", endpoint=\""+endpoint+"\", username=\""+username+"\", password=\""+password+"\", region=\""+location+"\", pdfendpoint=\""+pdfendpoint+"\" WHERE id=\""+id+"\"");
                             Toast.makeText(getApplicationContext(),getResources().getString(R.string.accountsave_success), Toast.LENGTH_SHORT).show();
                         } else {
-                            db.execSQL("INSERT INTO account VALUES (\""+alias+"\", \""+endpoint+"\", \""+username+"\", \""+password+"\", \""+location+"\")");
+                            db.execSQL("INSERT INTO account VALUES (\""+alias+"\", \""+endpoint+"\", \""+username+"\", \""+password+"\", \""+location+"\", \""+pdfendpoint+"\")");
                             Toast.makeText(getApplicationContext(),getResources().getString(R.string.accountadd_success), Toast.LENGTH_SHORT).show();
                         }
                         mainmenu();

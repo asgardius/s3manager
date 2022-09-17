@@ -41,7 +41,7 @@ public class ObjectSelect extends AppCompatActivity {
     ArrayList Img;
     //ArrayList object;
     RecyclerView recyclerView;
-    String username, password, endpoint, bucket, prefix, location;
+    String username, password, endpoint, bucket, prefix, location, pdfendpoint;
     int treelevel;
     String[] filename;
     Region region;
@@ -58,6 +58,7 @@ public class ObjectSelect extends AppCompatActivity {
         password = getIntent().getStringExtra("password");
         bucket = getIntent().getStringExtra("bucket");
         location = getIntent().getStringExtra("region");
+        pdfendpoint = getIntent().getStringExtra("pdfendpoint");
         prefix = getIntent().getStringExtra("prefix");
         treelevel = getIntent().getIntExtra("treelevel", 0);
         setContentView(R.layout.activity_object_select);
@@ -229,7 +230,14 @@ public class ObjectSelect extends AppCompatActivity {
                         GeneratePresignedUrlRequest request = new GeneratePresignedUrlRequest(bucket, prefix + Name.get(position).toString());
                         URL objectURL = s3client.generatePresignedUrl(request);
                         //System.out.println(getResources().getString(R.string.pdf_reader)+ URLEncoder.encode(objectURL.toString(), "UTF-8" ));
-                        webBrowser(getResources().getString(R.string.pdf_reader)+ URLEncoder.encode(objectURL.toString(), "UTF-8" ), Name.get(position).toString());
+                        if (pdfendpoint == null) {
+                            Toast.makeText(getApplicationContext(),getResources().getString(R.string.pdf_reader_notready), Toast.LENGTH_SHORT).show();
+                        } else if (pdfendpoint.endsWith("/")) {
+                            webBrowser(pdfendpoint + "web/viewer.html?file=" + URLEncoder.encode(objectURL.toString(), "UTF-8" ), Name.get(position).toString());
+                        } else {
+                            webBrowser(pdfendpoint + "/web/viewer.html?file=" + URLEncoder.encode(objectURL.toString(), "UTF-8" ), Name.get(position).toString());
+                        }
+
                     } catch (Exception e) {
                         Toast.makeText(getApplicationContext(),getResources().getString(R.string.media_list_fail), Toast.LENGTH_SHORT).show();
                     }
@@ -364,6 +372,7 @@ public class ObjectSelect extends AppCompatActivity {
         intent.putExtra("prefix", prefix + object);
         intent.putExtra("treelevel", treelevel+1);
         intent.putExtra("region", location);
+        intent.putExtra("pdfendpoint", pdfendpoint);
         startActivity(intent);
 
     }

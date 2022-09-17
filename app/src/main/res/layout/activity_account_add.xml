@@ -7,16 +7,40 @@
     android:orientation="vertical"
     tools:context=".AccountAdd">
 
-    <EditText
-        android:id="@+id/alias"
+    <LinearLayout
+        android:id="@+id/aliasLayout"
         android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="10dp"
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteX="20dp">
+
+        <EditText
+        android:id="@+id/alias"
+        android:layout_width="wrap_content"
         android:layout_height="48dp"
+        android:layout_weight="1"
         android:focusable="true"
         android:hint="@string/accountadd_alias"
         android:importantForAutofill="no"
         android:inputType="text"
         android:textColorHint="?attr/colorOnSecondary"
         tools:ignore="MissingConstraints" />
+
+        <EditText
+            android:id="@+id/pdfendpoint"
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:layout_weight="1"
+            android:focusable="true"
+            android:hint="@string/accountadd_pdfendpoint"
+            android:importantForAutofill="no"
+            android:inputType="textUri"
+            android:textColorHint="?attr/colorOnSecondary"
+            tools:ignore="MissingConstraints" />
+
+    </LinearLayout>
 
     <LinearLayout
         android:id="@+id/endpointLayout"

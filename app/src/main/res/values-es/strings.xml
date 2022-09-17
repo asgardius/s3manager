@@ -66,4 +66,6 @@
     <string name="about_button">Acerca de esta app</string>
     <string name="dummy_button">Botón de prueba</string>
     <string name="dummy_content">Contenido de prueba</string>
+    <string name="accountadd_pdfendpoint">servidor pdfjs</string>
+    <string name="pdf_reader_notready">Necesita configurar un servidor pdf.js</string>
 </resources>

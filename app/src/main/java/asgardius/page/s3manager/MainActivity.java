@@ -21,7 +21,7 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity {
 
     static boolean DEFAULT_PATH_STYLE_ACCESS = true;
-    String alias, username, password, endpoint, location;
+    String alias, username, password, endpoint, location, pdfendpoint;
     RecyclerView recyclerView;
     SQLiteDatabase db;
     ArrayList Name;
@@ -98,18 +98,20 @@ public class MainActivity extends AppCompatActivity {
                 if (db != null) {
                     // Database Queries
                     try {
-                        String query = "SELECT endpoint, username, password, region FROM account where id=\""+ Name.get(position).toString()+ "\"";
+                        String query = "SELECT endpoint, username, password, region, pdfendpoint FROM account where id=\""+ Name.get(position).toString()+ "\"";
                         Cursor cursor = db.rawQuery(query,null);
                         if (cursor.moveToNext()){
                             endpoint = cursor.getString(0);
                             username = cursor.getString(1);
                             password = cursor.getString(2);
                             location = cursor.getString(3);
+                            pdfendpoint = cursor.getString(4);
                             db.close();
                             explorer();
                         }
                     } catch (Exception e) {
                         e.printStackTrace();
+                        db.execSQL("ALTER TABLE account add column pdfendpoint text");
                     }
 
                 }
@@ -131,7 +133,7 @@ public class MainActivity extends AppCompatActivity {
                         if (menuItem.getTitle() == getResources().getString(R.string.accountedit_button)) {
                             try {
                                 db = dbHelper.getWritableDatabase();
-                                String query = "SELECT id, endpoint, username, password, region FROM account where id=\""+ Name.get(position).toString()+ "\"";
+                                String query = "SELECT id, endpoint, username, password, region, pdfendpoint FROM account where id=\""+ Name.get(position).toString()+ "\"";
                                 System.out.println(query);
                                 Cursor cursor = db.rawQuery(query,null);
                                 if (cursor.moveToNext()){
@@ -140,12 +142,14 @@ public class MainActivity extends AppCompatActivity {
                                     username = cursor.getString(2);
                                     password = cursor.getString(3);
                                     location = cursor.getString(4);
+                                    pdfendpoint = cursor.getString(5);
                                 }
                                 db.close();
                                 addaccount(true);
                                 //Toast.makeText(MainActivity.this, "This feature is not yet implemented", Toast.LENGTH_SHORT).show();
                             } catch (Exception e) {
                                 e.printStackTrace();
+                                db.execSQL("ALTER TABLE account add column pdfendpoint text");
                             }
                         }
                         else if (menuItem.getTitle() == getResources().getString(R.string.accountdel_button)) {
@@ -218,6 +222,7 @@ public class MainActivity extends AppCompatActivity {
         intent.putExtra("username", username);
         intent.putExtra("password", password);
         intent.putExtra("region", location);
+        intent.putExtra("pdfendpoint", pdfendpoint);
         startActivity(intent);
 
     }
@@ -231,6 +236,7 @@ public class MainActivity extends AppCompatActivity {
             intent.putExtra("username", username);
             intent.putExtra("password", password);
             intent.putExtra("region", location);
+            intent.putExtra("pdfendpoint", pdfendpoint);
         }
         intent.putExtra("edit", edit);
         startActivity(intent);

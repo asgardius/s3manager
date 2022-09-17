@@ -40,7 +40,7 @@ public class BucketSelect extends AppCompatActivity {
     ArrayList Name;
     ArrayList Img;
     RecyclerView recyclerView;
-    String username, password, endpoint, prefix, location, file;
+    String username, password, endpoint, prefix, location, file, pdfendpoint;
     int treelevel;
     Region region;
     S3ClientOptions s3ClientOptions;
@@ -55,6 +55,7 @@ public class BucketSelect extends AppCompatActivity {
         username = getIntent().getStringExtra("username");
         password = getIntent().getStringExtra("password");
         location = getIntent().getStringExtra("region");
+        pdfendpoint = getIntent().getStringExtra("pdfendpoint");
         prefix = "";
         setContentView(R.layout.activity_bucket_select);
         region = Region.getRegion("us-east-1");
@@ -189,6 +190,7 @@ public class BucketSelect extends AppCompatActivity {
         intent.putExtra("prefix", prefix);
         intent.putExtra("treelevel", treelevel);
         intent.putExtra("region", location);
+        intent.putExtra("pdfendpoint", pdfendpoint);
         startActivity(intent);
 
     }
