@@ -16,12 +16,15 @@ Current feature list
 * Delete folders
 * File upload
 * File download
+* pdf file reader using user provided pdf.js server
 
 Planned feature list
 
 * file sharing links
 
 This app is a work in progress, so it have some bugs that need to be fixed
+
+You need to setup a pdf.js server to use pdf viewer. Just download latest version from official website and upload to any web server with ssl on same root domain than S3 server (can be same subdomain or a different one). Then set url to pdfjs root folder like https://example.com/pdfjs-dist
 
 Supported languages
 
