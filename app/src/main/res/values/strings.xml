@@ -2,6 +2,8 @@
     <string name="app_name" translatable="false">S3 Manager</string>
     <string name="aws_endpoint" translatable="false">.amazonaws.com</string>
     <string name="endpoint_url" translatable="false">https://object.asgardius.company</string>
+    <string name="pdf_reader" translatable="false">https://office.asgardius.company/pdfjs</string>
+    <string name="pdf_reader_notready">You need to setup a pdf.js server</string>
     <string name="access_key" translatable="false">google</string>
     <string name="account_list">Account list</string>
     <string name="bucket_list">Bucket list</string>
@@ -45,6 +47,7 @@
     <string name="accounttest_button">Test credentials</string>
     <string name="accounttest_success">Credentials are correct</string>
     <string name="accountadd_alias">Account Alias</string>
+    <string name="accountadd_pdfendpoint">pdfjs server</string>
     <string name="accountadd_endpoint">S3 Endpoint URL</string>
     <string name="accountadd_region">S3 Region</string>
     <string name="accountadd_username">S3 Access Key</string>
