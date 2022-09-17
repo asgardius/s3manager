@@ -5,10 +5,13 @@ import static android.content.ContentValues.TAG;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
+import android.net.wifi.WifiManager;
 import android.os.Bundle;
+import android.os.PowerManager;
 import android.os.storage.StorageManager;
 import android.provider.MediaStore;
 import android.util.Log;
@@ -57,11 +60,18 @@ public class Uploader extends AppCompatActivity {
     Button fileUpload;
     Thread uploadFile;
     private static final long MAX_SINGLE_PART_UPLOAD_BYTES = 5 * 1024 * 1024;
+    private WifiManager.WifiLock mWifiLock;
+    private PowerManager.WakeLock mWakeLock;
+    private PowerManager powerManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_uploader);
+        // create Wifi and wake locks
+        mWifiLock = ((WifiManager) this.getApplicationContext().getSystemService(Context.WIFI_SERVICE)).createWifiLock(WifiManager.WIFI_MODE_FULL_HIGH_PERF, "Transistor:wifi_lock");
+        powerManager = (PowerManager) getSystemService(POWER_SERVICE);
+        mWakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "Transistor:wake_lock");
         endpoint = getIntent().getStringExtra("endpoint");
         username = getIntent().getStringExtra("username");
         password = getIntent().getStringExtra("password");
@@ -83,11 +93,6 @@ public class Uploader extends AppCompatActivity {
         //Toast.makeText(Uploader.this, getResources().getString(R.string.pending_feature), Toast.LENGTH_SHORT).show();
         performFileSearch("Select file to upload");
         fprefix.setText(prefix);
-        /*if (isfolder) {
-            folder = uploadFolder();
-        } else {
-            file = uploadFile();
-        }*/
         fileUpload.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
@@ -95,8 +100,15 @@ public class Uploader extends AppCompatActivity {
                 if (fileuri == null && folder == null) {
                     Toast.makeText(Uploader.this, getResources().getString(R.string.no_file_selected), Toast.LENGTH_SHORT).show();
                 } else {
-                    //Toast.makeText(CreateBucket.this, getResources().getString(R.string.pending_feature), Toast.LENGTH_SHORT).show();
-                    //System.out.println(file.getPath());
+                    //Acquiring WakeLock and WifiLock if not held
+                    if (!mWifiLock.isHeld()) {
+                        mWifiLock.acquire();
+                        //System.out.println("WifiLock acquired");
+                    }
+                    if (!mWakeLock.isHeld()) {
+                        mWakeLock.acquire();
+                        //System.out.println("WakeLock acquired");
+                    }
                     simpleProgressBar.setVisibility(View.VISIBLE);
                     fileUpload.setEnabled(false);
                     fileUpload.setText(getResources().getString(R.string.upload_in_progress));
@@ -125,6 +137,15 @@ public class Uploader extends AppCompatActivity {
 
                                     @Override
                                     public void run() {
+                                        //Releasing WifiLock and WakeLock if held
+                                        if (mWifiLock.isHeld()) {
+                                            mWifiLock.release();
+                                            //System.out.println("WifiLock released");
+                                        }
+                                        if (mWakeLock.isHeld()) {
+                                            mWakeLock.release();
+                                            //System.out.println("WakeLock released");
+                                        }
                                         //simpleProgressBar.setProgress(100);
                                         simpleProgressBar.setVisibility(View.INVISIBLE);
                                         fileUpload.setText(getResources().getString(R.string.upload_success));
@@ -141,6 +162,15 @@ public class Uploader extends AppCompatActivity {
 
                                     @Override
                                     public void run() {
+                                        //Releasing WifiLock and WakeLock if held
+                                        if (mWifiLock.isHeld()) {
+                                            mWifiLock.release();
+                                            //System.out.println("WifiLock released");
+                                        }
+                                        if (mWakeLock.isHeld()) {
+                                            mWakeLock.release();
+                                            //System.out.println("WakeLock released");
+                                        }
                                         simpleProgressBar.setVisibility(View.INVISIBLE);
                                         fileUpload.setEnabled(true);
                                         fileUpload.setText(getResources().getString(R.string.retry));

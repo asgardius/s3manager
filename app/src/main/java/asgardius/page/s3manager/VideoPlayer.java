@@ -2,7 +2,10 @@ package asgardius.page.s3manager;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
+import android.net.wifi.WifiManager;
 import android.os.Bundle;
+import android.os.PowerManager;
 import android.view.View;
 import android.widget.Toast;
 
@@ -21,10 +24,9 @@ public class VideoPlayer extends AppCompatActivity {
 
     // creating a variable for exoplayerview.
     protected StyledPlayerView playerView;
-
-
-    // url of video which we are loading.
-    //String videoURL = "https://video.asgardius.company/download/videos/41780585-a935-4d53-84c8-45ce97141231-480.mp4";
+    private WifiManager.WifiLock mWifiLock;
+    private PowerManager.WakeLock mWakeLock;
+    private PowerManager powerManager;
 
     ExoPlayer player;
 
@@ -32,6 +34,10 @@ public class VideoPlayer extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_video_player);
+        // create Wifi and wake locks
+        mWifiLock = ((WifiManager) this.getApplicationContext().getSystemService(Context.WIFI_SERVICE)).createWifiLock(WifiManager.WIFI_MODE_FULL_HIGH_PERF, "Transistor:wifi_lock");
+        powerManager = (PowerManager) getSystemService(POWER_SERVICE);
+        mWakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "Transistor:wake_lock");
         //Get media url
         String videoURL = getIntent().getStringExtra("video_url");
         playerView = findViewById(R.id.player_view);
@@ -57,18 +63,61 @@ public class VideoPlayer extends AppCompatActivity {
                 if (cause instanceof HttpDataSource.HttpDataSourceException) {
                     // An HTTP error occurred.
                     //System.out.println("Playback error F");
-                    Toast.makeText(getApplicationContext(),getResources().getString(R.string.media_conn_fail), Toast.LENGTH_SHORT).show();
-                }
-                else {
+                    Toast.makeText(getApplicationContext(), getResources().getString(R.string.media_conn_fail), Toast.LENGTH_SHORT).show();
+                } else {
                     // An HTTP error occurred.
                     //System.out.println("Playback error F");
-                    Toast.makeText(getApplicationContext(),getResources().getString(R.string.media_wrong_type), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), getResources().getString(R.string.media_wrong_type), Toast.LENGTH_SHORT).show();
                 }
                 player.release();
                 finish();
             }
 
 
+        });
+
+        player.addListener(new Player.Listener() {
+            @Override
+            public void onPlaybackStateChanged(@Player.State int state) {
+                if (state == 3) {
+                    // Active playback.
+                    //Acquiring WakeLock and WifiLock if not held
+                    if (!mWifiLock.isHeld()) {
+                        mWifiLock.acquire();
+                        //System.out.println("WifiLock acquired");
+                    }
+                    if (!mWakeLock.isHeld()) {
+                        mWakeLock.acquire();
+                        //System.out.println("WakeLock acquired");
+                    }
+                } else if (state == 2) {
+                    // Buffering.
+                    //Acquiring WakeLock and WifiLock if not held
+                    if (!mWifiLock.isHeld()) {
+                        mWifiLock.acquire();
+                        //System.out.println("WifiLock acquired");
+                    }
+                    if (!mWakeLock.isHeld()) {
+                        mWakeLock.acquire();
+                        //System.out.println("WakeLock acquired");
+                    }
+                } else {
+                    //Player inactive
+                    //Releasing WifiLock and WakeLock if held
+                    if (mWifiLock.isHeld()) {
+                        mWifiLock.release();
+                        //System.out.println("WifiLock released");
+                    }
+                    if (mWakeLock.isHeld()) {
+                        mWakeLock.release();
+                        //System.out.println("WakeLock released");
+                    }
+                    // Not playing because playback is paused, ended, suppressed, or the player
+                    // is buffering, stopped or failed. Check player.getPlayWhenReady,
+                    // player.getPlaybackState, player.getPlaybackSuppressionReason and
+                    // player.getPlaybackError for details.
+                }
+            }
         });
     }
 

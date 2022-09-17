@@ -10,7 +10,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
+import android.net.wifi.WifiManager;
 import android.os.Bundle;
+import android.os.PowerManager;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
@@ -37,28 +39,29 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 public class Downloader extends AppCompatActivity {
-    String username, password, endpoint, bucket, filekey, filename, prefix, location, fkey;
-    boolean isfolder;
-    int progress;
-    Uri fileuri, folder, uri;
-    EditText fprefix;
+    String username, password, endpoint, bucket, filename, prefix, location;
+    Uri fileuri;
     Region region;
     S3ClientOptions s3ClientOptions;
     AWSCredentials myCredentials;
     AmazonS3 s3client;
     ProgressBar simpleProgressBar;
-    File dfile;
     Intent intent;
     Button fileDownload;
     Thread downloadFile;
     S3Object object;
-    InputStream in;
-    OutputStream out;
+    private WifiManager.WifiLock mWifiLock;
+    private PowerManager.WakeLock mWakeLock;
+    private PowerManager powerManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_downloader);
+        // create Wifi and wake locks
+        mWifiLock = ((WifiManager) this.getApplicationContext().getSystemService(Context.WIFI_SERVICE)).createWifiLock(WifiManager.WIFI_MODE_FULL_HIGH_PERF, "Transistor:wifi_lock");
+        powerManager = (PowerManager) getSystemService(POWER_SERVICE);
+        mWakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "Transistor:wake_lock");
         filename = getIntent().getStringExtra("filename");
         endpoint = getIntent().getStringExtra("endpoint");
         username = getIntent().getStringExtra("username");
@@ -85,6 +88,15 @@ public class Downloader extends AppCompatActivity {
                 simpleProgressBar.setVisibility(View.VISIBLE);
                 fileDownload.setEnabled(false);
                 fileDownload.setText(getResources().getString(R.string.download_in_progress));
+                //Acquiring WakeLock and WifiLock if not held
+                if (!mWifiLock.isHeld()) {
+                    mWifiLock.acquire();
+                    //System.out.println("WifiLock acquired");
+                }
+                if (!mWakeLock.isHeld()) {
+                    mWakeLock.acquire();
+                    //System.out.println("WakeLock acquired");
+                }
                 downloadFile = new Thread(new Runnable() {
 
                     @Override
@@ -100,6 +112,15 @@ public class Downloader extends AppCompatActivity {
                                 @Override
                                 public void run() {
                                     //simpleProgressBar.setProgress(100);
+                                    //Releasing WifiLock and WakeLock if held
+                                    if (mWifiLock.isHeld()) {
+                                        mWifiLock.release();
+                                        //System.out.println("WifiLock released");
+                                    }
+                                    if (mWakeLock.isHeld()) {
+                                        mWakeLock.release();
+                                        //System.out.println("WakeLock released");
+                                    }
                                     simpleProgressBar.setVisibility(View.INVISIBLE);
                                     fileDownload.setText(getResources().getString(R.string.download_success));
                                     Toast.makeText(getApplicationContext(),getResources().getString(R.string.download_success), Toast.LENGTH_SHORT).show();
@@ -115,6 +136,15 @@ public class Downloader extends AppCompatActivity {
 
                                 @Override
                                 public void run() {
+                                    //Releasing WifiLock and WakeLock if held
+                                    if (mWifiLock.isHeld()) {
+                                        mWifiLock.release();
+                                        //System.out.println("WifiLock released");
+                                    }
+                                    if (mWakeLock.isHeld()) {
+                                        mWakeLock.release();
+                                        //System.out.println("WakeLock released");
+                                    }
                                     simpleProgressBar.setVisibility(View.INVISIBLE);
                                     fileDownload.setText(getResources().getString(R.string.download_failed));
                                     Toast.makeText(getApplicationContext(),getResources().getString(R.string.media_list_fail), Toast.LENGTH_SHORT).show();
