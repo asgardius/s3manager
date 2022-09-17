@@ -29,6 +29,7 @@ import com.amazonaws.services.s3.model.ObjectListing;
 import com.amazonaws.services.s3.model.S3ObjectSummary;
 
 import java.net.URL;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -132,6 +133,9 @@ public class ObjectSelect extends AppCompatActivity {
                         else if (Name.get(i).toString().toLowerCase(Locale.ROOT).endsWith(".txt") || Name.get(i).toString().toLowerCase(Locale.ROOT).endsWith(".md")) {
                             Img.add(R.drawable.textfile);
                         }
+                        else if (Name.get(i).toString().toLowerCase(Locale.ROOT).endsWith(".pdf")) {
+                            Img.add(R.drawable.pdffile);
+                        }
                         else if (Name.get(i).toString().toLowerCase(Locale.ROOT).endsWith(".jpg") || Name.get(i).toString().toLowerCase(Locale.ROOT).endsWith(".jpeg") || Name.get(i).toString().toLowerCase(Locale.ROOT).endsWith(".png") || Name.get(i).toString().toLowerCase(Locale.ROOT).endsWith(".gif")) {
                             Img.add(R.drawable.imagefile);
                         }
@@ -216,6 +220,16 @@ public class ObjectSelect extends AppCompatActivity {
                         GeneratePresignedUrlRequest request = new GeneratePresignedUrlRequest(bucket, prefix + Name.get(position).toString());
                         URL objectURL = s3client.generatePresignedUrl(request);
                         webBrowser(objectURL.toString(), Name.get(position).toString());
+                    } catch (Exception e) {
+                        Toast.makeText(getApplicationContext(),getResources().getString(R.string.media_list_fail), Toast.LENGTH_SHORT).show();
+                    }
+                } else if (Img.get(position).equals(R.drawable.pdffile)) {
+                    //load media file
+                    try {
+                        GeneratePresignedUrlRequest request = new GeneratePresignedUrlRequest(bucket, prefix + Name.get(position).toString());
+                        URL objectURL = s3client.generatePresignedUrl(request);
+                        //System.out.println(getResources().getString(R.string.pdf_reader)+ URLEncoder.encode(objectURL.toString(), "UTF-8" ));
+                        webBrowser(getResources().getString(R.string.pdf_reader)+ URLEncoder.encode(objectURL.toString(), "UTF-8" ), Name.get(position).toString());
                     } catch (Exception e) {
                         Toast.makeText(getApplicationContext(),getResources().getString(R.string.media_list_fail), Toast.LENGTH_SHORT).show();
                     }

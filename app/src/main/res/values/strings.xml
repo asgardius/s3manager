@@ -2,6 +2,7 @@
     <string name="app_name" translatable="false">S3 Manager</string>
     <string name="aws_endpoint" translatable="false">.amazonaws.com</string>
     <string name="endpoint_url" translatable="false">https://object.asgardius.company</string>
+    <string name="pdf_reader" translatable="false">https://office.asgardius.company/pdfjs/web/viewer.html?file=</string>
     <string name="access_key" translatable="false">google</string>
     <string name="account_list">Account list</string>
     <string name="bucket_list">Bucket list</string>
