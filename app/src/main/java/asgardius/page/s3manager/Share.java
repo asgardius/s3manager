@@ -109,10 +109,10 @@ public class Share extends AppCompatActivity {
                     mycal.set(Calendar.MINUTE, minute);
                     mycal.set(Calendar.SECOND, 0);
                     Date expiration = mycal.getTime();
-                    System.out.println(expiration);
+                    //System.out.println(expiration);
                     GeneratePresignedUrlRequest request = new GeneratePresignedUrlRequest(bucket, object).withExpiration(expiration);
                     URL objectURL = s3client.generatePresignedUrl(request);
-                    System.out.println(URLify(objectURL.toString()));
+                    //System.out.println(URLify(objectURL.toString()));
                     Intent shareIntent = new Intent(Intent.ACTION_SEND);
                     shareIntent.setType("text/plain");
                     shareIntent.putExtra(Intent.EXTRA_TEXT, URLify(objectURL.toString()));
