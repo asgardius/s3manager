@@ -2,7 +2,12 @@ package asgardius.page.s3manager;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.amazonaws.auth.AWSCredentials;
@@ -24,6 +29,9 @@ public class Share extends AppCompatActivity {
     AWSCredentials myCredentials;
     AmazonS3 s3client;
     Calendar mycal;
+    EditText datepick, monthpick, yearpick, hourpick, minutepick;
+    int date, month, year, hour, minute;
+    Button share;
 
     public static String URLify(String str) {
         str = str.trim();
@@ -59,6 +67,12 @@ public class Share extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_share);
         mycal = Calendar.getInstance();
+        datepick = (EditText)findViewById(R.id.Date);
+        monthpick = (EditText)findViewById(R.id.Month);
+        yearpick = (EditText)findViewById(R.id.Year);
+        hourpick = (EditText)findViewById(R.id.Hour);
+        minutepick = (EditText)findViewById(R.id.Minute);
+        share = (Button)findViewById(R.id.share);
         endpoint = getIntent().getStringExtra("endpoint");
         username = getIntent().getStringExtra("username");
         password = getIntent().getStringExtra("password");
@@ -78,17 +92,36 @@ public class Share extends AppCompatActivity {
             s3ClientOptions.setPathStyleAccess(true);
         }
         s3client.setS3ClientOptions(s3ClientOptions);
-        mycal.set(Calendar.YEAR, 2022);
-        mycal.set(Calendar.MONTH, 8);
-        mycal.set(Calendar.DATE, 18);
-        mycal.set(Calendar.HOUR, 14);
-        mycal.set(Calendar.MINUTE, 15);
-        mycal.set(Calendar.SECOND, 28);
-        Date expiration = mycal.getTime();
-        System.out.println(expiration);
+        share.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                //buttonaction
+                try {
+                    date = Integer.parseInt(datepick.getText().toString());
+                    month = Integer.parseInt(monthpick.getText().toString());
+                    year = Integer.parseInt(yearpick.getText().toString());
+                    hour = Integer.parseInt(hourpick.getText().toString());
+                    minute = Integer.parseInt(minutepick.getText().toString());
+                    mycal.set(Calendar.YEAR, year);
+                    mycal.set(Calendar.MONTH, month-1);
+                    mycal.set(Calendar.DATE, date);
+                    mycal.set(Calendar.HOUR, hour);
+                    mycal.set(Calendar.MINUTE, minute);
+                    mycal.set(Calendar.SECOND, 0);
+                    Date expiration = mycal.getTime();
+                    System.out.println(expiration);
+                    GeneratePresignedUrlRequest request = new GeneratePresignedUrlRequest(bucket, object).withExpiration(expiration);
+                    URL objectURL = s3client.generatePresignedUrl(request);
+                    System.out.println(URLify(objectURL.toString()));
+                    Intent shareIntent = new Intent(Intent.ACTION_SEND);
+                    shareIntent.setType("text/plain");
+                    shareIntent.putExtra(Intent.EXTRA_TEXT, URLify(objectURL.toString()));
+                    startActivity(Intent.createChooser(shareIntent, "choose one"));
+                    } catch (Exception e) {
+                        Toast.makeText(getApplicationContext(),getResources().getString(R.string.invalid_expiration_date), Toast.LENGTH_SHORT).show();
+                    }
+                }
 
-        GeneratePresignedUrlRequest request = new GeneratePresignedUrlRequest(bucket, object).withExpiration(expiration);
-        URL objectURL = s3client.generatePresignedUrl(request);
-        System.out.println(URLify(objectURL.toString()));
+        });
     }
 }

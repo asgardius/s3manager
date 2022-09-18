@@ -11,7 +11,7 @@
 
     <item
         android:id="@+id/sharefile"
-        android:title="@string/file_external" />
+        android:title="@string/file_share" />
 
     <item
         android:id="@+id/deletefile"
