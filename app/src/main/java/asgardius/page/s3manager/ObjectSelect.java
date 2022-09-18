@@ -7,7 +7,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -306,14 +305,8 @@ public class ObjectSelect extends AppCompatActivity {
                             } else if (menuItem.getTitle() == getResources().getString(R.string.upload_file_here)) {
                                 //Toast.makeText(ObjectSelect.this, getResources().getString(R.string.pending_feature), Toast.LENGTH_SHORT).show();
                                 upload();
-                            } else if (menuItem.getTitle() == getResources().getString(R.string.file_external)) {
-                                try {
-                                    GeneratePresignedUrlRequest request = new GeneratePresignedUrlRequest(bucket, prefix + Name.get(position).toString());
-                                    URL objectURL = s3client.generatePresignedUrl(request);
-                                    share(objectURL.toString());
-                                } catch (Exception e) {
-                                    Toast.makeText(getApplicationContext(),getResources().getString(R.string.media_list_fail), Toast.LENGTH_SHORT).show();
-                                }
+                            } else if (menuItem.getTitle() == getResources().getString(R.string.file_share)) {
+                                share(prefix + Name.get(position).toString());
                             } else if (menuItem.getTitle() == getResources().getString(R.string.file_del)) {
                                 if (menuItem.getTitle() == getResources().getString(R.string.file_del)) {
                                     if (Name.size() == 1 && treelevel >= 1) {
@@ -383,14 +376,15 @@ public class ObjectSelect extends AppCompatActivity {
 
     private void share(String object) {
 
-        try {
-
-            Intent shareIntent = new Intent(Intent.ACTION_VIEW);
-            shareIntent.setData(Uri.parse(object));
-            startActivity(Intent.createChooser(shareIntent, "choose one"));
-        } catch(Exception e) {
-            Toast.makeText(getApplicationContext(),getResources().getString(R.string.media_list_fail), Toast.LENGTH_SHORT).show();
-        }
+        Intent intent = new Intent(this, Share.class);
+        //treelevel ++;
+        intent.putExtra("endpoint", endpoint);
+        intent.putExtra("username", username);
+        intent.putExtra("password", password);
+        intent.putExtra("bucket", bucket);
+        intent.putExtra("object", object);
+        intent.putExtra("region", location);
+        startActivity(intent);
 
     }
 

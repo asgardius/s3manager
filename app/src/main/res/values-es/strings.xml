@@ -9,7 +9,7 @@
     <string name="set_bucket_name">Establezca el nombre del nuevo bucket</string>
     <string name="bucket_name">Nombre del bucket</string>
     <string name="bucket_name_empty">Se requiere un nombre para el bucket</string>
-    <string name="file_external">Abrir en</string>
+    <string name="file_share">Compartir archivo</string>
     <string name="download_file">Descargar archivo</string>
     <string name="download_in_progress">Descarga en proceso</string>
     <string name="download_success">Archivo descargado exitosamente</string>
@@ -68,4 +68,13 @@
     <string name="dummy_content">Contenido de prueba</string>
     <string name="accountadd_pdfendpoint">servidor pdfjs</string>
     <string name="pdf_reader_notready">Necesita configurar un servidor pdf.js</string>
+    <string name="share_date">DD</string>
+    <string name="share_month">MM</string>
+    <string name="share_year">AAAA</string>
+    <string name="share_hour">HH</string>
+    <string name="share_minute">MM</string>
+    <string name="expiration_date">Fecha de expiración</string>
+    <string name="expiration_time">Hora de expiración</string>
+    <string name="create_link">Crear enlace al archivo</string>
+    <string name="invalid_expiration_date">La fecha de caducidad debe ser inferior a 7 días</string>
 </resources>
