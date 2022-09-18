@@ -40,7 +40,7 @@ public class ObjectSelect extends AppCompatActivity {
     ArrayList Img;
     //ArrayList object;
     RecyclerView recyclerView;
-    String username, password, endpoint, bucket, prefix, location, pdfendpoint;
+    String username, password, endpoint, bucket, prefix, location, pdfendpoint, query;
     int treelevel;
     String[] filename;
     Region region;
@@ -229,20 +229,50 @@ public class ObjectSelect extends AppCompatActivity {
                     }
                 } else if (Img.get(position).equals(R.drawable.pdffile)) {
                     //load media file
-                    try {
-                        GeneratePresignedUrlRequest request = new GeneratePresignedUrlRequest(bucket, prefix + Name.get(position).toString());
-                        URL objectURL = s3client.generatePresignedUrl(request);
-                        //System.out.println(getResources().getString(R.string.pdf_reader)+ URLEncoder.encode(objectURL.toString(), "UTF-8" ));
-                        if (pdfendpoint == null) {
-                            Toast.makeText(getApplicationContext(),getResources().getString(R.string.pdf_reader_notready), Toast.LENGTH_SHORT).show();
-                        } else if (pdfendpoint.endsWith("/")) {
-                            webBrowser(pdfendpoint + "web/viewer.html?file=" + URLEncoder.encode(objectURL.toString(), "UTF-8" ), Name.get(position).toString());
-                        } else {
-                            webBrowser(pdfendpoint + "/web/viewer.html?file=" + URLEncoder.encode(objectURL.toString(), "UTF-8" ), Name.get(position).toString());
-                        }
+                    Thread pdfread = new Thread(new Runnable() {
 
-                    } catch (Exception e) {
-                        Toast.makeText(getApplicationContext(),getResources().getString(R.string.media_list_fail), Toast.LENGTH_SHORT).show();
+                        @Override
+                        public void run() {
+                            try  {
+                                //Your code goes here
+                                GeneratePresignedUrlRequest request = new GeneratePresignedUrlRequest(bucket, prefix + Name.get(position).toString());
+                                URL objectURL = s3client.generatePresignedUrl(request);
+                                //System.out.println(getResources().getString(R.string.pdf_reader)+ URLEncoder.encode(objectURL.toString(), "UTF-8" ));
+                                if (pdfendpoint.endsWith("/")) {
+                                    query = pdfendpoint + "web/viewer.html?file=" + URLEncoder.encode(objectURL.toString(), "UTF-8" );
+                                } else {
+                                    query = pdfendpoint + "/web/viewer.html?file=" + URLEncoder.encode(objectURL.toString(), "UTF-8" );
+                                }
+
+                                runOnUiThread(new Runnable() {
+
+                                    @Override
+                                    public void run() {
+                                        // Sending reference and data to Adapter
+                                        webBrowser(query, Name.get(position).toString());
+                                    }
+                                });
+                                //System.out.println("tree "+treelevel);
+                                //System.out.println("prefix "+prefix);
+
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                                runOnUiThread(new Runnable() {
+
+                                    @Override
+                                    public void run() {
+                                        Toast.makeText(getApplicationContext(),getResources().getString(R.string.media_list_fail), Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+                                //Toast.makeText(getApplicationContext(),getResources().getString(R.string.media_list_fail), Toast.LENGTH_SHORT).show();
+                                finish();
+                            }
+                        }
+                    });
+                    if (pdfendpoint == null) {
+                        Toast.makeText(getApplicationContext(),getResources().getString(R.string.pdf_reader_notready), Toast.LENGTH_SHORT).show();
+                    } else {
+                        pdfread.start();
                     }
                 } else if (Img.get(position).equals(R.drawable.audiofile) || Img.get(position).equals(R.drawable.videofile)) {
                     //load media file
