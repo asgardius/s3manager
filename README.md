@@ -40,7 +40,7 @@ Known supported providers
 
 * Amazon Web Services
 * Scaleway Elements
-* Oracle Cloud
+* Oracle Cloud (partial)
 * MinIO
 
 Known not supported providers

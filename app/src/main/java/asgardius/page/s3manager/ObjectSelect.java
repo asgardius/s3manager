@@ -66,7 +66,11 @@ public class ObjectSelect extends AppCompatActivity {
         region = Region.getRegion(location);
         s3ClientOptions = S3ClientOptions.builder().build();
         myCredentials = new BasicAWSCredentials(username, password);
-        s3client = new AmazonS3Client(myCredentials, region);
+        try {
+            s3client = new AmazonS3Client(myCredentials, region);
+        } catch (Exception e) {
+            Toast.makeText(getApplicationContext(),getResources().getString(R.string.media_list_fail), Toast.LENGTH_SHORT).show();
+        }
         s3client.setEndpoint(endpoint);
         if (!endpoint.contains(getResources().getString(R.string.aws_endpoint))) {
             s3ClientOptions.setPathStyleAccess(true);
