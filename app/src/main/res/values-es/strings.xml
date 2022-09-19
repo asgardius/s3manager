@@ -77,4 +77,7 @@
     <string name="expiration_time">Hora de expiración</string>
     <string name="create_link">Crear enlace al archivo</string>
     <string name="invalid_expiration_date">La fecha de caducidad debe ser inferior a 7 días</string>
+    <string name="object_size">Tamaño del objeto</string>
+    <string name="object_info">Propiedades</string>
+    <string name="file_external">Abir en</string>
 </resources>

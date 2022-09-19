@@ -165,6 +165,8 @@ public class BucketSelect extends AppCompatActivity {
                                 //System.out.println(file);
                                 //Toast.makeText(BucketSelect.this, intent.getData().toString(), Toast.LENGTH_SHORT).show();
 
+                            } else if (menuItem.getTitle() == getResources().getString(R.string.object_info)) {
+                                objectInfo(Name.get(position).toString());
                             } else if (menuItem.getTitle() == getResources().getString(R.string.file_del)) {
                                 //Toast.makeText(BucketSelect.this, getResources().getString(R.string.pending_feature), Toast.LENGTH_SHORT).show();
                                 delete(prefix + Name.get(position).toString());
@@ -286,6 +288,19 @@ public class BucketSelect extends AppCompatActivity {
         intent.putExtra("prefix", prefix);
         intent.putExtra("region", location);
         startActivity(intent);
+    }
+
+    private void objectInfo(String bucket) {
+
+        Intent intent = new Intent(this, ObjectInfo.class);
+        //treelevel ++;
+        intent.putExtra("endpoint", endpoint);
+        intent.putExtra("username", username);
+        intent.putExtra("password", password);
+        intent.putExtra("bucket", bucket);
+        intent.putExtra("region", location);
+        startActivity(intent);
+
     }
 
     private void newBucket() {

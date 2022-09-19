@@ -10,6 +10,10 @@
         android:title="@string/create_bucket" />
 
     <item
+        android:id="@+id/info"
+        android:title="@string/object_info" />
+
+    <item
         android:id="@+id/deletefolder"
         android:title="@string/file_del" />
 
