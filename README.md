@@ -2,9 +2,11 @@
 
 File Explorer to manage servers compatible with S3 Object Storage Protocol
 
+
+
 Current feature list
 
-* Audio and Video playback (opus, ogg, oga, mp3, m4a, flac, mka, mkv, mp4,, m4v, webm)
+* Audio and Video playback (opus, ogg, oga, mp3, m4a, flac, mka, mkv, mp4, m4v, webm)
 * Picture preview (jpg, jpeg, png, gif)
 * Plain text file preview (txt, md)
 * Webpage viewer (htm, html)
@@ -25,6 +27,8 @@ Planned feature list
 This app is a work in progress, so it have some bugs that need to be fixed
 
 You need to setup a pdf.js server to use pdf viewer. Just download latest version from official website and upload to any web server with ssl on same root domain than S3 server (can be same subdomain or a different one). Then set url to pdfjs root folder like https://example.com/pdfjs-dist
+
+Steps to joining to Google Play Alpha testing channel are available at https://forum.asgardius.company/d/1-asgardius-s3-manager-testing
 
 Supported languages
 
