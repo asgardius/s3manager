@@ -39,6 +39,7 @@ Knnown issues
 
 * Object listing can be slow on buckets with a lot of objects (4000+)
 * Slow user interface on some low-end devices
+* Running screen restarts after toggling system dark mode
 
 Known supported providers
 
