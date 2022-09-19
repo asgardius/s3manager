@@ -23,6 +23,7 @@ Current feature list
 Planned feature list
 
 * file sharing links
+* better interface for uploads and downloads
 
 This app is a work in progress, so it have some bugs that need to be fixed
 
