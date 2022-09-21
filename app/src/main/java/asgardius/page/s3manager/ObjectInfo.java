@@ -35,11 +35,15 @@ public class ObjectInfo extends AppCompatActivity {
     long totalSize = 0;
     int totalItems = 0;
     ListObjectsRequest orequest;
+    long KiB, MiB, GiB;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_object_info);
+        KiB = 1024;
+        MiB = 1024 * KiB;
+        GiB = 1024 * MiB;
         simpleProgressBar = (ProgressBar) findViewById(R.id.simpleProgressBar);
         filesize = (TextView) findViewById(R.id.size);
         filesizeinfo = (TextView) findViewById(R.id.size_info);
@@ -103,7 +107,15 @@ public class ObjectInfo extends AppCompatActivity {
                             } else {
                                 filesizeinfo.setText(getResources().getString(R.string.bucket_size));
                             }
-                            filesize.setText(Long.toString(totalSize));
+                            if (totalSize >= GiB) {
+                                filesize.setText(Long.toString(totalSize/GiB)+" GiB");
+                            } else if (totalSize >= MiB) {
+                                filesize.setText(Long.toString(totalSize/MiB)+" MiB");
+                            } else if (totalSize >= KiB) {
+                                filesize.setText(Long.toString(totalSize/KiB)+" KiB");
+                            } else {
+                                filesize.setText(Long.toString(totalSize)+" Bytes");
+                            }
                             simpleProgressBar.setVisibility(View.INVISIBLE);
                         }
                     });
