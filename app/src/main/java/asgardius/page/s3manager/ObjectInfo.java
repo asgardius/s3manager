@@ -16,6 +16,9 @@ import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.S3ClientOptions;
 import com.amazonaws.services.s3.model.Bucket;
+import com.amazonaws.services.s3.model.ListObjectsRequest;
+import com.amazonaws.services.s3.model.ObjectListing;
+import com.amazonaws.services.s3.model.S3ObjectSummary;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,6 +32,9 @@ public class ObjectInfo extends AppCompatActivity {
     ProgressBar simpleProgressBar;
     TextView filesize, filesizeinfo;
     boolean isobject, isfolder;
+    long totalSize = 0;
+    int totalItems = 0;
+    ListObjectsRequest orequest;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +70,7 @@ public class ObjectInfo extends AppCompatActivity {
                     //Your code goes here
                     if (object == null) {
                         isobject = false;
+                        orequest = new ListObjectsRequest().withBucketName(bucket).withMaxKeys(8000);
                     } else {
                         isobject = true;
                         if (object.endsWith("/")) {
@@ -71,7 +78,16 @@ public class ObjectInfo extends AppCompatActivity {
                         } else {
                             isfolder = false;
                         }
+                        orequest = new ListObjectsRequest().withBucketName(bucket).withPrefix(object).withMaxKeys(8000);
                     }
+                    ObjectListing result = s3client.listObjects(orequest);
+                    do {
+                        for (S3ObjectSummary objectSummary : result.getObjectSummaries()) {
+                            totalSize += objectSummary.getSize();
+                            totalItems++;
+                        }
+                        result = s3client.listNextBatchOfObjects (result);
+                    } while (result.isTruncated());
 
 
                     runOnUiThread(new Runnable() {
@@ -87,6 +103,7 @@ public class ObjectInfo extends AppCompatActivity {
                             } else {
                                 filesizeinfo.setText(getResources().getString(R.string.bucket_size));
                             }
+                            filesize.setText(Long.toString(totalSize));
                             simpleProgressBar.setVisibility(View.INVISIBLE);
                         }
                     });
