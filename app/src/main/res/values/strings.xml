@@ -18,12 +18,14 @@
     <string name="share_year">YYYY</string>
     <string name="create_link">Create file link</string>
     <string name="invalid_expiration_date">Expiration date must be at most 7 days</string>
+    <string name="null_expiration_date">You must set an expiration date to share files</string>
     <string name="broken_database">Local database is corrupted. Please reinstall this app</string>
     <string name="pending_feature">This feature is not implemented yet</string>
     <string name="set_bucket_name">Set new bucket name</string>
     <string name="bucket_name">Bucket name</string>
     <string name="bucket_name_empty">A bucket name is required</string>
     <string name="file_share">Share file</string>
+    <string name="file_external">Open in</string>
     <string name="download_file">Download file</string>
     <string name="download_in_progress">Download in progress</string>
     <string name="download_success">File downloaded successfully</string>
@@ -39,6 +41,11 @@
     <string name="retry">Retry</string>
     <string name="download_failed">Download failed</string>
     <string name="success">Success</string>
+    <string name="object_info">Properties</string>
+    <string name="file_size">File Size</string>
+    <string name="folder_size">Folder Size</string>
+    <string name="bucket_size">Bucket Size</string>
+    <string name="file_count">Files</string>
     <string name="create_bucket">Create new bucket</string>
     <string name="create_bucket_success">Bucket created successfully</string>
     <string name="upload_file_here">Upload file in current folder</string>

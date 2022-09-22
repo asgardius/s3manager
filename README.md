@@ -19,10 +19,12 @@ Current feature list
 * File upload
 * File download
 * pdf file reader using user provided pdf.js server
+* file sharing links
+* get object info
+* get bucket info
 
 Planned feature list
 
-* file sharing links
 * better interface for uploads and downloads
 
 This app is a work in progress, so it have some bugs that need to be fixed

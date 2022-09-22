@@ -20,6 +20,14 @@
         android:theme="@style/Theme.AsgardiusS3Manager"
         tools:targetApi="31">
         <activity
+            android:name=".ObjectInfo"
+            android:configChanges="orientation|keyboardHidden|screenSize|uiMode|keyboardHidden"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
             android:name=".Share"
             android:exported="false" />
         <activity

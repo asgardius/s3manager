@@ -77,4 +77,11 @@
     <string name="expiration_time">Hora de expiración</string>
     <string name="create_link">Crear enlace al archivo</string>
     <string name="invalid_expiration_date">La fecha de caducidad debe ser inferior a 7 días</string>
+    <string name="file_size">Tamaño del archivo</string>
+    <string name="object_info">Propiedades</string>
+    <string name="file_external">Abir en</string>
+    <string name="folder_size">Tamaño de la carpeta</string>
+    <string name="bucket_size">Tamaño del bucket</string>
+    <string name="file_count">Archivos</string>
+    <string name="null_expiration_date">Debe establecer una fecha de expiración para compartir archivos</string>
 </resources>

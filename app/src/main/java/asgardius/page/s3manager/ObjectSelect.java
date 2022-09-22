@@ -306,6 +306,8 @@ public class ObjectSelect extends AppCompatActivity {
                             if (menuItem.getTitle() == getResources().getString(R.string.upload_file_here)) {
                                 //Toast.makeText(ObjectSelect.this, getResources().getString(R.string.pending_feature), Toast.LENGTH_SHORT).show();
                                 upload();
+                            } else if (menuItem.getTitle() == getResources().getString(R.string.object_info)) {
+                                objectInfo(prefix + Name.get(position).toString());
                             } else if (menuItem.getTitle() == getResources().getString(R.string.file_del)) {
                                 if (Name.size() == 1 && treelevel >= 1) {
                                     Toast.makeText(ObjectSelect.this, getResources().getString(R.string.only_item_onlist), Toast.LENGTH_SHORT).show();
@@ -335,8 +337,10 @@ public class ObjectSelect extends AppCompatActivity {
                             } else if (menuItem.getTitle() == getResources().getString(R.string.upload_file_here)) {
                                 //Toast.makeText(ObjectSelect.this, getResources().getString(R.string.pending_feature), Toast.LENGTH_SHORT).show();
                                 upload();
-                            } else if (menuItem.getTitle() == getResources().getString(R.string.file_share)) {
+                            } else if (menuItem.getTitle() == getResources().getString(R.string.create_link)) {
                                 share(prefix + Name.get(position).toString());
+                            } else if (menuItem.getTitle() == getResources().getString(R.string.object_info)) {
+                                objectInfo(prefix + Name.get(position).toString());
                             } else if (menuItem.getTitle() == getResources().getString(R.string.file_del)) {
                                 if (menuItem.getTitle() == getResources().getString(R.string.file_del)) {
                                     if (Name.size() == 1 && treelevel >= 1) {
@@ -407,6 +411,20 @@ public class ObjectSelect extends AppCompatActivity {
     private void share(String object) {
 
         Intent intent = new Intent(this, Share.class);
+        //treelevel ++;
+        intent.putExtra("endpoint", endpoint);
+        intent.putExtra("username", username);
+        intent.putExtra("password", password);
+        intent.putExtra("bucket", bucket);
+        intent.putExtra("object", object);
+        intent.putExtra("region", location);
+        startActivity(intent);
+
+    }
+
+    private void objectInfo(String object) {
+
+        Intent intent = new Intent(this, ObjectInfo.class);
         //treelevel ++;
         intent.putExtra("endpoint", endpoint);
         intent.putExtra("username", username);
