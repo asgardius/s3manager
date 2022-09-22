@@ -337,7 +337,7 @@ public class ObjectSelect extends AppCompatActivity {
                             } else if (menuItem.getTitle() == getResources().getString(R.string.upload_file_here)) {
                                 //Toast.makeText(ObjectSelect.this, getResources().getString(R.string.pending_feature), Toast.LENGTH_SHORT).show();
                                 upload();
-                            } else if (menuItem.getTitle() == getResources().getString(R.string.file_share)) {
+                            } else if (menuItem.getTitle() == getResources().getString(R.string.create_link)) {
                                 share(prefix + Name.get(position).toString());
                             } else if (menuItem.getTitle() == getResources().getString(R.string.object_info)) {
                                 objectInfo(prefix + Name.get(position).toString());
