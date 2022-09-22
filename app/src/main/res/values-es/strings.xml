@@ -82,4 +82,5 @@
     <string name="file_external">Abir en</string>
     <string name="folder_size">Tamaño de la carpeta</string>
     <string name="bucket_size">Tamaño del bucket</string>
+    <string name="file_count">archivos</string>
 </resources>

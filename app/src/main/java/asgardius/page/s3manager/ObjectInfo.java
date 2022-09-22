@@ -30,7 +30,7 @@ public class ObjectInfo extends AppCompatActivity {
     AWSCredentials myCredentials;
     AmazonS3 s3client;
     ProgressBar simpleProgressBar;
-    TextView filesize, filesizeinfo;
+    TextView filesize, filesizeinfo, objectcount;
     boolean isobject, isfolder;
     long totalSize = 0;
     int totalItems = 0;
@@ -47,12 +47,18 @@ public class ObjectInfo extends AppCompatActivity {
         simpleProgressBar = (ProgressBar) findViewById(R.id.simpleProgressBar);
         filesize = (TextView) findViewById(R.id.size);
         filesizeinfo = (TextView) findViewById(R.id.size_info);
+        objectcount = (TextView) findViewById(R.id.object_count);
         endpoint = getIntent().getStringExtra("endpoint");
         username = getIntent().getStringExtra("username");
         password = getIntent().getStringExtra("password");
         bucket = getIntent().getStringExtra("bucket");
         location = getIntent().getStringExtra("region");
         object = getIntent().getStringExtra("object");
+        if (object == null) {
+            getSupportActionBar().setTitle(bucket+"/");
+        } else {
+            getSupportActionBar().setTitle(bucket+"/"+object);
+        }
         region = Region.getRegion(location);
         s3ClientOptions = S3ClientOptions.builder().build();
         myCredentials = new BasicAWSCredentials(username, password);
@@ -101,11 +107,13 @@ public class ObjectInfo extends AppCompatActivity {
                             if (isobject) {
                                 if (isfolder) {
                                     filesizeinfo.setText(getResources().getString(R.string.folder_size));
+                                    objectcount.setText(totalItems+" "+getResources().getString(R.string.file_count));
                                 } else {
                                     filesizeinfo.setText(getResources().getString(R.string.file_size));
                                 }
                             } else {
                                 filesizeinfo.setText(getResources().getString(R.string.bucket_size));
+                                objectcount.setText(totalItems+" "+getResources().getString(R.string.file_count));
                             }
                             if (totalSize >= GiB) {
                                 filesize.setText(Long.toString(totalSize/GiB)+" GiB");
