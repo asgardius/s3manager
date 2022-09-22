@@ -20,6 +20,8 @@ Current feature list
 * File download
 * pdf file reader using user provided pdf.js server
 * file sharing links
+* get object info
+* get bucket info
 
 Planned feature list
 

@@ -82,5 +82,6 @@
     <string name="file_external">Abir en</string>
     <string name="folder_size">Tamaño de la carpeta</string>
     <string name="bucket_size">Tamaño del bucket</string>
-    <string name="file_count">archivos</string>
+    <string name="file_count">Archivos</string>
+    <string name="null_expiration_date">Debe establecer una fecha de expiración para compartir archivos</string>
 </resources>
