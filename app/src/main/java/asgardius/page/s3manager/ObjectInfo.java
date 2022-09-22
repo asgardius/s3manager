@@ -91,14 +91,21 @@ public class ObjectInfo extends AppCompatActivity {
                         orequest = new ListObjectsRequest().withBucketName(bucket).withPrefix(object).withMaxKeys(8000);
                     }
                     ObjectListing result = s3client.listObjects(orequest);
-                    do {
-                        for (S3ObjectSummary objectSummary : result.getObjectSummaries()) {
-                            totalSize += objectSummary.getSize();
+                    List<S3ObjectSummary> objects = result.getObjectSummaries();
+                    boolean nextbatch = false;
+                    while (result.isTruncated() || !nextbatch) {
+                        if (nextbatch) {
+                            result = s3client.listNextBatchOfObjects (result);
+                            objects = result.getObjectSummaries();
+                        } else {
+                            nextbatch = true;
+                        }
+                        for (S3ObjectSummary os : objects) {
+                            totalSize += os.getSize();
                             totalItems++;
                         }
-                        result = s3client.listNextBatchOfObjects (result);
-                    } while (result.isTruncated());
 
+                    }
 
                     runOnUiThread(new Runnable() {
 
