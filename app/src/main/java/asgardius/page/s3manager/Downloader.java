@@ -46,7 +46,7 @@ public class Downloader extends AppCompatActivity {
     boolean started = false;
     boolean cancel = false;
     long filesize = 0;
-    long transfered;
+    long transfered = 0;
     private WifiManager.WifiLock mWifiLock;
     private PowerManager.WakeLock mWakeLock;
     private PowerManager powerManager;
@@ -110,7 +110,7 @@ public class Downloader extends AppCompatActivity {
                                 //s3client.createBucket(bucket, location);
                                 //System.out.println(fkey);
                                 object = s3client.getObject(bucket, prefix+filename);
-                                filesize = object.getObjectMetadata().getContentLength();
+                                filesize = (object.getObjectMetadata().getContentLength())/1024;
                                 writeContentToFile(fileuri);
                                 runOnUiThread(new Runnable() {
                                     @Override
@@ -125,7 +125,7 @@ public class Downloader extends AppCompatActivity {
                                             mWakeLock.release();
                                             //System.out.println("WakeLock released");
                                         }
-                                        simpleProgressBar.setVisibility(View.INVISIBLE);
+                                        simpleProgressBar.setProgress(100);
                                         fileDownload.setText(getResources().getString(R.string.download_success));
                                         fileDownload.setEnabled(false);
                                         //simpleProgressBar.setVisibility(View.INVISIBLE);
@@ -149,7 +149,6 @@ public class Downloader extends AppCompatActivity {
                                             mWakeLock.release();
                                             //System.out.println("WakeLock released");
                                         }
-                                        simpleProgressBar.setVisibility(View.INVISIBLE);
                                         if (cancel) {
                                             fileDownload.setText(getResources().getString(R.string.download_canceled));
                                         } else {
@@ -167,13 +166,12 @@ public class Downloader extends AppCompatActivity {
 
                         @Override
                         public void run() {
-                            simpleProgressBar.setVisibility(View.VISIBLE);
                             try  {
                                 //Your code goes here
-                                while (!cancel && fileDownload.isEnabled()) {
+                                while (fileDownload.isEnabled()) {
                                     try {
                                         if (filesize != 0) {
-                                            System.out.println("file size: "+Long.toString(filesize));
+                                            simpleProgressBar.setProgress((int)((transfered*100)/filesize));
                                         }
                                         Thread.sleep(500);
                                     } catch (Exception e) {
@@ -252,6 +250,7 @@ public class Downloader extends AppCompatActivity {
             byte[] buffer = new byte[1024];
             for (int len; (len = in.read(buffer)) != -1; ) {
                 out.write(buffer, 0, len);
+                transfered ++;
             }
         }
     }
