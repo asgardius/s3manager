@@ -135,7 +135,7 @@ public class ObjectSelect extends AppCompatActivity {
                             Img.add(R.drawable.folder);
                         }
                         else if (Name.get(i).toString().toLowerCase(Locale.ROOT).endsWith(".txt") || Name.get(i).toString().toLowerCase(Locale.ROOT).endsWith(".md")) {
-                            Img.add(R.drawable.textfile);
+                            Img.add(R.drawable.ptextfile);
                         }
                         else if (Name.get(i).toString().toLowerCase(Locale.ROOT).endsWith(".pdf")) {
                             Img.add(R.drawable.pdffile);
@@ -218,7 +218,7 @@ public class ObjectSelect extends AppCompatActivity {
                     } catch (Exception e) {
                         Toast.makeText(getApplicationContext(),getResources().getString(R.string.media_list_fail), Toast.LENGTH_SHORT).show();
                     }
-                }*/ else if (Img.get(position).equals(R.drawable.webpage) || Img.get(position).equals(R.drawable.textfile)) {
+                }*/ else if (Img.get(position).equals(R.drawable.webpage) || Img.get(position).equals(R.drawable.ptextfile)) {
                     //load media file
                     try {
                         GeneratePresignedUrlRequest request = new GeneratePresignedUrlRequest(bucket, prefix + Name.get(position).toString());
