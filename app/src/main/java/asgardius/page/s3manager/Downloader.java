@@ -179,15 +179,6 @@ public class Downloader extends AppCompatActivity {
                                     }
                                 }
 
-                                runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        //simpleProgressBar.setProgress(100);
-                                    }
-                                });
-                                //System.out.println("tree "+treelevel);
-                                //System.out.println("prefix "+prefix);
-
                             } catch (Exception e) {
                                 e.printStackTrace();
                                 //Toast.makeText(getApplicationContext(),getResources().getString(R.string.media_list_fail), Toast.LENGTH_SHORT).show();

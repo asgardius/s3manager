@@ -57,8 +57,9 @@ public class Uploader extends AppCompatActivity {
     File ufile;
     Intent intent;
     Button fileUpload;
-    Thread uploadFile;
+    Thread uploadFile, uploadProgress;
     boolean started = false;
+    long transfered = 0;
     private static final long MAX_SINGLE_PART_UPLOAD_BYTES = 5 * 1024 * 1024;
     private WifiManager.WifiLock mWifiLock;
     private PowerManager.WakeLock mWakeLock;
@@ -103,6 +104,8 @@ public class Uploader extends AppCompatActivity {
                     //simpleProgressBar.setVisibility(View.INVISIBLE);
                 } else {
                     started = true;
+                    transfered = 0;
+                    //simpleProgressBar.setProgress(0);
                     simpleProgressBar.setVisibility(View.VISIBLE);
                     if (fileuri == null && folder == null) {
                         Toast.makeText(Uploader.this, getResources().getString(R.string.no_file_selected), Toast.LENGTH_SHORT).show();
@@ -152,9 +155,10 @@ public class Uploader extends AppCompatActivity {
                                                 mWakeLock.release();
                                                 //System.out.println("WakeLock released");
                                             }
-                                            //simpleProgressBar.setProgress(100);
-                                            simpleProgressBar.setVisibility(View.INVISIBLE);
+                                            simpleProgressBar.setProgress(100);
+                                            //simpleProgressBar.setVisibility(View.INVISIBLE);
                                             fileUpload.setText(getResources().getString(R.string.upload_success));
+                                            started = false;
                                             fileUpload.setEnabled(false);
                                             //Toast.makeText(getApplicationContext(),getResources().getString(R.string.upload_success), Toast.LENGTH_SHORT).show();
                                             //simpleProgressBar.setVisibility(View.INVISIBLE);
@@ -178,7 +182,8 @@ public class Uploader extends AppCompatActivity {
                                                 mWakeLock.release();
                                                 //System.out.println("WakeLock released");
                                             }
-                                            simpleProgressBar.setVisibility(View.INVISIBLE);
+                                            started = false;
+                                            //simpleProgressBar.setVisibility(View.INVISIBLE);
                                             //fileUpload.setEnabled(true);
                                             fileUpload.setText(getResources().getString(R.string.retry));
                                             //Toast.makeText(getApplicationContext(),getResources().getString(R.string.media_list_fail), Toast.LENGTH_SHORT).show();
@@ -189,8 +194,43 @@ public class Uploader extends AppCompatActivity {
                                 }
                             }
                         });
+                        uploadProgress = new Thread(new Runnable() {
+
+                            @Override
+                            public void run() {
+                                try  {
+                                    //Your code goes here
+                                    while (started) {
+                                        try {
+                                            if (filesize != 0) {
+                                                //simpleProgressBar.setProgress((int)((transfered*100)/filesize));
+                                                simpleProgressBar.setProgress((int)((transfered*100)/filesize));
+                                            }
+                                            Thread.sleep(500);
+                                        } catch (Exception e) {
+                                            e.printStackTrace();
+                                        }
+                                    }
+
+                                    runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            //simpleProgressBar.setProgress(100);
+                                        }
+                                    });
+                                    //System.out.println("tree "+treelevel);
+                                    //System.out.println("prefix "+prefix);
+
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                    //Toast.makeText(getApplicationContext(),getResources().getString(R.string.media_list_fail), Toast.LENGTH_SHORT).show();
+                                    //finish();
+                                }
+                            }
+                        });
                         //simpleProgressBar.setVisibility(View.VISIBLE);
                         uploadFile.start();
+                        uploadProgress.start();
                     /*while (progress <= 99) {
                         System.out.println("Upload in progress");
                         if (upload != null) {
@@ -327,6 +367,7 @@ public class Uploader extends AppCompatActivity {
             partETags.add(uploadResult.getPartETag());
 
             fileOffset += partSize;
+            transfered = fileOffset;
         }
 
         // Complete the multipart upload.
