@@ -27,7 +27,7 @@
     <string name="file_share">Share file</string>
     <string name="file_external">Open in</string>
     <string name="download_file">Download file</string>
-    <string name="download_in_progress">Download in progress</string>
+    <string name="cancel_download">Cancel download</string>
     <string name="download_success">File downloaded successfully</string>
     <string name="upload_file_tobucket">Upload file to this bucket</string>
     <string name="upload_folder_tobucket">Upload folder to this bucket</string>
@@ -37,9 +37,10 @@
     <string name="upload_prefix">Object prefix</string>
     <string name="no_file_selected">Please select a file</string>
     <string name="upload_success">File uploaded successfully</string>
-    <string name="upload_in_progress">Upload in progress</string>
+    <string name="cancel_upload">Cancel Upload</string>
     <string name="retry">Retry</string>
     <string name="download_failed">Download failed</string>
+    <string name="download_canceled">Download canceled</string>
     <string name="success">Success</string>
     <string name="object_info">Properties</string>
     <string name="file_size">File Size</string>

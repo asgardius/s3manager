@@ -11,7 +11,7 @@
     <string name="bucket_name_empty">Se requiere un nombre para el bucket</string>
     <string name="file_share">Compartir archivo</string>
     <string name="download_file">Descargar archivo</string>
-    <string name="download_in_progress">Descarga en proceso</string>
+    <string name="cancel_download">Cancelar descarga</string>
     <string name="download_success">Archivo descargado exitosamente</string>
     <string name="upload_file_tobucket">Subir archivo en este bucket</string>
     <string name="upload_folder_tobucket">Subir carpeta en este bucket</string>
@@ -21,7 +21,7 @@
     <string name="upload_prefix">Prefijo del objeto</string>
     <string name="no_file_selected">Favor de seleccionar un archivo</string>
     <string name="upload_success">Archivo subido exitosamente</string>
-    <string name="upload_in_progress">Subida en proceso</string>
+    <string name="cancel_upload">Cancelar subida</string>
     <string name="retry">Reintentar</string>
     <string name="download_failed">Descarga fallida</string>
     <string name="success">Éxito</string>
@@ -84,4 +84,5 @@
     <string name="bucket_size">Tamaño del bucket</string>
     <string name="file_count">Archivos</string>
     <string name="null_expiration_date">Debe establecer una fecha de expiración para compartir archivos</string>
+    <string name="download_canceled">Descarga cancelada</string>
 </resources>

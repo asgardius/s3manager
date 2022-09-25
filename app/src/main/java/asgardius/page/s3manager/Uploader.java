@@ -12,7 +12,6 @@ import android.net.Uri;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.os.PowerManager;
-import android.os.storage.StorageManager;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
@@ -58,7 +57,9 @@ public class Uploader extends AppCompatActivity {
     File ufile;
     Intent intent;
     Button fileUpload;
-    Thread uploadFile;
+    Thread uploadFile, uploadProgress;
+    boolean started = false;
+    long transfered = 0;
     private static final long MAX_SINGLE_PART_UPLOAD_BYTES = 5 * 1024 * 1024;
     private WifiManager.WifiLock mWifiLock;
     private PowerManager.WakeLock mWakeLock;
@@ -97,93 +98,139 @@ public class Uploader extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 //buttonaction
-                if (fileuri == null && folder == null) {
-                    Toast.makeText(Uploader.this, getResources().getString(R.string.no_file_selected), Toast.LENGTH_SHORT).show();
+                if (started) {
+                    started = false;
+                    uploadFile.interrupt();
+                    //simpleProgressBar.setVisibility(View.INVISIBLE);
                 } else {
-                    //Acquiring WakeLock and WifiLock if not held
-                    if (!mWifiLock.isHeld()) {
-                        mWifiLock.acquire();
-                        //System.out.println("WifiLock acquired");
-                    }
-                    if (!mWakeLock.isHeld()) {
-                        mWakeLock.acquire();
-                        //System.out.println("WakeLock acquired");
-                    }
+                    started = true;
+                    transfered = 0;
+                    //simpleProgressBar.setProgress(0);
                     simpleProgressBar.setVisibility(View.VISIBLE);
-                    fileUpload.setEnabled(false);
-                    fileUpload.setText(getResources().getString(R.string.upload_in_progress));
-                    uploadFile = new Thread(new Runnable() {
-
-                        @Override
-                        public void run() {
-                            if (fprefix.getText().toString().endsWith("/") || fprefix.getText().toString().equals("")) {
-                                fkey = fprefix.getText().toString()+getDisplayName(fileuri);
-                            } else {
-                                fkey = fprefix.getText().toString()+"/"+getDisplayName(fileuri);
-                            }
-                            //System.out.println(fkey);
-                            progress = 0;
-                            filesize = 0;
-                            try  {
-                                //Your code goes here
-                                //s3client.createBucket(bucket, location);
-                                //System.out.println(fkey);
-                                ufile = readContentToFile(fileuri);
-                                filesize = ufile.length();
-                                //PutObjectRequest request = new PutObjectRequest(bucket, fkey, ufile);
-                                //upload = s3client.putObject(request);
-                                putS3Object(bucket, fkey, ufile);
-                                runOnUiThread(new Runnable() {
-
-                                    @Override
-                                    public void run() {
-                                        //Releasing WifiLock and WakeLock if held
-                                        if (mWifiLock.isHeld()) {
-                                            mWifiLock.release();
-                                            //System.out.println("WifiLock released");
-                                        }
-                                        if (mWakeLock.isHeld()) {
-                                            mWakeLock.release();
-                                            //System.out.println("WakeLock released");
-                                        }
-                                        //simpleProgressBar.setProgress(100);
-                                        simpleProgressBar.setVisibility(View.INVISIBLE);
-                                        fileUpload.setText(getResources().getString(R.string.upload_success));
-                                        Toast.makeText(getApplicationContext(),getResources().getString(R.string.upload_success), Toast.LENGTH_SHORT).show();
-                                        //simpleProgressBar.setVisibility(View.INVISIBLE);
-                                    }
-                                });
-                                //System.out.println("tree "+treelevel);
-                                //System.out.println("prefix "+prefix);
-
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                                runOnUiThread(new Runnable() {
-
-                                    @Override
-                                    public void run() {
-                                        //Releasing WifiLock and WakeLock if held
-                                        if (mWifiLock.isHeld()) {
-                                            mWifiLock.release();
-                                            //System.out.println("WifiLock released");
-                                        }
-                                        if (mWakeLock.isHeld()) {
-                                            mWakeLock.release();
-                                            //System.out.println("WakeLock released");
-                                        }
-                                        simpleProgressBar.setVisibility(View.INVISIBLE);
-                                        fileUpload.setEnabled(true);
-                                        fileUpload.setText(getResources().getString(R.string.retry));
-                                        Toast.makeText(getApplicationContext(),getResources().getString(R.string.media_list_fail), Toast.LENGTH_SHORT).show();
-                                    }
-                                });
-                                //Toast.makeText(getApplicationContext(),getResources().getString(R.string.media_list_fail), Toast.LENGTH_SHORT).show();
-                                //finish();
-                            }
+                    if (fileuri == null && folder == null) {
+                        Toast.makeText(Uploader.this, getResources().getString(R.string.no_file_selected), Toast.LENGTH_SHORT).show();
+                    } else {
+                        //Acquiring WakeLock and WifiLock if not held
+                        if (!mWifiLock.isHeld()) {
+                            mWifiLock.acquire();
+                            //System.out.println("WifiLock acquired");
                         }
-                    });
-                    //simpleProgressBar.setVisibility(View.VISIBLE);
-                    uploadFile.start();
+                        if (!mWakeLock.isHeld()) {
+                            mWakeLock.acquire();
+                            //System.out.println("WakeLock acquired");
+                        }
+                        //eUpload.setEnabled(false);
+                        fileUpload.setText(getResources().getString(R.string.cancel_upload));
+                        uploadFile = new Thread(new Runnable() {
+
+                            @Override
+                            public void run() {
+                                if (fprefix.getText().toString().endsWith("/") || fprefix.getText().toString().equals("")) {
+                                    fkey = fprefix.getText().toString()+getDisplayName(fileuri);
+                                } else {
+                                    fkey = fprefix.getText().toString()+"/"+getDisplayName(fileuri);
+                                }
+                                //System.out.println(fkey);
+                                progress = 0;
+                                filesize = 0;
+                                try  {
+                                    //Your code goes here
+                                    //s3client.createBucket(bucket, location);
+                                    //System.out.println(fkey);
+                                    ufile = readContentToFile(fileuri);
+                                    filesize = ufile.length();
+                                    //PutObjectRequest request = new PutObjectRequest(bucket, fkey, ufile);
+                                    //upload = s3client.putObject(request);
+                                    putS3Object(bucket, fkey, ufile);
+                                    runOnUiThread(new Runnable() {
+
+                                        @Override
+                                        public void run() {
+                                            //Releasing WifiLock and WakeLock if held
+                                            if (mWifiLock.isHeld()) {
+                                                mWifiLock.release();
+                                                //System.out.println("WifiLock released");
+                                            }
+                                            if (mWakeLock.isHeld()) {
+                                                mWakeLock.release();
+                                                //System.out.println("WakeLock released");
+                                            }
+                                            simpleProgressBar.setProgress(100);
+                                            //simpleProgressBar.setVisibility(View.INVISIBLE);
+                                            fileUpload.setText(getResources().getString(R.string.upload_success));
+                                            started = false;
+                                            fileUpload.setEnabled(false);
+                                            //Toast.makeText(getApplicationContext(),getResources().getString(R.string.upload_success), Toast.LENGTH_SHORT).show();
+                                            //simpleProgressBar.setVisibility(View.INVISIBLE);
+                                        }
+                                    });
+                                    //System.out.println("tree "+treelevel);
+                                    //System.out.println("prefix "+prefix);
+
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                    runOnUiThread(new Runnable() {
+
+                                        @Override
+                                        public void run() {
+                                            //Releasing WifiLock and WakeLock if held
+                                            if (mWifiLock.isHeld()) {
+                                                mWifiLock.release();
+                                                //System.out.println("WifiLock released");
+                                            }
+                                            if (mWakeLock.isHeld()) {
+                                                mWakeLock.release();
+                                                //System.out.println("WakeLock released");
+                                            }
+                                            started = false;
+                                            //simpleProgressBar.setVisibility(View.INVISIBLE);
+                                            //fileUpload.setEnabled(true);
+                                            fileUpload.setText(getResources().getString(R.string.retry));
+                                            //Toast.makeText(getApplicationContext(),getResources().getString(R.string.media_list_fail), Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
+                                    //Toast.makeText(getApplicationContext(),getResources().getString(R.string.media_list_fail), Toast.LENGTH_SHORT).show();
+                                    //finish();
+                                }
+                            }
+                        });
+                        uploadProgress = new Thread(new Runnable() {
+
+                            @Override
+                            public void run() {
+                                try  {
+                                    //Your code goes here
+                                    while (started) {
+                                        try {
+                                            if (filesize != 0) {
+                                                //simpleProgressBar.setProgress((int)((transfered*100)/filesize));
+                                                simpleProgressBar.setProgress((int)((transfered*100)/filesize));
+                                            }
+                                            Thread.sleep(500);
+                                        } catch (Exception e) {
+                                            e.printStackTrace();
+                                        }
+                                    }
+
+                                    runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            //simpleProgressBar.setProgress(100);
+                                        }
+                                    });
+                                    //System.out.println("tree "+treelevel);
+                                    //System.out.println("prefix "+prefix);
+
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                    //Toast.makeText(getApplicationContext(),getResources().getString(R.string.media_list_fail), Toast.LENGTH_SHORT).show();
+                                    //finish();
+                                }
+                            }
+                        });
+                        //simpleProgressBar.setVisibility(View.VISIBLE);
+                        uploadFile.start();
+                        uploadProgress.start();
                     /*while (progress <= 99) {
                         System.out.println("Upload in progress");
                         if (upload != null) {
@@ -200,6 +247,7 @@ public class Uploader extends AppCompatActivity {
                             e.printStackTrace();
                         }
                     }*/
+                    }
                 }
             }
 
@@ -319,6 +367,7 @@ public class Uploader extends AppCompatActivity {
             partETags.add(uploadResult.getPartETag());
 
             fileOffset += partSize;
+            transfered = fileOffset;
         }
 
         // Complete the multipart upload.
