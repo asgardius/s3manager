@@ -111,7 +111,6 @@ public class MainActivity extends AppCompatActivity {
                         }
                     } catch (Exception e) {
                         e.printStackTrace();
-                        db.execSQL("ALTER TABLE account add column pdfendpoint text");
                     }
 
                 }
@@ -149,7 +148,6 @@ public class MainActivity extends AppCompatActivity {
                                 //Toast.makeText(MainActivity.this, "This feature is not yet implemented", Toast.LENGTH_SHORT).show();
                             } catch (Exception e) {
                                 e.printStackTrace();
-                                db.execSQL("ALTER TABLE account add column pdfendpoint text");
                             }
                         }
                         else if (menuItem.getTitle() == getResources().getString(R.string.accountdel_button)) {

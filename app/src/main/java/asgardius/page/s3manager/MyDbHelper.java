@@ -6,7 +6,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class MyDbHelper extends SQLiteOpenHelper {
     private static final String atcreate = "CREATE TABLE IF NOT EXISTS account(id text UNIQUE, endpoint text, username text, password text, region text, pdfendpoint text)";
-    private static final String atupgrade = "ALTER TABLE account add column pdfendpoint text";
+    //private static final String upgrade = "ALTER TABLE account add column pdfendpoint text";
     private static final int DATABASE_VERSION = 1;
     private static final String dbname = "accounts.sqlite3";
     private static final int dbversion = 3;
@@ -19,6 +19,6 @@ public class MyDbHelper extends SQLiteOpenHelper {
     }
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL(atupgrade);
+        //db.execSQL(upgrade);
     }
 }
