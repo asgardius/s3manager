@@ -25,7 +25,7 @@ Current feature list
 
 Planned feature list
 
-* better interface for uploads and downloads
+* Nothing for now
 
 This app is a work in progress, so it have some bugs that need to be fixed
 
