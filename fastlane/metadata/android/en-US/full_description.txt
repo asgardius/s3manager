@@ -1,0 +1,52 @@
+File Explorer to manage servers compatible with S3 Object Storage Protocol
+
+Current feature list
+
+<li>Audio and Video playback (opus, ogg, oga, mp3, m4a, flac, mka, mkv, mp4, m4v, webm)</li>
+<li>Picture preview (jpg, jpeg, png, gif)</li>
+<li>Plain text file preview (txt, md)</li>
+<li>Webpage viewer (htm, html)</li>
+<li>Multiple account support</li>
+<li>Open object in external web browser</li>
+<li>Create buckets</li>
+<li>Delete buckets</li>
+<li>Delete files</li>
+<li>Delete folders</li>
+<li>File upload</li>
+<li>File download</li>
+<li>pdf file reader using user provided pdf.js server</li>
+<li>file sharing links</li>
+<li>get object info</li>
+<li>get bucket info</li>
+
+Planned feature list
+
+<li>Nothing for now</li>
+
+This app is a work in progress, so it have some bugs that need to be fixed
+
+You need to setup a pdf.js server to use pdf viewer. Just download latest version from official website and upload to any web server with ssl on same root domain than S3 server (can be same subdomain or a different one). Then set url to pdfjs root folder like https://example.com/pdfjs-dist
+
+Supported languages
+
+<li>English</li>
+<li>Spanish</li>
+
+Knnown issues
+
+<li>Object listing can be slow on buckets with a lot of objects (4000+)</li>
+<li>Slow user interface on some low-end devices</li>
+<li>Running screen restarts after toggling system dark mode</li>
+
+Known supported providers
+
+<li>Amazon Web Services</li>
+<li>Scaleway Elements</li>
+<li>Oracle Cloud (partial)</li>
+<li>MinIO</li>
+
+Known not supported providers
+
+<li>Google Cloud</li>
+
+Please report all issues at https://forum.asgardius.company/t/s3-manager
