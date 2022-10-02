@@ -39,7 +39,9 @@ You need to setup a pdf.js server to use pdf viewer. Just download latest versio
     alt="Get it on Google Play"
     height="80">](https://play.google.com/store/apps/details?id=asgardius.page.s3manager)
 
-Steps to joining to Google Play Alpha testing channel are available at https://forum.asgardius.company/d/1-asgardius-s3-manager-testing
+F-droid release may take a few days to get updated [More info here](https://www.f-droid.org/en/docs/FAQ_-_App_Developers/#ive-published-a-new-release-why-is-it-not-in-the-repository)
+
+[Steps to joining to Google Play Alpha testing channel are available here](https://forum.asgardius.company/d/1-asgardius-s3-manager-testing)
 
 You can get help at https://forum.asgardius.company/t/s3-manager
 
