@@ -33,6 +33,8 @@ public class Share extends AppCompatActivity {
     EditText datepick, monthpick, yearpick, hourpick, minutepick;
     int date, month, year, hour, minute;
     Button share, external;
+    GeneratePresignedUrlRequest request;
+    Date expiration;
 
     public static String URLify(String str) {
         str = str.trim();
@@ -116,9 +118,9 @@ public class Share extends AppCompatActivity {
                         mycal.set(Calendar.HOUR, hour);
                         mycal.set(Calendar.MINUTE, minute);
                         mycal.set(Calendar.SECOND, 0);
-                        Date expiration = mycal.getTime();
+                        expiration = mycal.getTime();
                         //System.out.println(expiration);
-                        GeneratePresignedUrlRequest request = new GeneratePresignedUrlRequest(bucket, object).withExpiration(expiration);
+                        request = new GeneratePresignedUrlRequest(bucket, object).withExpiration(expiration);
                         URL objectURL = s3client.generatePresignedUrl(request);
                         //System.out.println(URLify(objectURL.toString()));
                         Intent shareIntent = new Intent(Intent.ACTION_SEND);
@@ -137,7 +139,17 @@ public class Share extends AppCompatActivity {
             public void onClick(View view) {
                 //buttonaction
                 try {
-                    GeneratePresignedUrlRequest request = new GeneratePresignedUrlRequest(bucket, object);
+                    if (mediafile) {
+                        expiration = new Date();
+                        mycal.setTime(expiration);
+                        //System.out.println("today is " + mycal.getTime());
+                        mycal.add(Calendar.HOUR, 6);
+                        //System.out.println("Expiration date: " + mycal.getTime());
+                        expiration = mycal.getTime();
+                        request = new GeneratePresignedUrlRequest(bucket, object).withExpiration(expiration);
+                    } else {
+                        request = new GeneratePresignedUrlRequest(bucket, object);
+                    }
                     URL objectURL = s3client.generatePresignedUrl(request);
                     //System.out.println(URLify(objectURL.toString()));
                     Intent shareIntent = new Intent(Intent.ACTION_SEND);

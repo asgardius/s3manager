@@ -30,6 +30,8 @@ import com.amazonaws.services.s3.model.S3ObjectSummary;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
@@ -277,7 +279,14 @@ public class ObjectSelect extends AppCompatActivity {
                 } else if (Img.get(position).equals(R.drawable.audiofile) || Img.get(position).equals(R.drawable.videofile)) {
                     //load media file
                     try {
-                        GeneratePresignedUrlRequest request = new GeneratePresignedUrlRequest(bucket, prefix + Name.get(position).toString());
+                        Date expiration = new Date();
+                        Calendar mycal = Calendar.getInstance();
+                        mycal.setTime(expiration);
+                        //System.out.println("today is " + mycal.getTime());
+                        mycal.add(Calendar.HOUR, 6);
+                        //System.out.println("Expiration date: " + mycal.getTime());
+                        expiration = mycal.getTime();
+                        GeneratePresignedUrlRequest request = new GeneratePresignedUrlRequest(bucket, prefix + Name.get(position).toString()).withExpiration(expiration);;
                         URL objectURL = s3client.generatePresignedUrl(request);
                         videoPlayer(objectURL.toString());
                     } catch (Exception e) {
