@@ -33,6 +33,10 @@ You need to setup a pdf.js server to use pdf viewer. Just download latest versio
 
 Steps to joining to Google Play Alpha testing channel are available at https://forum.asgardius.company/d/1-asgardius-s3-manager-testing
 
+You can find it on Google Play using following link https://play.google.com/store/apps/details?id=asgardius.page.s3manager
+
+You can get help at https://forum.asgardius.company/t/s3-manager
+
 Supported languages
 
 * English
