@@ -24,6 +24,7 @@ import java.util.Date;
 
 public class Share extends AppCompatActivity {
     String username, password, endpoint, bucket, object, location;
+    boolean mediafile;
     Region region;
     S3ClientOptions s3ClientOptions;
     AWSCredentials myCredentials;
@@ -80,6 +81,7 @@ public class Share extends AppCompatActivity {
         bucket = getIntent().getStringExtra("bucket");
         location = getIntent().getStringExtra("region");
         object = getIntent().getStringExtra("object");
+        mediafile = getIntent().getBooleanExtra("mediafile", false);
         region = Region.getRegion(location);
         s3ClientOptions = S3ClientOptions.builder().build();
         myCredentials = new BasicAWSCredentials(username, password);

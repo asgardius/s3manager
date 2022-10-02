@@ -338,7 +338,11 @@ public class ObjectSelect extends AppCompatActivity {
                                 //Toast.makeText(ObjectSelect.this, getResources().getString(R.string.pending_feature), Toast.LENGTH_SHORT).show();
                                 upload();
                             } else if (menuItem.getTitle() == getResources().getString(R.string.create_link)) {
-                                share(prefix + Name.get(position).toString());
+                                if (Img.get(position).equals(R.drawable.audiofile) || Img.get(position).equals(R.drawable.videofile)) {
+                                    share(prefix + Name.get(position).toString(), true);
+                                } else {
+                                    share(prefix + Name.get(position).toString(), false);
+                                }
                             } else if (menuItem.getTitle() == getResources().getString(R.string.object_info)) {
                                 objectInfo(prefix + Name.get(position).toString());
                             } else if (menuItem.getTitle() == getResources().getString(R.string.file_del)) {
@@ -408,7 +412,7 @@ public class ObjectSelect extends AppCompatActivity {
 
     }
 
-    private void share(String object) {
+    private void share(String object, boolean mediafile) {
 
         Intent intent = new Intent(this, Share.class);
         //treelevel ++;
@@ -418,6 +422,7 @@ public class ObjectSelect extends AppCompatActivity {
         intent.putExtra("bucket", bucket);
         intent.putExtra("object", object);
         intent.putExtra("region", location);
+        intent.putExtra("mediafile", mediafile);
         startActivity(intent);
 
     }
