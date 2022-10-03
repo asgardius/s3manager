@@ -30,6 +30,7 @@
             android:layout_weight="1"
             android:focusable="true"
             android:hint="@string/share_date"
+            android:maxLength="2"
             android:inputType="date"
             android:textColorHint="?attr/colorOnSecondary"
             tools:ignore="MissingConstraints" />
@@ -41,6 +42,7 @@
             android:layout_weight="1"
             android:focusable="true"
             android:hint="@string/share_month"
+            android:maxLength="2"
             android:inputType="date"
             android:textColorHint="?attr/colorOnSecondary"
             tools:ignore="MissingConstraints" />
@@ -52,6 +54,7 @@
             android:layout_weight="1"
             android:focusable="true"
             android:hint="@string/share_year"
+            android:maxLength="4"
             android:inputType="date"
             android:textColorHint="?attr/colorOnSecondary"
             tools:ignore="MissingConstraints" />
@@ -81,6 +84,7 @@
             android:layout_weight="1"
             android:focusable="true"
             android:hint="@string/share_hour"
+            android:maxLength="2"
             android:inputType="date"
             android:textColorHint="?attr/colorOnSecondary"
             tools:ignore="MissingConstraints" />
@@ -92,6 +96,7 @@
             android:layout_weight="1"
             android:focusable="true"
             android:hint="@string/share_minute"
+            android:maxLength="2"
             android:inputType="date"
             android:textColorHint="?attr/colorOnSecondary"
             tools:ignore="MissingConstraints" />
