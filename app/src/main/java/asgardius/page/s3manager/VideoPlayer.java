@@ -3,6 +3,7 @@ package asgardius.page.s3manager;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
+import android.net.Uri;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.os.PowerManager;
@@ -13,6 +14,9 @@ import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.MediaItem;
 import com.google.android.exoplayer2.PlaybackException;
 import com.google.android.exoplayer2.Player;
+import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
+import com.google.android.exoplayer2.source.MediaSource;
+import com.google.android.exoplayer2.source.ProgressiveMediaSource;
 import com.google.android.exoplayer2.ui.StyledPlayerView;
 import com.google.android.exoplayer2.upstream.HttpDataSource;
 
@@ -43,6 +47,8 @@ public class VideoPlayer extends AppCompatActivity {
         playerView = findViewById(R.id.player_view);
         // creating a variable for exoplayer
         player = new ExoPlayer.Builder(this).build();
+        //MediaSource audioSource = new ProgressiveMediaSource(Uri.parse("url"),
+        //        new CacheDataSourceFactory(this, 100 * 1024 * 1024, 5 * 1024 * 1024), new DefaultExtractorsFactory(), null, null);
         // Attach player to the view.
         playerView.setPlayer(player);
         MediaItem mediaItem = MediaItem.fromUri(videoURL);
@@ -50,6 +56,8 @@ public class VideoPlayer extends AppCompatActivity {
         // Set the media item to be played.
         player.setMediaItem(mediaItem);
         // Prepare the player.
+        player.setPlayWhenReady(true);
+        //player.setMediaSource(audioSource);
         player.prepare();
         // Start the playback.
         player.play();
