@@ -47,17 +47,19 @@ public class VideoPlayer extends AppCompatActivity {
         playerView = findViewById(R.id.player_view);
         // creating a variable for exoplayer
         player = new ExoPlayer.Builder(this).build();
+        MediaSource mediaSource = new ProgressiveMediaSource.Factory(new CacheDataSourceFactory(this, 100 * 1024 * 1024, 512 * 1024 * 1024))
+                .createMediaSource(MediaItem.fromUri(Uri.parse(videoURL)));
         //MediaSource audioSource = new ProgressiveMediaSource(Uri.parse("url"),
         //        new CacheDataSourceFactory(this, 100 * 1024 * 1024, 5 * 1024 * 1024), new DefaultExtractorsFactory(), null, null);
         // Attach player to the view.
         playerView.setPlayer(player);
-        MediaItem mediaItem = MediaItem.fromUri(videoURL);
+        //MediaItem mediaItem = MediaItem.fromUri(videoURL);
 
         // Set the media item to be played.
-        player.setMediaItem(mediaItem);
+        //player.setMediaItem(mediaItem);
         // Prepare the player.
         player.setPlayWhenReady(true);
-        //player.setMediaSource(audioSource);
+        player.setMediaSource(mediaSource);
         player.prepare();
         // Start the playback.
         player.play();
