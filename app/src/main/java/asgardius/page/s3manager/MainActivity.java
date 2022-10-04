@@ -98,6 +98,7 @@ public class MainActivity extends AppCompatActivity {
                 if (db != null) {
                     // Database Queries
                     try {
+                        //This retrieves credentials from selected account
                         String query = "SELECT endpoint, username, password, region, pdfendpoint FROM account where id=\""+ Name.get(position).toString()+ "\"";
                         Cursor cursor = db.rawQuery(query,null);
                         if (cursor.moveToNext()){
@@ -107,6 +108,7 @@ public class MainActivity extends AppCompatActivity {
                             location = cursor.getString(3);
                             pdfendpoint = cursor.getString(4);
                             db.close();
+                            //This launch file explorer using selected account
                             explorer();
                         }
                     } catch (Exception e) {
@@ -132,6 +134,7 @@ public class MainActivity extends AppCompatActivity {
                         if (menuItem.getTitle() == getResources().getString(R.string.accountedit_button)) {
                             try {
                                 db = dbHelper.getWritableDatabase();
+                                //This retrieves credentials from selected account
                                 String query = "SELECT id, endpoint, username, password, region, pdfendpoint FROM account where id=\""+ Name.get(position).toString()+ "\"";
                                 System.out.println(query);
                                 Cursor cursor = db.rawQuery(query,null);
@@ -144,6 +147,7 @@ public class MainActivity extends AppCompatActivity {
                                     pdfendpoint = cursor.getString(5);
                                 }
                                 db.close();
+                                //This launch account editor
                                 addaccount(true);
                                 //Toast.makeText(MainActivity.this, "This feature is not yet implemented", Toast.LENGTH_SHORT).show();
                             } catch (Exception e) {
@@ -161,7 +165,7 @@ public class MainActivity extends AppCompatActivity {
                                         public void onClick(DialogInterface dialog, int which) {
                                             db = dbHelper.getWritableDatabase();
                                             if (db != null) {
-                                                // Database Queries
+                                                // This remove selected user account from local database
                                                 try {
                                                     db.execSQL("DELETE FROM account where id=\""+ Name.get(position).toString()+ "\"");
                                                     Toast.makeText(getApplicationContext(),getResources().getString(R.string.accountdel_success), Toast.LENGTH_SHORT).show();
@@ -192,17 +196,18 @@ public class MainActivity extends AppCompatActivity {
             }
         }));
 
-        //This is to launch video playback test
+        //This is to add new user account
         Button addaccount = (Button)findViewById(R.id.addaccount);
         addaccount.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
                 //buttonaction
+                //This launch account add screen
                 addaccount(false);
             }
         });
 
-        //This is to launch file explorer test
+        //This is to view app credits
         Button about = (Button)findViewById(R.id.about_button);
         about.setOnClickListener(new View.OnClickListener(){
             @Override

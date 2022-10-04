@@ -50,3 +50,7 @@ Known not supported providers
 <li>Google Cloud</li>
 
 Please report all issues at https://forum.asgardius.company/t/s3-manager
+
+This app has nonfreenet antifeature because its compatibility list.
+
+You can use MinIO to have a FOSS selfhosted server to use with this app

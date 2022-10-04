@@ -31,7 +31,19 @@ This app is a work in progress, so it have some bugs that need to be fixed
 
 You need to setup a pdf.js server to use pdf viewer. Just download latest version from official website and upload to any web server with ssl on same root domain than S3 server (can be same subdomain or a different one). Then set url to pdfjs root folder like https://example.com/pdfjs-dist
 
-Steps to joining to Google Play Alpha testing channel are available at https://forum.asgardius.company/d/1-asgardius-s3-manager-testing
+[<img src="app-store-badges/fdroid.png"
+    alt="Get it on F-Droid"
+    height="80">](https://f-droid.org/packages/asgardius.page.s3manager/)
+
+[<img src="app-store-badges/play-store.png"
+    alt="Get it on Google Play"
+    height="80">](https://play.google.com/store/apps/details?id=asgardius.page.s3manager)
+
+F-droid release may take a few days to get updated [More info here](https://www.f-droid.org/en/docs/FAQ_-_App_Developers/#ive-published-a-new-release-why-is-it-not-in-the-repository)
+
+[Steps to joining to Google Play Alpha testing channel are available here](https://forum.asgardius.company/d/1-asgardius-s3-manager-testing)
+
+You can get help at https://forum.asgardius.company/t/s3-manager
 
 Supported languages
 
