@@ -277,21 +277,48 @@ public class ObjectSelect extends AppCompatActivity {
                         pdfread.start();
                     }
                 } else if (Img.get(position).equals(R.drawable.audiofile) || Img.get(position).equals(R.drawable.videofile)) {
-                    //load media file
-                    try {
-                        Date expiration = new Date();
-                        Calendar mycal = Calendar.getInstance();
-                        mycal.setTime(expiration);
-                        //System.out.println("today is " + mycal.getTime());
-                        mycal.add(Calendar.HOUR, 6);
-                        //System.out.println("Expiration date: " + mycal.getTime());
-                        expiration = mycal.getTime();
-                        GeneratePresignedUrlRequest request = new GeneratePresignedUrlRequest(bucket, prefix + Name.get(position).toString()).withExpiration(expiration);;
-                        URL objectURL = s3client.generatePresignedUrl(request);
-                        videoPlayer(objectURL.toString());
-                    } catch (Exception e) {
-                        Toast.makeText(getApplicationContext(),getResources().getString(R.string.media_list_fail), Toast.LENGTH_SHORT).show();
-                    }
+                    Thread mediaread = new Thread(new Runnable() {
+
+                        @Override
+                        public void run() {
+                            try  {
+                                //load media file
+                                Date expiration = new Date();
+                                Calendar mycal = Calendar.getInstance();
+                                mycal.setTime(expiration);
+                                //System.out.println("today is " + mycal.getTime());
+                                mycal.add(Calendar.HOUR, 6);
+                                //System.out.println("Expiration date: " + mycal.getTime());
+                                expiration = mycal.getTime();
+                                GeneratePresignedUrlRequest request = new GeneratePresignedUrlRequest(bucket, prefix + Name.get(position).toString()).withExpiration(expiration);;
+                                URL objectURL = s3client.generatePresignedUrl(request);
+
+                                runOnUiThread(new Runnable() {
+
+                                    @Override
+                                    public void run() {
+                                        // Sending reference and data to Adapter
+                                        videoPlayer(objectURL.toString());
+                                    }
+                                });
+                                //System.out.println("tree "+treelevel);
+                                //System.out.println("prefix "+prefix);
+
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                                runOnUiThread(new Runnable() {
+
+                                    @Override
+                                    public void run() {
+                                        Toast.makeText(getApplicationContext(),getResources().getString(R.string.media_list_fail), Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+                                //Toast.makeText(getApplicationContext(),getResources().getString(R.string.media_list_fail), Toast.LENGTH_SHORT).show();
+                                finish();
+                            }
+                        }
+                    });
+                    mediaread.start();
                 }  else {
                     Toast.makeText(ObjectSelect.this, getResources().getString(R.string.unsupported_file), Toast.LENGTH_SHORT).show();
                 }

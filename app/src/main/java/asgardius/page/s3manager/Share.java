@@ -35,6 +35,7 @@ public class Share extends AppCompatActivity {
     Button share, external;
     GeneratePresignedUrlRequest request;
     Date expiration;
+    URL objectURL;
 
     public static String URLify(String str) {
         str = str.trim();
@@ -121,7 +122,7 @@ public class Share extends AppCompatActivity {
                         expiration = mycal.getTime();
                         //System.out.println(expiration);
                         request = new GeneratePresignedUrlRequest(bucket, object).withExpiration(expiration);
-                        URL objectURL = s3client.generatePresignedUrl(request);
+                        objectURL = s3client.generatePresignedUrl(request);
                         //System.out.println(URLify(objectURL.toString()));
                         Intent shareIntent = new Intent(Intent.ACTION_SEND);
                         shareIntent.setType("text/plain");
@@ -150,7 +151,7 @@ public class Share extends AppCompatActivity {
                     } else {
                         request = new GeneratePresignedUrlRequest(bucket, object);
                     }
-                    URL objectURL = s3client.generatePresignedUrl(request);
+                    objectURL = s3client.generatePresignedUrl(request);
                     //System.out.println(URLify(objectURL.toString()));
                     Intent shareIntent = new Intent(Intent.ACTION_SEND);
                     shareIntent.setType("text/plain");
