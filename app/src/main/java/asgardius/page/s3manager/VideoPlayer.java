@@ -3,6 +3,7 @@ package asgardius.page.s3manager;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
+import android.net.Uri;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.os.PowerManager;
@@ -13,8 +14,15 @@ import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.MediaItem;
 import com.google.android.exoplayer2.PlaybackException;
 import com.google.android.exoplayer2.Player;
+import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
+import com.google.android.exoplayer2.source.MediaSource;
+import com.google.android.exoplayer2.source.ProgressiveMediaSource;
 import com.google.android.exoplayer2.ui.StyledPlayerView;
 import com.google.android.exoplayer2.upstream.HttpDataSource;
+import com.google.android.exoplayer2.upstream.cache.LeastRecentlyUsedCacheEvictor;
+import com.google.android.exoplayer2.upstream.cache.SimpleCache;
+
+import java.io.File;
 
 /**
  * An example full-screen activity that shows and hides the system UI (i.e.
@@ -27,6 +35,8 @@ public class VideoPlayer extends AppCompatActivity {
     private WifiManager.WifiLock mWifiLock;
     private PowerManager.WakeLock mWakeLock;
     private PowerManager powerManager;
+    private long maxCacheSize = 100 * 1024 * 1024;
+    SimpleCache simpleCache;
 
     ExoPlayer player;
 
@@ -43,13 +53,21 @@ public class VideoPlayer extends AppCompatActivity {
         playerView = findViewById(R.id.player_view);
         // creating a variable for exoplayer
         player = new ExoPlayer.Builder(this).build();
+        LeastRecentlyUsedCacheEvictor evictor = new LeastRecentlyUsedCacheEvictor(maxCacheSize);
+        simpleCache = new SimpleCache(new File(this.getCacheDir(), "media"), evictor);
+        MediaSource mediaSource = new ProgressiveMediaSource.Factory(new CacheDataSourceFactory(this, simpleCache, 512 * 1024 * 1024))
+                .createMediaSource(MediaItem.fromUri(Uri.parse(videoURL)));
+        //MediaSource audioSource = new ProgressiveMediaSource(Uri.parse("url"),
+        //        new CacheDataSourceFactory(this, 100 * 1024 * 1024, 5 * 1024 * 1024), new DefaultExtractorsFactory(), null, null);
         // Attach player to the view.
         playerView.setPlayer(player);
-        MediaItem mediaItem = MediaItem.fromUri(videoURL);
+        //MediaItem mediaItem = MediaItem.fromUri(videoURL);
 
         // Set the media item to be played.
-        player.setMediaItem(mediaItem);
+        //player.setMediaItem(mediaItem);
         // Prepare the player.
+        player.setPlayWhenReady(true);
+        player.setMediaSource(mediaSource);
         player.prepare();
         // Start the playback.
         player.play();
@@ -138,13 +156,14 @@ public class VideoPlayer extends AppCompatActivity {
     }
 
     public void onDestroy() {
+        simpleCache.release();
         player.release();
         super.onDestroy();
 
     }
 
-    public void onBackPressed() {
+    /*public void onBackPressed() {
         player.release();
         finish();
-    }
+    }*/
 }
