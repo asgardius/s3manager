@@ -17,13 +17,15 @@ import java.io.File;
 public class CacheDataSourceFactory implements DataSource.Factory {
     private final Context context;
     private final DefaultDataSource.Factory defaultDatasourceFactory;
-    private final long maxFileSize, maxCacheSize;
+    private final long maxFileSize;
+    SimpleCache simpleCache;
     //DatabaseProvider databaseProvider = ExoDatabaseProvider(this);
 
-    public CacheDataSourceFactory(Context context, long maxCacheSize, long maxFileSize) {
+    public CacheDataSourceFactory(Context context, SimpleCache simpleCache, long maxFileSize) {
         super();
         this.context = context;
-        this.maxCacheSize = maxCacheSize;
+        this.simpleCache = simpleCache;
+        //this.maxCacheSize = maxCacheSize;
         this.maxFileSize = maxFileSize;
         String userAgent = Util.getUserAgent(context, context.getString(R.string.app_name));
         //DefaultBandwidthMeter bandwidthMeter = new DefaultBandwidthMeter();
@@ -32,8 +34,8 @@ public class CacheDataSourceFactory implements DataSource.Factory {
 
     @Override
     public DataSource createDataSource() {
-        LeastRecentlyUsedCacheEvictor evictor = new LeastRecentlyUsedCacheEvictor(maxCacheSize);
-        SimpleCache simpleCache = new SimpleCache(new File(context.getCacheDir(), "media"), evictor);
+        //LeastRecentlyUsedCacheEvictor evictor = new LeastRecentlyUsedCacheEvictor(maxCacheSize);
+        //simpleCache = new SimpleCache(new File(context.getCacheDir(), "media"), evictor);
         return new CacheDataSource(simpleCache, defaultDatasourceFactory.createDataSource(),
                 new FileDataSource(), new CacheDataSink(simpleCache, maxFileSize),
                 CacheDataSource.FLAG_BLOCK_ON_CACHE | CacheDataSource.FLAG_IGNORE_CACHE_ON_ERROR, null);

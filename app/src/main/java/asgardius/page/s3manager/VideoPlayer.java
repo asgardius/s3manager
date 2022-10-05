@@ -19,6 +19,10 @@ import com.google.android.exoplayer2.source.MediaSource;
 import com.google.android.exoplayer2.source.ProgressiveMediaSource;
 import com.google.android.exoplayer2.ui.StyledPlayerView;
 import com.google.android.exoplayer2.upstream.HttpDataSource;
+import com.google.android.exoplayer2.upstream.cache.LeastRecentlyUsedCacheEvictor;
+import com.google.android.exoplayer2.upstream.cache.SimpleCache;
+
+import java.io.File;
 
 /**
  * An example full-screen activity that shows and hides the system UI (i.e.
@@ -31,6 +35,8 @@ public class VideoPlayer extends AppCompatActivity {
     private WifiManager.WifiLock mWifiLock;
     private PowerManager.WakeLock mWakeLock;
     private PowerManager powerManager;
+    private long maxCacheSize = 100 * 1024 * 1024;
+    SimpleCache simpleCache;
 
     ExoPlayer player;
 
@@ -47,7 +53,9 @@ public class VideoPlayer extends AppCompatActivity {
         playerView = findViewById(R.id.player_view);
         // creating a variable for exoplayer
         player = new ExoPlayer.Builder(this).build();
-        MediaSource mediaSource = new ProgressiveMediaSource.Factory(new CacheDataSourceFactory(this, 100 * 1024 * 1024, 512 * 1024 * 1024))
+        LeastRecentlyUsedCacheEvictor evictor = new LeastRecentlyUsedCacheEvictor(maxCacheSize);
+        simpleCache = new SimpleCache(new File(this.getCacheDir(), "media"), evictor);
+        MediaSource mediaSource = new ProgressiveMediaSource.Factory(new CacheDataSourceFactory(this, simpleCache, 512 * 1024 * 1024))
                 .createMediaSource(MediaItem.fromUri(Uri.parse(videoURL)));
         //MediaSource audioSource = new ProgressiveMediaSource(Uri.parse("url"),
         //        new CacheDataSourceFactory(this, 100 * 1024 * 1024, 5 * 1024 * 1024), new DefaultExtractorsFactory(), null, null);
@@ -148,13 +156,14 @@ public class VideoPlayer extends AppCompatActivity {
     }
 
     public void onDestroy() {
+        simpleCache.release();
         player.release();
         super.onDestroy();
 
     }
 
-    public void onBackPressed() {
+    /*public void onBackPressed() {
         player.release();
         finish();
-    }
+    }*/
 }
