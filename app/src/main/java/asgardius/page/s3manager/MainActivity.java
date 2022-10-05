@@ -26,6 +26,7 @@ public class MainActivity extends AppCompatActivity {
     SQLiteDatabase db;
     ArrayList Name;
     ArrayList Img;
+    MyDbHelper dbHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,29 +39,28 @@ public class MainActivity extends AppCompatActivity {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getApplicationContext());
         recyclerView.setLayoutManager(linearLayoutManager);
 
-        MyDbHelper dbHelper = new MyDbHelper(this);
-        db = dbHelper.getWritableDatabase();
-        if (db != null) {
-            // Database Queries
-            Name = new ArrayList<String>();
-            Img = new ArrayList<String>();
-            String query = "SELECT id FROM account";
-            Cursor cursor = db.rawQuery(query,null);
-            while (cursor.moveToNext()){
-                Name.add(cursor.getString(0));
-                Img.add(R.drawable.account);
-            }
-            db.close();
-        } else {
-            Toast.makeText(getApplicationContext(),getResources().getString(R.string.broken_database), Toast.LENGTH_SHORT).show();
-        }
-
+        dbHelper = new MyDbHelper(this);
         Thread listaccount = new Thread(new Runnable() {
 
             @Override
             public void run() {
                 try  {
                     //Your code goes here
+                    db = dbHelper.getWritableDatabase();
+                    if (db != null) {
+                        // Database Queries
+                        Name = new ArrayList<String>();
+                        Img = new ArrayList<String>();
+                        String query = "SELECT id FROM account";
+                        Cursor cursor = db.rawQuery(query,null);
+                        while (cursor.moveToNext()){
+                            Name.add(cursor.getString(0));
+                            Img.add(R.drawable.account);
+                        }
+                        db.close();
+                    } else {
+                        Toast.makeText(getApplicationContext(),getResources().getString(R.string.broken_database), Toast.LENGTH_SHORT).show();
+                    }
                     runOnUiThread(new Runnable() {
 
                         @Override

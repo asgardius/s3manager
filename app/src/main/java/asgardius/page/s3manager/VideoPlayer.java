@@ -35,7 +35,7 @@ public class VideoPlayer extends AppCompatActivity {
     private WifiManager.WifiLock mWifiLock;
     private PowerManager.WakeLock mWakeLock;
     private PowerManager powerManager;
-    private long maxCacheSize = 100 * 1024 * 1024;
+    private long maxCacheSize = 1024 * 1024 * 1024;
     SimpleCache simpleCache;
 
     ExoPlayer player;
@@ -55,7 +55,7 @@ public class VideoPlayer extends AppCompatActivity {
         player = new ExoPlayer.Builder(this).build();
         LeastRecentlyUsedCacheEvictor evictor = new LeastRecentlyUsedCacheEvictor(maxCacheSize);
         simpleCache = new SimpleCache(new File(this.getCacheDir(), "media"), evictor);
-        MediaSource mediaSource = new ProgressiveMediaSource.Factory(new CacheDataSourceFactory(this, simpleCache, 512 * 1024 * 1024))
+        MediaSource mediaSource = new ProgressiveMediaSource.Factory(new CacheDataSourceFactory(this, simpleCache, maxCacheSize))
                 .createMediaSource(MediaItem.fromUri(Uri.parse(videoURL)));
         //MediaSource audioSource = new ProgressiveMediaSource(Uri.parse("url"),
         //        new CacheDataSourceFactory(this, 100 * 1024 * 1024, 5 * 1024 * 1024), new DefaultExtractorsFactory(), null, null);
