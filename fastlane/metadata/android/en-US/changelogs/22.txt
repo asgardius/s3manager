@@ -1,0 +1,1 @@
+Fix performance issue at main screen

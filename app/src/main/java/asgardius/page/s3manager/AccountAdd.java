@@ -55,7 +55,6 @@ public class AccountAdd extends AppCompatActivity {
             pdfendpoint = getIntent().getStringExtra("pdfendpoint");
             aapick.setText(id);
             //aapick.setEnabled(false);
-            aepick.setText(endpoint);
             aupick.setText(username);
             appick.setText(password);
             arpick.setText(location);
