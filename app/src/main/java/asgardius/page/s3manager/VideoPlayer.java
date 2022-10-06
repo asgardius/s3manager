@@ -35,8 +35,9 @@ public class VideoPlayer extends AppCompatActivity {
     private WifiManager.WifiLock mWifiLock;
     private PowerManager.WakeLock mWakeLock;
     private PowerManager powerManager;
-    private long maxCacheSize = 1024 * 1024 * 1024;
+    private long maxCacheSize;
     SimpleCache simpleCache;
+    int videocache;
 
     ExoPlayer player;
 
@@ -50,6 +51,8 @@ public class VideoPlayer extends AppCompatActivity {
         mWakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "Transistor:wake_lock");
         //Get media url
         String videoURL = getIntent().getStringExtra("video_url");
+        videocache = getIntent().getIntExtra("videocache", 40);
+        maxCacheSize = (long)videocache * 1024 * 1024;
         playerView = findViewById(R.id.player_view);
         // creating a variable for exoplayer
         player = new ExoPlayer.Builder(this).build();

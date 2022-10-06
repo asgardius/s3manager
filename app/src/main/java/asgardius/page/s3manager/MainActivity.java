@@ -92,8 +92,6 @@ public class MainActivity extends AppCompatActivity {
                             db.close();
                         }
                     }
-                    System.out.println("videocache " + videocache);
-                    System.out.println("videotime " + videotime);
                 } catch (Exception e) {
                     e.printStackTrace();
                     runOnUiThread(new Runnable() {
@@ -291,6 +289,8 @@ public class MainActivity extends AppCompatActivity {
         intent.putExtra("password", password);
         intent.putExtra("region", location);
         intent.putExtra("pdfendpoint", pdfendpoint);
+        intent.putExtra("videocache", videocache);
+        intent.putExtra("videotime", videotime);
         startActivity(intent);
 
     }

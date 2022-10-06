@@ -50,6 +50,7 @@ public class ObjectSelect extends AppCompatActivity {
     AWSCredentials myCredentials;
     AmazonS3 s3client;
     ProgressBar simpleProgressBar;
+    int videocache, videotime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +63,8 @@ public class ObjectSelect extends AppCompatActivity {
         pdfendpoint = getIntent().getStringExtra("pdfendpoint");
         prefix = getIntent().getStringExtra("prefix");
         treelevel = getIntent().getIntExtra("treelevel", 0);
+        videocache = getIntent().getIntExtra("videocache", 40);
+        videotime = getIntent().getIntExtra("videotime", 1);
         setContentView(R.layout.activity_object_select);
         getSupportActionBar().setTitle(bucket+"/"+prefix);
         region = Region.getRegion(location);
@@ -287,7 +290,7 @@ public class ObjectSelect extends AppCompatActivity {
                                 Calendar mycal = Calendar.getInstance();
                                 mycal.setTime(expiration);
                                 //System.out.println("today is " + mycal.getTime());
-                                mycal.add(Calendar.HOUR, 6);
+                                mycal.add(Calendar.HOUR, videotime);
                                 //System.out.println("Expiration date: " + mycal.getTime());
                                 expiration = mycal.getTime();
                                 GeneratePresignedUrlRequest request = new GeneratePresignedUrlRequest(bucket, prefix + Name.get(position).toString()).withExpiration(expiration);;
@@ -404,6 +407,7 @@ public class ObjectSelect extends AppCompatActivity {
 
         Intent intent = new Intent(this, VideoPlayer.class);
         intent.putExtra("video_url", url);
+        intent.putExtra("videocache", videocache);
         startActivity(intent);
 
     }
@@ -444,6 +448,8 @@ public class ObjectSelect extends AppCompatActivity {
         intent.putExtra("treelevel", treelevel+1);
         intent.putExtra("region", location);
         intent.putExtra("pdfendpoint", pdfendpoint);
+        intent.putExtra("videocache", videocache);
+        intent.putExtra("videotime", videotime);
         startActivity(intent);
 
     }
@@ -459,6 +465,7 @@ public class ObjectSelect extends AppCompatActivity {
         intent.putExtra("object", object);
         intent.putExtra("region", location);
         intent.putExtra("mediafile", mediafile);
+        intent.putExtra("videotime", videotime);
         startActivity(intent);
 
     }
