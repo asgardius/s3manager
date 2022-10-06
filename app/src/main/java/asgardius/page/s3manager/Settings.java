@@ -1,18 +1,24 @@
 package asgardius.page.s3manager;
 
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import asgardius.page.s3manager.databinding.ActivitySettingsBinding;
 
 public class Settings extends AppCompatActivity {
 
     private ActivitySettingsBinding binding;
+    MyDbHelper dbHelper;
+    SQLiteDatabase db;
+    int videocache, videotime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,6 +26,44 @@ public class Settings extends AppCompatActivity {
 
         binding = ActivitySettingsBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+        dbHelper = new MyDbHelper(this);
+        Thread getprefs = new Thread(new Runnable() {
+
+            @Override
+            public void run() {
+                try  {
+                    //Your code goes here
+                    // Database Queries
+                    db = dbHelper.getWritableDatabase();
+                    String query = "SELECT value FROM preferences where setting='videocache'";
+                    Cursor cursor = db.rawQuery(query,null);
+                    while (cursor.moveToNext()){
+                        videocache = (Integer.parseInt(cursor.getString(0)));
+                    }
+                    query = "SELECT value FROM preferences where setting='videotime'";
+                    cursor = db.rawQuery(query,null);
+                    while (cursor.moveToNext()){
+                        videotime = (Integer.parseInt(cursor.getString(0)));
+                    }
+                    db.close();
+                    System.out.println("videocache " + videocache);
+                    System.out.println("videotime " + videotime);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    runOnUiThread(new Runnable() {
+
+                        @Override
+                        public void run() {
+                            Toast.makeText(getApplicationContext(),getResources().getString(R.string.broken_database), Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                    //Toast.makeText(getApplicationContext(),getResources().getString(R.string.media_list_fail), Toast.LENGTH_SHORT).show();
+                    finish();
+                }
+            }
+        });
+        getprefs.start();
+
         //This is to add new user account
         Button saveprefs = (Button)findViewById(R.id.saveprefs);
         saveprefs.setOnClickListener(new View.OnClickListener(){
