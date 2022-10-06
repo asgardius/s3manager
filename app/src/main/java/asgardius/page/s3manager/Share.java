@@ -36,6 +36,7 @@ public class Share extends AppCompatActivity {
     GeneratePresignedUrlRequest request;
     Date expiration;
     URL objectURL;
+    int videotime;
 
     public static String URLify(String str) {
         str = str.trim();
@@ -85,6 +86,7 @@ public class Share extends AppCompatActivity {
         location = getIntent().getStringExtra("region");
         object = getIntent().getStringExtra("object");
         mediafile = getIntent().getBooleanExtra("mediafile", false);
+        videotime = getIntent().getIntExtra("videotime", 1);
         region = Region.getRegion(location);
         s3ClientOptions = S3ClientOptions.builder().build();
         myCredentials = new BasicAWSCredentials(username, password);
@@ -144,7 +146,7 @@ public class Share extends AppCompatActivity {
                         expiration = new Date();
                         mycal.setTime(expiration);
                         //System.out.println("today is " + mycal.getTime());
-                        mycal.add(Calendar.HOUR, 6);
+                        mycal.add(Calendar.HOUR, videotime);
                         //System.out.println("Expiration date: " + mycal.getTime());
                         expiration = mycal.getTime();
                         request = new GeneratePresignedUrlRequest(bucket, object).withExpiration(expiration);

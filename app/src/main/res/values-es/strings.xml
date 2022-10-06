@@ -85,4 +85,8 @@
     <string name="file_count">Archivos</string>
     <string name="null_expiration_date">Debe establecer una fecha de expiración para compartir archivos</string>
     <string name="download_canceled">Descarga cancelada</string>
+    <string name="settings">Ajustes</string>
+    <string name="save_settings">Guardar ajustes</string>
+    <string name="videocache">Tamaño máximo de cache multimedia (en MiB)</string>
+    <string name="videotime">Tiempo de expiración para visor multimedia (en horas)</string>
 </resources>

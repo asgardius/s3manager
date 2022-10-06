@@ -27,11 +27,11 @@
             style="?android:attr/buttonStyle" />
 
         <Button
-            android:id="@+id/about_button"
+            android:id="@+id/settings_button"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text="@string/about_button"
+            android:text="@string/settings"
             tools:ignore="MissingConstraints"
             style="?android:attr/buttonStyle" />
 

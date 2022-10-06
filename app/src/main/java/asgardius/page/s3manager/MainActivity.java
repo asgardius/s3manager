@@ -27,6 +27,7 @@ public class MainActivity extends AppCompatActivity {
     ArrayList Name;
     ArrayList Img;
     MyDbHelper dbHelper;
+    int videocache, videotime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +41,71 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(linearLayoutManager);
 
         dbHelper = new MyDbHelper(this);
+        Thread getprefs = new Thread(new Runnable() {
+
+            @Override
+            public void run() {
+                try  {
+                    //Your code goes here
+                    // Database Queries
+                    try {
+                        db = dbHelper.getWritableDatabase();
+                        String query = "SELECT value FROM preferences where setting='videocache'";
+                        Cursor cursor = db.rawQuery(query,null);
+                        while (cursor.moveToNext()){
+                            videocache = (Integer.parseInt(cursor.getString(0)));
+                        }
+                        db.close();
+                    } catch (Exception e) {
+                        try {
+                            db = dbHelper.getWritableDatabase();
+                            db.execSQL("INSERT INTO preferences VALUES ('videocache', '300')");
+                            videocache = 300;
+                            db.close();
+                        } catch (Exception f) {
+                            db = dbHelper.getWritableDatabase();
+                            db.execSQL("CREATE TABLE IF NOT EXISTS preferences(setting text UNIQUE, value text)");
+                            db.execSQL("INSERT INTO preferences VALUES ('videocache', '300')");
+                            db.execSQL("INSERT INTO preferences VALUES ('videotime', '3')");
+                            videocache = 300;
+                            //videotime = 3;
+                            db.close();
+                        }
+                    }
+                    try {
+                        db = dbHelper.getWritableDatabase();
+                        String query = "SELECT value FROM preferences where setting='videotime'";
+                        Cursor cursor = db.rawQuery(query,null);
+                        while (cursor.moveToNext()){
+                            videotime = (Integer.parseInt(cursor.getString(0)));
+                        }
+                        db.close();
+                    } catch (Exception e) {
+                        try {
+                            db = dbHelper.getWritableDatabase();
+                            db.execSQL("INSERT INTO preferences VALUES ('videotime', '3')");
+                            videotime = 3;
+                            db.close();
+                        } catch (Exception f) {
+                            db = dbHelper.getWritableDatabase();
+                            db.execSQL("CREATE TABLE IF NOT EXISTS preferences(setting text UNIQUE, value text)");
+                            db.close();
+                        }
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    runOnUiThread(new Runnable() {
+
+                        @Override
+                        public void run() {
+                            Toast.makeText(getApplicationContext(),getResources().getString(R.string.broken_database), Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                    //Toast.makeText(getApplicationContext(),getResources().getString(R.string.media_list_fail), Toast.LENGTH_SHORT).show();
+                    finish();
+                }
+            }
+        });
         Thread listaccount = new Thread(new Runnable() {
 
             @Override
@@ -47,20 +113,17 @@ public class MainActivity extends AppCompatActivity {
                 try  {
                     //Your code goes here
                     db = dbHelper.getWritableDatabase();
-                    if (db != null) {
-                        // Database Queries
-                        Name = new ArrayList<String>();
-                        Img = new ArrayList<String>();
-                        String query = "SELECT id FROM account";
-                        Cursor cursor = db.rawQuery(query,null);
-                        while (cursor.moveToNext()){
-                            Name.add(cursor.getString(0));
-                            Img.add(R.drawable.account);
-                        }
-                        db.close();
-                    } else {
-                        Toast.makeText(getApplicationContext(),getResources().getString(R.string.broken_database), Toast.LENGTH_SHORT).show();
+                    // Database Queries
+                    Name = new ArrayList<String>();
+                    Img = new ArrayList<String>();
+                    String query = "SELECT id FROM account";
+                    Cursor cursor = db.rawQuery(query,null);
+                    while (cursor.moveToNext()){
+                        Name.add(cursor.getString(0));
+                        Img.add(R.drawable.account);
                     }
+                    db.close();
+                    getprefs.start();
                     runOnUiThread(new Runnable() {
 
                         @Override
@@ -208,12 +271,12 @@ public class MainActivity extends AppCompatActivity {
         });
 
         //This is to view app credits
-        Button about = (Button)findViewById(R.id.about_button);
-        about.setOnClickListener(new View.OnClickListener(){
+        Button settings = (Button)findViewById(R.id.settings_button);
+        settings.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
                 //buttonaction
-                aboutPage();
+                settingsPage();
             }
         });
     }
@@ -226,6 +289,8 @@ public class MainActivity extends AppCompatActivity {
         intent.putExtra("password", password);
         intent.putExtra("region", location);
         intent.putExtra("pdfendpoint", pdfendpoint);
+        intent.putExtra("videocache", videocache);
+        intent.putExtra("videotime", videotime);
         startActivity(intent);
 
     }
@@ -246,11 +311,11 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void aboutPage () {
+    private void settingsPage() {
 
-        Intent intent = new Intent(this, WebBrowser.class);
-        intent.putExtra("web_url", "file:///android_asset/about.htm");
-        intent.putExtra("title", getResources().getString(R.string.about_button));
+        Intent intent = new Intent(this, Settings.class);
+        //intent.putExtra("web_url", "file:///android_asset/about.htm");
+        //intent.putExtra("title", getResources().getString(R.string.about_button));
         startActivity(intent);
 
     }
