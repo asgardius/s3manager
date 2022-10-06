@@ -126,6 +126,8 @@ public class Share extends AppCompatActivity {
                         //System.out.println(URLify(objectURL.toString()));
                         Intent shareIntent = new Intent(Intent.ACTION_SEND);
                         shareIntent.setType("text/plain");
+                        shareIntent.putExtra(Intent.EXTRA_TEXT, URLify(objectURL.toString()));
+                        startActivity(Intent.createChooser(shareIntent, "choose one"));
                     }
                     } catch (Exception e) {
                         Toast.makeText(getApplicationContext(),getResources().getString(R.string.invalid_expiration_date), Toast.LENGTH_SHORT).show();
