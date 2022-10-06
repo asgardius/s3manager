@@ -1,5 +1,6 @@
 package asgardius.page.s3manager;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -9,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import asgardius.page.s3manager.databinding.ActivitySettingsBinding;
@@ -19,6 +21,7 @@ public class Settings extends AppCompatActivity {
     MyDbHelper dbHelper;
     SQLiteDatabase db;
     int videocache, videotime;
+    EditText vcachepick, vtimepick;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,6 +29,8 @@ public class Settings extends AppCompatActivity {
 
         binding = ActivitySettingsBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+        vcachepick = (EditText)findViewById(R.id.videocache);
+        vtimepick = (EditText)findViewById(R.id.videotime);
         dbHelper = new MyDbHelper(this);
         Thread getprefs = new Thread(new Runnable() {
 
@@ -46,6 +51,15 @@ public class Settings extends AppCompatActivity {
                         videotime = (Integer.parseInt(cursor.getString(0)));
                     }
                     db.close();
+                    runOnUiThread(new Runnable() {
+
+                        @SuppressLint("SetTextI18n")
+                        @Override
+                        public void run() {
+                            vcachepick.setText(Integer.toString(videocache));
+                            vtimepick.setText(Integer.toString(videotime));
+                        }
+                    });
                     System.out.println("videocache " + videocache);
                     System.out.println("videotime " + videotime);
                 } catch (Exception e) {
