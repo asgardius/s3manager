@@ -20,7 +20,7 @@ public class Settings extends AppCompatActivity {
     private ActivitySettingsBinding binding;
     MyDbHelper dbHelper;
     SQLiteDatabase db;
-    int videocache, videotime;
+    String videocache, videotime;
     EditText vcachepick, vtimepick;
 
     @Override
@@ -43,12 +43,12 @@ public class Settings extends AppCompatActivity {
                     String query = "SELECT value FROM preferences where setting='videocache'";
                     Cursor cursor = db.rawQuery(query,null);
                     while (cursor.moveToNext()){
-                        videocache = (Integer.parseInt(cursor.getString(0)));
+                        videocache = (cursor.getString(0));
                     }
                     query = "SELECT value FROM preferences where setting='videotime'";
                     cursor = db.rawQuery(query,null);
                     while (cursor.moveToNext()){
-                        videotime = (Integer.parseInt(cursor.getString(0)));
+                        videotime = (cursor.getString(0));
                     }
                     db.close();
                     runOnUiThread(new Runnable() {
@@ -56,12 +56,10 @@ public class Settings extends AppCompatActivity {
                         @SuppressLint("SetTextI18n")
                         @Override
                         public void run() {
-                            vcachepick.setText(Integer.toString(videocache));
-                            vtimepick.setText(Integer.toString(videotime));
+                            vcachepick.setText(videocache);
+                            vtimepick.setText(videotime);
                         }
                     });
-                    System.out.println("videocache " + videocache);
-                    System.out.println("videotime " + videotime);
                 } catch (Exception e) {
                     e.printStackTrace();
                     runOnUiThread(new Runnable() {
@@ -84,6 +82,22 @@ public class Settings extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 //buttonaction
+                try {
+                    videocache = vcachepick.getText().toString();
+                    videotime = vtimepick.getText().toString();
+                    if (videocache.equals("") || videotime.equals("")) {
+                        Toast.makeText(getApplicationContext(),getResources().getString(R.string.accountadd_null), Toast.LENGTH_SHORT).show();
+                    } else {
+                        db = dbHelper.getWritableDatabase();
+                        db.execSQL("UPDATE preferences SET value='"+videocache+"' where setting='videocache'");
+                        db.execSQL("UPDATE preferences SET value='"+videotime+"' where setting='videotime'");
+                        db.close();
+                        mainmenu();
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    Toast.makeText(getApplicationContext(),getResources().getString(R.string.broken_database), Toast.LENGTH_SHORT).show();
+                }
                 //This launch account add screen
                 //addaccount(false);
             }
@@ -105,6 +119,15 @@ public class Settings extends AppCompatActivity {
         Intent intent = new Intent(this, WebBrowser.class);
         intent.putExtra("web_url", "file:///android_asset/about.htm");
         intent.putExtra("title", getResources().getString(R.string.about_button));
+        startActivity(intent);
+
+    }
+
+    private void mainmenu() {
+
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intent.putExtra("EXIT", true);
         startActivity(intent);
 
     }
