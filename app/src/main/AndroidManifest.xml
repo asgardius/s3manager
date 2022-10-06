@@ -22,8 +22,7 @@
         <activity
             android:name=".Settings"
             android:exported="false"
-            android:label="@string/title_activity_settings"
-            android:theme="@style/Theme.AsgardiusS3Manager.NoActionBar">
+            android:label="@string/settings">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />

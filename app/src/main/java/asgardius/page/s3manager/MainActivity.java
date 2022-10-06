@@ -273,12 +273,12 @@ public class MainActivity extends AppCompatActivity {
         });
 
         //This is to view app credits
-        Button about = (Button)findViewById(R.id.about_button);
-        about.setOnClickListener(new View.OnClickListener(){
+        Button settings = (Button)findViewById(R.id.settings_button);
+        settings.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
                 //buttonaction
-                aboutPage();
+                settingsPage();
             }
         });
     }
@@ -311,11 +311,11 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void aboutPage () {
+    private void settingsPage() {
 
-        Intent intent = new Intent(this, WebBrowser.class);
-        intent.putExtra("web_url", "file:///android_asset/about.htm");
-        intent.putExtra("title", getResources().getString(R.string.about_button));
+        Intent intent = new Intent(this, Settings.class);
+        //intent.putExtra("web_url", "file:///android_asset/about.htm");
+        //intent.putExtra("title", getResources().getString(R.string.about_button));
         startActivity(intent);
 
     }

@@ -17,10 +17,29 @@
         tools:layout_editor_absoluteX="20dp">
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/text_margin"
-            android:text="@string/large_text" />
+            android:text="@string/expiration_date"
+            android:textAlignment="center"
+            android:textSize="25sp" />
+
+        <Button
+            android:id="@+id/saveprefs"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="@string/accountadd_button"
+            tools:ignore="MissingConstraints"
+            style="?android:attr/buttonStyle" />
+
+        <Button
+            android:id="@+id/settings_button"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="@string/about_button"
+            tools:ignore="MissingConstraints"
+            style="?android:attr/buttonStyle" />
 
     </LinearLayout>
 

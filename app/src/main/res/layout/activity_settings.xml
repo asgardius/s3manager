@@ -1,16 +1,69 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
     tools:context=".Settings">
 
-    <include
-        android:id="@+id/include"
-        layout="@layout/content_settings"
-        app:layout_anchor="@+id/include"
-        app:layout_anchorGravity="center" />
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/videocache"
+                android:textAlignment="center"
+                android:textSize="25sp"/>
+
+            <EditText
+                android:id="@+id/videocache"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:focusable="true"
+                android:hint="@string/videocache"
+                android:inputType="number"
+                android:textColorHint="?attr/colorOnSecondary"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/videotime"
+                android:textAlignment="center"
+                android:textSize="25sp"/>
+
+            <EditText
+                android:id="@+id/videotime"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_weight="1"
+                android:focusable="true"
+                android:hint="@string/videotime"
+                android:inputType="number"
+                android:textColorHint="?attr/colorOnSecondary"/>
+
+            <Button
+                android:id="@+id/saveprefs"
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
+                android:text="@string/save_settings"
+                android:textColor="#ffffff"
+                android:textSize="24sp" />
+
+            <Button
+                android:id="@+id/settings_button"
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
+                android:text="@string/about_button"
+                android:textColor="#ffffff"
+                android:textSize="24sp" />
+
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+</RelativeLayout>
