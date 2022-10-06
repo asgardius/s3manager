@@ -87,10 +87,12 @@ public class Settings extends AppCompatActivity {
                     videotime = vtimepick.getText().toString();
                     if (videocache.equals("") || videotime.equals("")) {
                         Toast.makeText(getApplicationContext(),getResources().getString(R.string.accountadd_null), Toast.LENGTH_SHORT).show();
+                    }else if (Integer.parseInt(videotime) > 168) {
+                        Toast.makeText(getApplicationContext(),getResources().getString(R.string.invalid_expiration_date), Toast.LENGTH_SHORT).show();
                     } else {
                         db = dbHelper.getWritableDatabase();
-                        db.execSQL("UPDATE preferences SET value='"+videocache+"' where setting='videocache'");
-                        db.execSQL("UPDATE preferences SET value='"+videotime+"' where setting='videotime'");
+                        db.execSQL("UPDATE preferences SET value='" + videocache + "' where setting='videocache'");
+                        db.execSQL("UPDATE preferences SET value='" + videotime + "' where setting='videotime'");
                         db.close();
                         mainmenu();
                     }
