@@ -14,11 +14,14 @@ import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.MediaItem;
 import com.google.android.exoplayer2.PlaybackException;
 import com.google.android.exoplayer2.Player;
+import com.google.android.exoplayer2.database.StandaloneDatabaseProvider;
 import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
 import com.google.android.exoplayer2.source.MediaSource;
 import com.google.android.exoplayer2.source.ProgressiveMediaSource;
 import com.google.android.exoplayer2.ui.StyledPlayerView;
+import com.google.android.exoplayer2.upstream.DefaultHttpDataSource;
 import com.google.android.exoplayer2.upstream.HttpDataSource;
+import com.google.android.exoplayer2.upstream.cache.CacheDataSource;
 import com.google.android.exoplayer2.upstream.cache.LeastRecentlyUsedCacheEvictor;
 import com.google.android.exoplayer2.upstream.cache.SimpleCache;
 
@@ -36,8 +39,11 @@ public class VideoPlayer extends AppCompatActivity {
     private PowerManager.WakeLock mWakeLock;
     private PowerManager powerManager;
     private long maxCacheSize;
+    LeastRecentlyUsedCacheEvictor evictor;
+    StandaloneDatabaseProvider standaloneDatabaseProvider;
     SimpleCache simpleCache;
     int videocache;
+    ProgressiveMediaSource mediaSource;
 
     ExoPlayer player;
 
@@ -52,17 +58,23 @@ public class VideoPlayer extends AppCompatActivity {
         //Get media url
         String videoURL = getIntent().getStringExtra("video_url");
         videocache = getIntent().getIntExtra("videocache", 40);
+        standaloneDatabaseProvider = new StandaloneDatabaseProvider(this);
         maxCacheSize = (long)videocache * 1024 * 1024;
         playerView = findViewById(R.id.player_view);
         // creating a variable for exoplayer
         player = new ExoPlayer.Builder(this).build();
-        LeastRecentlyUsedCacheEvictor evictor = new LeastRecentlyUsedCacheEvictor(maxCacheSize);
-        simpleCache = new SimpleCache(new File(this.getCacheDir(), "media"), evictor);
-        MediaSource mediaSource = new ProgressiveMediaSource.Factory(new CacheDataSourceFactory(this, simpleCache, maxCacheSize))
-                .createMediaSource(MediaItem.fromUri(Uri.parse(videoURL)));
-        //MediaSource audioSource = new ProgressiveMediaSource(Uri.parse("url"),
-        //        new CacheDataSourceFactory(this, 100 * 1024 * 1024, 5 * 1024 * 1024), new DefaultExtractorsFactory(), null, null);
-        // Attach player to the view.
+        evictor = new LeastRecentlyUsedCacheEvictor(maxCacheSize);
+        simpleCache = new SimpleCache(
+                new File(this.getCacheDir(), "media"),
+                evictor,
+                standaloneDatabaseProvider);
+        mediaSource = new ProgressiveMediaSource.Factory(
+                new CacheDataSource.Factory()
+                        .setCache(simpleCache)
+                        .setUpstreamDataSourceFactory(new DefaultHttpDataSource.Factory()
+                                .setUserAgent("ExoplayerDemo"))
+                        .setFlags(CacheDataSource.FLAG_IGNORE_CACHE_ON_ERROR)
+        ).createMediaSource(MediaItem.fromUri(Uri.parse(videoURL)));
         playerView.setPlayer(player);
         //MediaItem mediaItem = MediaItem.fromUri(videoURL);
 
