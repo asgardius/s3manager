@@ -9,8 +9,8 @@ android {
         applicationId "asgardius.page.s3manager"
         minSdk 24
         targetSdk 33
-        versionCode 25
-        versionName "0.1.23"
+        versionCode 26
+        versionName "0.1.24"
         setProperty("archivesBaseName", "s3-manager-$versionName")
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -39,7 +39,7 @@ dependencies {
     implementation 'com.google.android.exoplayer:exoplayer:2.18.1'
     implementation 'androidx.recyclerview:recyclerview:1.2.1'
     // BEGIN AWS DEPENDENCIES
-    def aws_version = "2.53.0"
+    def aws_version = "2.54.0"
     implementation "com.amazonaws:aws-android-sdk-s3:$aws_version"
     implementation ("com.amazonaws:aws-android-sdk-mobile-client:$aws_version") { transitive = true }
     // END AWS DEPENDENCIES
