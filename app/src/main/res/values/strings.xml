@@ -93,4 +93,6 @@
     <string name="save_settings">Save settings</string>
     <string name="videocache">Max media cache size (in MiB)</string>
     <string name="videotime">Expiration time for media viewer (in hours)</string>
+    <string name="buffersize">Media player buffer size (in milliseconds)</string>
+    <string name="buffersize_error">Buffer size must be at least 2001 milliseconds</string>
 </resources>

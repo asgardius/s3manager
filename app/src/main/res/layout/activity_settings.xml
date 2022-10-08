@@ -48,6 +48,23 @@
                 android:inputType="number"
                 android:textColorHint="?attr/colorOnSecondary"/>
 
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/buffersize"
+                android:textAlignment="center"
+                android:textSize="25sp"/>
+
+            <EditText
+                android:id="@+id/buffersize"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_weight="1"
+                android:focusable="true"
+                android:hint="@string/buffersize"
+                android:inputType="number"
+                android:textColorHint="?attr/colorOnSecondary"/>
+
             <Button
                 android:id="@+id/saveprefs"
                 android:layout_width="match_parent"

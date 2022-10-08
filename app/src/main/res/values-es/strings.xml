@@ -89,4 +89,6 @@
     <string name="save_settings">Guardar ajustes</string>
     <string name="videocache">Tamaño máximo de cache multimedia (en MiB)</string>
     <string name="videotime">Tiempo de expiración para visor multimedia (en horas)</string>
+    <string name="buffersize">Tamaño del buffer del reproductor multimedia (en milisegundos)</string>
+    <string name="buffersize_error">El tamaño del búfer debe ser de al menos 2001 milisegundos</string>
 </resources>

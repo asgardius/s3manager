@@ -20,8 +20,8 @@ public class Settings extends AppCompatActivity {
     private ActivitySettingsBinding binding;
     MyDbHelper dbHelper;
     SQLiteDatabase db;
-    String videocache, videotime;
-    EditText vcachepick, vtimepick;
+    String videocache, videotime, buffersize;
+    EditText vcachepick, vtimepick, bsizepick;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +31,7 @@ public class Settings extends AppCompatActivity {
         setContentView(binding.getRoot());
         vcachepick = (EditText)findViewById(R.id.videocache);
         vtimepick = (EditText)findViewById(R.id.videotime);
+        bsizepick = (EditText)findViewById(R.id.buffersize);
         dbHelper = new MyDbHelper(this);
         Thread getprefs = new Thread(new Runnable() {
 
@@ -50,6 +51,11 @@ public class Settings extends AppCompatActivity {
                     while (cursor.moveToNext()){
                         videotime = (cursor.getString(0));
                     }
+                    query = "SELECT value FROM preferences where setting='buffersize'";
+                    cursor = db.rawQuery(query,null);
+                    while (cursor.moveToNext()){
+                        buffersize = (cursor.getString(0));
+                    }
                     db.close();
                     runOnUiThread(new Runnable() {
 
@@ -58,6 +64,7 @@ public class Settings extends AppCompatActivity {
                         public void run() {
                             vcachepick.setText(videocache);
                             vtimepick.setText(videotime);
+                            bsizepick.setText(buffersize);
                         }
                     });
                 } catch (Exception e) {
@@ -85,14 +92,18 @@ public class Settings extends AppCompatActivity {
                 try {
                     videocache = vcachepick.getText().toString();
                     videotime = vtimepick.getText().toString();
-                    if (videocache.equals("") || videotime.equals("")) {
+                    buffersize = bsizepick.getText().toString();
+                    if (videocache.equals("") || videotime.equals("") || buffersize.equals("")) {
                         Toast.makeText(getApplicationContext(),getResources().getString(R.string.accountadd_null), Toast.LENGTH_SHORT).show();
-                    }else if (Integer.parseInt(videotime) > 168) {
+                    } else if (Integer.parseInt(buffersize) <= 2000) {
+                        Toast.makeText(getApplicationContext(),getResources().getString(R.string.buffersize_error), Toast.LENGTH_SHORT).show();
+                    }  else if (Integer.parseInt(videotime) > 168) {
                         Toast.makeText(getApplicationContext(),getResources().getString(R.string.invalid_expiration_date), Toast.LENGTH_SHORT).show();
                     } else {
                         db = dbHelper.getWritableDatabase();
                         db.execSQL("UPDATE preferences SET value='" + videocache + "' where setting='videocache'");
                         db.execSQL("UPDATE preferences SET value='" + videotime + "' where setting='videotime'");
+                        db.execSQL("UPDATE preferences SET value='" + buffersize + "' where setting='buffersize'");
                         db.close();
                         mainmenu();
                     }
