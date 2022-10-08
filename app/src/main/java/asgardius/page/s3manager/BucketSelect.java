@@ -47,7 +47,7 @@ public class BucketSelect extends AppCompatActivity {
     AWSCredentials myCredentials;
     AmazonS3 s3client;
     ProgressBar simpleProgressBar;
-    int videocache, videotime;
+    int videocache, videotime, buffersize;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +59,7 @@ public class BucketSelect extends AppCompatActivity {
         pdfendpoint = getIntent().getStringExtra("pdfendpoint");
         videocache = getIntent().getIntExtra("videocache", 40);
         videotime = getIntent().getIntExtra("videotime", 1);
+        buffersize = getIntent().getIntExtra("buffersize", 2000);
         prefix = "";
         setContentView(R.layout.activity_bucket_select);
         region = Region.getRegion("us-east-1");
@@ -198,6 +199,7 @@ public class BucketSelect extends AppCompatActivity {
         intent.putExtra("pdfendpoint", pdfendpoint);
         intent.putExtra("videocache", videocache);
         intent.putExtra("videotime", videotime);
+        intent.putExtra("buffersize", buffersize);
         startActivity(intent);
 
     }

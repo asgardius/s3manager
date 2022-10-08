@@ -10,6 +10,8 @@ import android.os.PowerManager;
 import android.view.View;
 import android.widget.Toast;
 
+import com.google.android.exoplayer2.DefaultLoadControl;
+import com.google.android.exoplayer2.DefaultRenderersFactory;
 import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.MediaItem;
 import com.google.android.exoplayer2.PlaybackException;
@@ -42,9 +44,10 @@ public class VideoPlayer extends AppCompatActivity {
     LeastRecentlyUsedCacheEvictor evictor;
     StandaloneDatabaseProvider standaloneDatabaseProvider;
     SimpleCache simpleCache;
-    int videocache;
+    int videocache, buffersize;
     ProgressiveMediaSource mediaSource;
-
+    DefaultLoadControl loadControl;
+    DefaultRenderersFactory renderersFactory;
     ExoPlayer player;
 
     @Override
@@ -58,11 +61,17 @@ public class VideoPlayer extends AppCompatActivity {
         //Get media url
         String videoURL = getIntent().getStringExtra("video_url");
         videocache = getIntent().getIntExtra("videocache", 40);
+        buffersize = getIntent().getIntExtra("buffersize", 2000);
+        loadControl = new DefaultLoadControl.Builder().setBufferDurationsMs(2000, buffersize, 1500, 2000).build();
+
+        @DefaultRenderersFactory.ExtensionRendererMode int extensionRendererMode = DefaultRenderersFactory.EXTENSION_RENDERER_MODE_PREFER;
+
+        renderersFactory = new DefaultRenderersFactory(this) .setExtensionRendererMode(extensionRendererMode);
         standaloneDatabaseProvider = new StandaloneDatabaseProvider(this);
         maxCacheSize = (long)videocache * 1024 * 1024;
         playerView = findViewById(R.id.player_view);
         // creating a variable for exoplayer
-        player = new ExoPlayer.Builder(this).build();
+        player = new ExoPlayer.Builder(this).setLoadControl(loadControl).build();
         evictor = new LeastRecentlyUsedCacheEvictor(maxCacheSize);
         simpleCache = new SimpleCache(
                 new File(this.getCacheDir(), "media"),

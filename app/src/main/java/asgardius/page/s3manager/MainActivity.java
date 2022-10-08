@@ -27,7 +27,7 @@ public class MainActivity extends AppCompatActivity {
     ArrayList Name;
     ArrayList Img;
     MyDbHelper dbHelper;
-    int videocache, videotime;
+    int videocache, videotime, buffersize;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,21 +56,34 @@ public class MainActivity extends AppCompatActivity {
                             videocache = (Integer.parseInt(cursor.getString(0)));
                         }
                         db.close();
-                    } catch (Exception e) {
-                        try {
-                            db = dbHelper.getWritableDatabase();
-                            db.execSQL("INSERT INTO preferences VALUES ('videocache', '300')");
-                            videocache = 300;
-                            db.close();
-                        } catch (Exception f) {
-                            db = dbHelper.getWritableDatabase();
-                            db.execSQL("CREATE TABLE IF NOT EXISTS preferences(setting text UNIQUE, value text)");
-                            db.execSQL("INSERT INTO preferences VALUES ('videocache', '300')");
-                            db.execSQL("INSERT INTO preferences VALUES ('videotime', '3')");
-                            videocache = 300;
-                            //videotime = 3;
-                            db.close();
+                        if (videocache == 0) {
+                            try {
+                                db = dbHelper.getWritableDatabase();
+                                db.execSQL("INSERT INTO preferences VALUES ('videocache', '300')");
+                                videocache = 300;
+                                db.close();
+                            } catch (Exception e) {
+                                db = dbHelper.getWritableDatabase();
+                                db.execSQL("CREATE TABLE IF NOT EXISTS preferences(setting text UNIQUE, value text)");
+                                db.execSQL("INSERT INTO preferences VALUES ('videocache', '300')");
+                                db.execSQL("INSERT INTO preferences VALUES ('videotime', '3')");
+                                db.execSQL("INSERT INTO preferences VALUES ('buffersize', '12000')");
+                                videocache = 300;
+                                //videotime = 3;
+                                db.close();
+                            }
                         }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        runOnUiThread(new Runnable() {
+
+                            @Override
+                            public void run() {
+                                Toast.makeText(getApplicationContext(),getResources().getString(R.string.broken_database), Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                        //Toast.makeText(getApplicationContext(),getResources().getString(R.string.media_list_fail), Toast.LENGTH_SHORT).show();
+                        finish();
                     }
                     try {
                         db = dbHelper.getWritableDatabase();
@@ -80,17 +93,61 @@ public class MainActivity extends AppCompatActivity {
                             videotime = (Integer.parseInt(cursor.getString(0)));
                         }
                         db.close();
-                    } catch (Exception e) {
-                        try {
-                            db = dbHelper.getWritableDatabase();
-                            db.execSQL("INSERT INTO preferences VALUES ('videotime', '3')");
-                            videotime = 3;
-                            db.close();
-                        } catch (Exception f) {
-                            db = dbHelper.getWritableDatabase();
-                            db.execSQL("CREATE TABLE IF NOT EXISTS preferences(setting text UNIQUE, value text)");
-                            db.close();
+                        if (videotime == 0) {
+                            try {
+                                db = dbHelper.getWritableDatabase();
+                                db.execSQL("INSERT INTO preferences VALUES ('videotime', '3')");
+                                videotime = 3;
+                                db.close();
+                            } catch (Exception e) {
+                                db = dbHelper.getWritableDatabase();
+                                db.execSQL("CREATE TABLE IF NOT EXISTS preferences(setting text UNIQUE, value text)");
+                                db.close();
+                            }
                         }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        runOnUiThread(new Runnable() {
+
+                            @Override
+                            public void run() {
+                                Toast.makeText(getApplicationContext(),getResources().getString(R.string.broken_database), Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                        //Toast.makeText(getApplicationContext(),getResources().getString(R.string.media_list_fail), Toast.LENGTH_SHORT).show();
+                        finish();
+                    }
+                    try {
+                        db = dbHelper.getWritableDatabase();
+                        String query = "SELECT value FROM preferences where setting='buffersize'";
+                        Cursor cursor = db.rawQuery(query,null);
+                        while (cursor.moveToNext()){
+                            buffersize = (Integer.parseInt(cursor.getString(0)));
+                        }
+                        db.close();
+                        if (buffersize == 0) {
+                            try {
+                                db = dbHelper.getWritableDatabase();
+                                db.execSQL("INSERT INTO preferences VALUES ('buffersize', '12000')");
+                                buffersize = 12000;
+                                db.close();
+                            } catch (Exception e) {
+                                db = dbHelper.getWritableDatabase();
+                                db.execSQL("CREATE TABLE IF NOT EXISTS preferences(setting text UNIQUE, value text)");
+                                db.close();
+                            }
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        runOnUiThread(new Runnable() {
+
+                            @Override
+                            public void run() {
+                                Toast.makeText(getApplicationContext(),getResources().getString(R.string.broken_database), Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                        //Toast.makeText(getApplicationContext(),getResources().getString(R.string.media_list_fail), Toast.LENGTH_SHORT).show();
+                        finish();
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -291,6 +348,7 @@ public class MainActivity extends AppCompatActivity {
         intent.putExtra("pdfendpoint", pdfendpoint);
         intent.putExtra("videocache", videocache);
         intent.putExtra("videotime", videotime);
+        intent.putExtra("buffersize", buffersize);
         startActivity(intent);
 
     }
