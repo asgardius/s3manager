@@ -2,9 +2,12 @@ package asgardius.page.s3manager;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.PictureInPictureParams;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.net.wifi.WifiManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.PowerManager;
 import android.view.View;
@@ -49,15 +52,16 @@ public class VideoPlayer extends AppCompatActivity {
     DefaultLoadControl loadControl;
     DefaultRenderersFactory renderersFactory;
     ExoPlayer player;
+    long videoPosition;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_video_player);
         // create Wifi and wake locks
-        mWifiLock = ((WifiManager) this.getApplicationContext().getSystemService(Context.WIFI_SERVICE)).createWifiLock(WifiManager.WIFI_MODE_FULL_HIGH_PERF, "Transistor:wifi_lock");
+        mWifiLock = ((WifiManager) this.getApplicationContext().getSystemService(Context.WIFI_SERVICE)).createWifiLock(WifiManager.WIFI_MODE_FULL_HIGH_PERF, "S3Manager:wifi_lock");
         powerManager = (PowerManager) getSystemService(POWER_SERVICE);
-        mWakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "Transistor:wake_lock");
+        mWakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "S3Manager:wake_lock");
         //Get media url
         String videoURL = getIntent().getStringExtra("video_url");
         videocache = getIntent().getIntExtra("videocache", 40);
@@ -163,6 +167,22 @@ public class VideoPlayer extends AppCompatActivity {
         });
     }
 
+    protected void enterPIPMode() {
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N
+                && this.getPackageManager()
+                .hasSystemFeature(
+                        PackageManager.FEATURE_PICTURE_IN_PICTURE)) {
+            videoPosition = player.getCurrentPosition();
+            playerView.setUseController(false);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                PictureInPictureParams params = new PictureInPictureParams.Builder().build();
+                this.enterPictureInPictureMode(params);
+            }else {
+                this.enterPictureInPictureMode();
+            }
+        }
+    }
+
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
@@ -181,9 +201,15 @@ public class VideoPlayer extends AppCompatActivity {
 
     public void onDestroy() {
         simpleCache.release();
+        playerView.setPlayer(null);
         player.release();
         super.onDestroy();
 
+    }
+
+    public void onUserLeaveHint() {
+        super.onUserLeaveHint();
+        enterPIPMode();
     }
 
     /*public void onBackPressed() {

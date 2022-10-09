@@ -86,9 +86,11 @@
             android:label="@string/bucket_list" />
         <activity
             android:name=".VideoPlayer"
-            android:configChanges="orientation|keyboardHidden|screenSize|uiMode|keyboardHidden"
+            android:resizeableActivity="true"
+            android:supportsPictureInPicture="true"
+            android:configChanges="orientation|keyboardHidden|screenSize|smallestScreenSize|uiMode|keyboardHidden"
             android:exported="false"
-            android:theme="@style/Theme.AsgardiusS3Manager.Fullscreen" />
+            android:theme="@style/Theme.AsgardiusS3Manager.NoActionBar" />
         <activity
             android:name=".MainActivity"
             android:configChanges="orientation|keyboardHidden|screenSize|uiMode|keyboardHidden"
