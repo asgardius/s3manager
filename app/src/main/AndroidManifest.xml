@@ -21,7 +21,7 @@
         tools:targetApi="31">
         <activity
             android:name=".Settings"
-            android:configChanges="orientation|keyboardHidden|screenSize|uiMode|keyboardHidden"
+            android:configChanges="orientation|keyboardHidden|screenSize|smallestScreenSize|screenLayout|uiMode|keyboardHidden"
             android:exported="false"
             android:label="@string/settings">
             <meta-data
@@ -30,7 +30,7 @@
         </activity>
         <activity
             android:name=".ObjectInfo"
-            android:configChanges="orientation|keyboardHidden|screenSize|uiMode|keyboardHidden"
+            android:configChanges="orientation|keyboardHidden|screenSize|smallestScreenSize|screenLayout|uiMode|keyboardHidden"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
@@ -38,50 +38,50 @@
         </activity>
         <activity
             android:name=".Share"
-            android:configChanges="orientation|keyboardHidden|screenSize|uiMode|keyboardHidden"
+            android:configChanges="orientation|keyboardHidden|screenSize|smallestScreenSize|screenLayout|uiMode|keyboardHidden"
             android:exported="false" />
         <activity
             android:name=".Downloader"
-            android:configChanges="orientation|keyboardHidden|screenSize|uiMode|keyboardHidden"
+            android:configChanges="orientation|keyboardHidden|screenSize|smallestScreenSize|screenLayout|uiMode|keyboardHidden"
             android:exported="false"
             android:label="@string/download_file" />
         <activity
             android:name=".CreateBucket"
-            android:configChanges="orientation|keyboardHidden|screenSize|uiMode|keyboardHidden"
+            android:configChanges="orientation|keyboardHidden|screenSize|smallestScreenSize|screenLayout|uiMode|keyboardHidden"
             android:exported="false"
             android:label="@string/create_bucket" />
         <activity
             android:name=".Uploader"
-            android:configChanges="orientation|keyboardHidden|screenSize|uiMode|keyboardHidden"
+            android:configChanges="orientation|keyboardHidden|screenSize|smallestScreenSize|screenLayout|uiMode|keyboardHidden"
             android:exported="false"
             android:label="@string/upload_button" />
         <activity
             android:name=".ImageViewer"
-            android:configChanges="orientation|keyboardHidden|screenSize|uiMode|keyboardHidden"
+            android:configChanges="orientation|keyboardHidden|screenSize|smallestScreenSize|screenLayout|uiMode|keyboardHidden"
             android:exported="false" />
         <activity
             android:name=".TextViewer"
-            android:configChanges="orientation|keyboardHidden|screenSize|uiMode|keyboardHidden"
+            android:configChanges="orientation|keyboardHidden|screenSize|smallestScreenSize|screenLayout|uiMode|keyboardHidden"
             android:exported="false" />
         <activity
             android:name=".WebBrowser"
-            android:configChanges="orientation|keyboardHidden|screenSize|uiMode|keyboardHidden"
+            android:configChanges="orientation|keyboardHidden|screenSize|smallestScreenSize|screenLayout|uiMode|keyboardHidden"
             android:exported="false" />
         <activity
             android:name=".AccountAdd"
-            android:configChanges="orientation|keyboardHidden|screenSize|uiMode|keyboardHidden"
+            android:configChanges="orientation|keyboardHidden|screenSize|smallestScreenSize|screenLayout|uiMode|keyboardHidden"
             android:exported="false" />
         <activity
             android:name=".ObjectSelect"
-            android:configChanges="orientation|keyboardHidden|screenSize|uiMode|keyboardHidden"
+            android:configChanges="orientation|keyboardHidden|screenSize|smallestScreenSize|screenLayout|uiMode|keyboardHidden"
             android:exported="false" />
         <activity
             android:name=".list_item"
-            android:configChanges="orientation|keyboardHidden|screenSize|uiMode|keyboardHidden"
+            android:configChanges="orientation|keyboardHidden|screenSize|smallestScreenSize|screenLayout|uiMode|keyboardHidden"
             android:exported="false" />
         <activity
             android:name=".BucketSelect"
-            android:configChanges="orientation|keyboardHidden|screenSize|uiMode|keyboardHidden"
+            android:configChanges="orientation|keyboardHidden|screenSize|smallestScreenSize|screenLayout|uiMode|keyboardHidden"
             android:exported="false"
             android:label="@string/bucket_list" />
         <activity
@@ -94,7 +94,7 @@
             android:theme="@style/Theme.AsgardiusS3Manager.NoActionBar" />
         <activity
             android:name=".MainActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize|uiMode|keyboardHidden"
+            android:configChanges="orientation|keyboardHidden|screenSize|smallestScreenSize|screenLayout|uiMode|keyboardHidden"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
