@@ -20,8 +20,6 @@ import com.google.android.exoplayer2.MediaItem;
 import com.google.android.exoplayer2.PlaybackException;
 import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.database.StandaloneDatabaseProvider;
-import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
-import com.google.android.exoplayer2.source.MediaSource;
 import com.google.android.exoplayer2.source.ProgressiveMediaSource;
 import com.google.android.exoplayer2.ui.StyledPlayerView;
 import com.google.android.exoplayer2.upstream.DefaultHttpDataSource;
@@ -204,7 +202,18 @@ public class VideoPlayer extends AppCompatActivity {
         playerView.setPlayer(null);
         player.release();
         super.onDestroy();
+    }
 
+    public void onStop() {
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N
+                && this.getPackageManager()
+                .hasSystemFeature(
+                        PackageManager.FEATURE_PICTURE_IN_PICTURE)) {
+            simpleCache.release();
+            playerView.setPlayer(null);
+            player.release();
+        }
+        super.onStop();
     }
 
     public void onUserLeaveHint() {
@@ -212,8 +221,14 @@ public class VideoPlayer extends AppCompatActivity {
         enterPIPMode();
     }
 
-    /*public void onBackPressed() {
-        player.release();
-        finish();
-    }*/
+    public void onBackPressed() {
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N
+                && this.getPackageManager()
+                .hasSystemFeature(
+                        PackageManager.FEATURE_PICTURE_IN_PICTURE)) {
+            enterPIPMode();
+        } else {
+            super.onBackPressed();
+        }
+    }
 }

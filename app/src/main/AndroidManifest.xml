@@ -88,7 +88,7 @@
             android:name=".VideoPlayer"
             android:resizeableActivity="true"
             android:supportsPictureInPicture="true"
-            android:configChanges="orientation|keyboardHidden|screenSize|smallestScreenSize|uiMode|keyboardHidden"
+            android:configChanges="orientation|keyboardHidden|screenSize|smallestScreenSize|screenLayout|uiMode|keyboardHidden"
             android:exported="false"
             android:theme="@style/Theme.AsgardiusS3Manager.NoActionBar" />
         <activity
