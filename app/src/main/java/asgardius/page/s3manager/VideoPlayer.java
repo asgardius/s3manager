@@ -55,6 +55,7 @@ public class VideoPlayer extends AppCompatActivity {
     long videoPosition;
     MediaSessionCompat mediaSession;
     MediaSessionConnector mediaSessionConnector;
+    StyledPlayerView.ControllerVisibilityListener control;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,6 +96,17 @@ public class VideoPlayer extends AppCompatActivity {
                         .setFlags(CacheDataSource.FLAG_IGNORE_CACHE_ON_ERROR)
         ).createMediaSource(MediaItem.fromUri(Uri.parse(videoURL)));
         playerView.setPlayer(player);
+        control = new StyledPlayerView.ControllerVisibilityListener() {
+            @Override
+            public void onVisibilityChanged(int visibility) {
+                if (playerView.isControllerFullyVisible()) {
+                    showSystemBars();
+                } else {
+                    hideSystemBars();
+                }
+            }
+        };
+        playerView.setControllerVisibilityListener(control);
         //MediaItem mediaItem = MediaItem.fromUri(videoURL);
 
         // Set the media item to be played.
@@ -173,6 +185,28 @@ public class VideoPlayer extends AppCompatActivity {
         });
     }
 
+    private void hideSystemBars() {
+        // Set the IMMERSIVE flag.
+        // Set the content to appear under the system bars so that the content
+        // doesn't resize when the system bars hide and show.
+        View decorView = getWindow().getDecorView();
+        decorView.setSystemUiVisibility(
+                View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                        | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION // hide nav bar
+                        | View.SYSTEM_UI_FLAG_FULLSCREEN // hide status bar
+                        | View.SYSTEM_UI_FLAG_IMMERSIVE);
+    }
+
+    private void showSystemBars() {
+        View decorView = getWindow().getDecorView();
+        decorView.setSystemUiVisibility(
+                View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+    }
+
+
     protected void enterPIPMode() {
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N
                 && this.getPackageManager()
@@ -190,7 +224,7 @@ public class VideoPlayer extends AppCompatActivity {
     }
 
     @Override
-    public void onWindowFocusChanged(boolean hasFocus) {
+    /*public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
 
 
@@ -203,7 +237,7 @@ public class VideoPlayer extends AppCompatActivity {
                         | View.SYSTEM_UI_FLAG_FULLSCREEN
                         | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
 
-    }
+    }*/
 
     public void onDestroy() {
         mediaSessionConnector.setPlayer(null);
