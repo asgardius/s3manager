@@ -10,6 +10,7 @@ import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.PowerManager;
+import android.support.v4.media.session.MediaSessionCompat;
 import android.view.View;
 import android.widget.Toast;
 
@@ -20,6 +21,7 @@ import com.google.android.exoplayer2.MediaItem;
 import com.google.android.exoplayer2.PlaybackException;
 import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.database.StandaloneDatabaseProvider;
+import com.google.android.exoplayer2.ext.mediasession.MediaSessionConnector;
 import com.google.android.exoplayer2.source.ProgressiveMediaSource;
 import com.google.android.exoplayer2.ui.StyledPlayerView;
 import com.google.android.exoplayer2.upstream.DefaultHttpDataSource;
@@ -51,11 +53,15 @@ public class VideoPlayer extends AppCompatActivity {
     DefaultRenderersFactory renderersFactory;
     ExoPlayer player;
     long videoPosition;
+    MediaSessionCompat mediaSession;
+    MediaSessionConnector mediaSessionConnector;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_video_player);
+        mediaSession = new MediaSessionCompat(this, getPackageName());
+        mediaSessionConnector = new MediaSessionConnector(mediaSession);
         // create Wifi and wake locks
         mWifiLock = ((WifiManager) this.getApplicationContext().getSystemService(Context.WIFI_SERVICE)).createWifiLock(WifiManager.WIFI_MODE_FULL_HIGH_PERF, "S3Manager:wifi_lock");
         powerManager = (PowerManager) getSystemService(POWER_SERVICE);
@@ -74,6 +80,8 @@ public class VideoPlayer extends AppCompatActivity {
         playerView = findViewById(R.id.player_view);
         // creating a variable for exoplayer
         player = new ExoPlayer.Builder(this).setLoadControl(loadControl).build();
+        mediaSessionConnector.setPlayer(player);
+        mediaSession.setActive(true);
         evictor = new LeastRecentlyUsedCacheEvictor(maxCacheSize);
         simpleCache = new SimpleCache(
                 new File(this.getCacheDir(), "media"),
@@ -198,9 +206,11 @@ public class VideoPlayer extends AppCompatActivity {
     }
 
     public void onDestroy() {
-        simpleCache.release();
-        playerView.setPlayer(null);
+        mediaSessionConnector.setPlayer(null);
+        mediaSession.setActive(false);
         player.release();
+        playerView.setPlayer(null);
+        simpleCache.release();
         super.onDestroy();
     }
 
@@ -209,9 +219,11 @@ public class VideoPlayer extends AppCompatActivity {
                 && this.getPackageManager()
                 .hasSystemFeature(
                         PackageManager.FEATURE_PICTURE_IN_PICTURE)) {
-            simpleCache.release();
-            playerView.setPlayer(null);
+            mediaSessionConnector.setPlayer(null);
+            mediaSession.setActive(false);
             player.release();
+            playerView.setPlayer(null);
+            simpleCache.release();
         }
         super.onStop();
     }
