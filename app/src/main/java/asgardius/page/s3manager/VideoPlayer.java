@@ -229,6 +229,14 @@ public class VideoPlayer extends AppCompatActivity {
         super.onStop();
     }
 
+    public void onResume(){
+        super.onResume();
+        // put your code here...
+        if (!playerView.getUseController()) {
+            playerView.setUseController(true);
+        }
+    }
+
     public void onUserLeaveHint() {
         super.onUserLeaveHint();
         enterPIPMode();
