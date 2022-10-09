@@ -95,4 +95,5 @@
     <string name="videotime">Expiration time for media viewer (in hours)</string>
     <string name="buffersize">Media player buffer size (in milliseconds)</string>
     <string name="buffersize_error">Buffer size must be at least 2001 milliseconds</string>
+    <string name="mediaplayer_multierror">Only one media file can be played at once</string>
 </resources>

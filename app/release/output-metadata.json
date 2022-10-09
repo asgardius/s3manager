@@ -1,0 +1,20 @@
+{
+  "version": 3,
+  "artifactType": {
+    "type": "APK",
+    "kind": "Directory"
+  },
+  "applicationId": "asgardius.page.s3manager",
+  "variantName": "release",
+  "elements": [
+    {
+      "type": "SINGLE",
+      "filters": [],
+      "attributes": [],
+      "versionCode": 28,
+      "versionName": "0.1.26",
+      "outputFile": "s3-manager-0.1.26-release.apk"
+    }
+  ],
+  "elementType": "File"
+}

@@ -224,6 +224,7 @@ public class VideoPlayer extends AppCompatActivity {
             player.release();
             playerView.setPlayer(null);
             simpleCache.release();
+            finish();
         }
         super.onStop();
     }
