@@ -14,12 +14,14 @@ import android.support.v4.media.session.MediaSessionCompat;
 import android.view.View;
 import android.widget.Toast;
 
+import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.DefaultLoadControl;
 import com.google.android.exoplayer2.DefaultRenderersFactory;
 import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.MediaItem;
 import com.google.android.exoplayer2.PlaybackException;
 import com.google.android.exoplayer2.Player;
+import com.google.android.exoplayer2.audio.AudioAttributes;
 import com.google.android.exoplayer2.database.StandaloneDatabaseProvider;
 import com.google.android.exoplayer2.ext.mediasession.MediaSessionConnector;
 import com.google.android.exoplayer2.source.ProgressiveMediaSource;
@@ -63,6 +65,11 @@ public class VideoPlayer extends AppCompatActivity {
         setContentView(R.layout.activity_video_player);
         mediaSession = new MediaSessionCompat(this, getPackageName());
         mediaSessionConnector = new MediaSessionConnector(mediaSession);
+        hideSystemBars();
+        AudioAttributes audioAttributes = new AudioAttributes.Builder()
+                .setUsage(C.USAGE_MEDIA)
+                .setContentType(C.AUDIO_CONTENT_TYPE_MOVIE)
+                .build();
         // create Wifi and wake locks
         mWifiLock = ((WifiManager) this.getApplicationContext().getSystemService(Context.WIFI_SERVICE)).createWifiLock(WifiManager.WIFI_MODE_FULL_HIGH_PERF, "S3Manager:wifi_lock");
         powerManager = (PowerManager) getSystemService(POWER_SERVICE);
@@ -81,6 +88,7 @@ public class VideoPlayer extends AppCompatActivity {
         playerView = findViewById(R.id.player_view);
         // creating a variable for exoplayer
         player = new ExoPlayer.Builder(this).setLoadControl(loadControl).build();
+        player.setAudioAttributes(audioAttributes, true);
         mediaSessionConnector.setPlayer(player);
         mediaSession.setActive(true);
         evictor = new LeastRecentlyUsedCacheEvictor(maxCacheSize);
