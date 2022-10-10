@@ -75,7 +75,7 @@ public class VideoPlayer extends AppCompatActivity {
         setContentView(R.layout.activity_video_player);
         if(Build.VERSION.SDK_INT >=Build.VERSION_CODES.O){
 
-            NotificationChannel channel= new NotificationChannel("playback","Test Notification",NotificationManager.IMPORTANCE_DEFAULT);
+            NotificationChannel channel= new NotificationChannel("playback","Video Playback", NotificationManager.IMPORTANCE_DEFAULT);
             NotificationManager manager =getSystemService(NotificationManager.class);
             manager.createNotificationChannel(channel);
         }
