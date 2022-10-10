@@ -1,11 +1,14 @@
 package asgardius.page.s3manager;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AppOpsManager;
+import android.app.PendingIntent;
 import android.app.PictureInPictureParams;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.net.wifi.WifiManager;
 import android.os.Build;
@@ -127,7 +130,8 @@ public class VideoPlayer extends AppCompatActivity {
         //player.setMediaItem(mediaItem);
         // Prepare the player.
         player.setPlayWhenReady(true);
-        //playerNotificationManager = new PlayerNotificationManager.Builder(this, notificationId, "playback").build();
+        playerNotificationManager = new PlayerNotificationManager.Builder(this, notificationId, "playback").build();
+        playerNotificationManager.setPlayer(player);
         player.setMediaSource(mediaSource);
         player.prepare();
         // Start the playback.
@@ -324,6 +328,45 @@ public class VideoPlayer extends AppCompatActivity {
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
             super.onBackPressed();
+        }
+    }
+
+    private class DescriptionAdapter implements
+            PlayerNotificationManager.MediaDescriptionAdapter {
+
+        @Override
+        public String getCurrentContentTitle(Player player) {
+            int window = player.getCurrentMediaItemIndex();
+            return getTitle().toString();
+        }
+
+        @Nullable
+        @Override
+        public String getCurrentContentText(Player player) {
+            int window = player.getCurrentMediaItemIndex();
+            return getCurrentContentText(player);
+        }
+
+        @Nullable
+        @Override
+        public Bitmap getCurrentLargeIcon(Player player,
+                                          PlayerNotificationManager.BitmapCallback callback) {
+            int window = player.getCurrentMediaItemIndex();
+            Bitmap largeIcon = getCurrentLargeIcon(player, callback);
+            /*if (largeIcon == null && getLargeIconUri(window) != null) {
+                // load bitmap async
+                loadBitmap(getLargeIconUri(window), callback);
+                return getPlaceholderBitmap();
+            }*/
+            return largeIcon;
+        }
+
+        @Nullable
+        @Override
+        public PendingIntent createCurrentContentIntent(Player player) {
+            int window = player.getCurrentMediaItemIndex();
+            //return createPendingIntent(window);
+            return null;
         }
     }
 }
