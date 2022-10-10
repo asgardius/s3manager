@@ -26,6 +26,7 @@ import com.google.android.exoplayer2.audio.AudioAttributes;
 import com.google.android.exoplayer2.database.StandaloneDatabaseProvider;
 import com.google.android.exoplayer2.ext.mediasession.MediaSessionConnector;
 import com.google.android.exoplayer2.source.ProgressiveMediaSource;
+import com.google.android.exoplayer2.ui.PlayerNotificationManager;
 import com.google.android.exoplayer2.ui.StyledPlayerView;
 import com.google.android.exoplayer2.upstream.DefaultHttpDataSource;
 import com.google.android.exoplayer2.upstream.HttpDataSource;
@@ -60,6 +61,8 @@ public class VideoPlayer extends AppCompatActivity {
     MediaSessionConnector mediaSessionConnector;
     StyledPlayerView.ControllerVisibilityListener control;
     AppOpsManager appOpsManager;
+    private PlayerNotificationManager playerNotificationManager;
+    private int notificationId = 1234;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -124,6 +127,7 @@ public class VideoPlayer extends AppCompatActivity {
         //player.setMediaItem(mediaItem);
         // Prepare the player.
         player.setPlayWhenReady(true);
+        //playerNotificationManager = new PlayerNotificationManager.Builder(this, notificationId, "playback").build();
         player.setMediaSource(mediaSource);
         player.prepare();
         // Start the playback.
