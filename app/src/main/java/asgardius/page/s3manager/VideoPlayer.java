@@ -146,7 +146,6 @@ public class VideoPlayer extends AppCompatActivity {
         // Start the playback.
         player.play();
 
-
         player.addListener(new Player.Listener() {
             @Override
 
@@ -278,6 +277,7 @@ public class VideoPlayer extends AppCompatActivity {
     public void onDestroy() {
         mediaSessionConnector.setPlayer(null);
         mediaSession.setActive(false);
+        playerNotificationManager.setPlayer(null);
         player.release();
         playerView.setPlayer(null);
         simpleCache.release();
@@ -296,6 +296,7 @@ public class VideoPlayer extends AppCompatActivity {
                     == AppOpsManager.MODE_ALLOWED) {
                 mediaSessionConnector.setPlayer(null);
                 mediaSession.setActive(false);
+                playerNotificationManager.setPlayer(null);
                 player.release();
                 playerView.setPlayer(null);
                 simpleCache.release();
