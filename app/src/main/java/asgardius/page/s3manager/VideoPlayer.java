@@ -267,7 +267,7 @@ public class VideoPlayer extends AppCompatActivity {
         super.onDestroy();
     }
 
-    /*public void onStop() {
+    public void onStop() {
         try {
             if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N
                     && this.getPackageManager()
@@ -288,7 +288,7 @@ public class VideoPlayer extends AppCompatActivity {
             e.printStackTrace();
         }
         super.onStop();
-    }*/
+    }
 
     public void onResume(){
         super.onResume();
