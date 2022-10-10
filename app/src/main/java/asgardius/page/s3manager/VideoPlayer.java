@@ -2,6 +2,7 @@ package asgardius.page.s3manager;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.AppOpsManager;
 import android.app.PictureInPictureParams;
 import android.content.Context;
 import android.content.pm.PackageManager;
@@ -58,11 +59,13 @@ public class VideoPlayer extends AppCompatActivity {
     MediaSessionCompat mediaSession;
     MediaSessionConnector mediaSessionConnector;
     StyledPlayerView.ControllerVisibilityListener control;
+    AppOpsManager appOpsManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_video_player);
+        appOpsManager = (AppOpsManager)getSystemService(Context.APP_OPS_SERVICE);
         mediaSession = new MediaSessionCompat(this, getPackageName());
         mediaSessionConnector = new MediaSessionConnector(mediaSession);
         hideSystemBars();
@@ -216,18 +219,26 @@ public class VideoPlayer extends AppCompatActivity {
 
 
     protected void enterPIPMode() {
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N
-                && this.getPackageManager()
-                .hasSystemFeature(
-                        PackageManager.FEATURE_PICTURE_IN_PICTURE)) {
-            videoPosition = player.getCurrentPosition();
-            playerView.setUseController(false);
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                PictureInPictureParams params = new PictureInPictureParams.Builder().build();
-                this.enterPictureInPictureMode(params);
-            }else {
-                this.enterPictureInPictureMode();
+        try {
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N
+                    && this.getPackageManager()
+                    .hasSystemFeature(
+                            PackageManager.FEATURE_PICTURE_IN_PICTURE) && appOpsManager.checkOpNoThrow(
+                    AppOpsManager.OPSTR_PICTURE_IN_PICTURE,
+                    this.getPackageManager().getApplicationInfo(this.getPackageName(),
+                            PackageManager.GET_META_DATA).uid, this.getPackageName())
+                    == AppOpsManager.MODE_ALLOWED) {
+                videoPosition = player.getCurrentPosition();
+                playerView.setUseController(false);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    PictureInPictureParams params = new PictureInPictureParams.Builder().build();
+                    this.enterPictureInPictureMode(params);
+                }else {
+                    this.enterPictureInPictureMode();
+                }
             }
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
         }
     }
 
@@ -256,20 +267,28 @@ public class VideoPlayer extends AppCompatActivity {
         super.onDestroy();
     }
 
-    public void onStop() {
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N
-                && this.getPackageManager()
-                .hasSystemFeature(
-                        PackageManager.FEATURE_PICTURE_IN_PICTURE)) {
-            mediaSessionConnector.setPlayer(null);
-            mediaSession.setActive(false);
-            player.release();
-            playerView.setPlayer(null);
-            simpleCache.release();
-            finish();
+    /*public void onStop() {
+        try {
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N
+                    && this.getPackageManager()
+                    .hasSystemFeature(
+                            PackageManager.FEATURE_PICTURE_IN_PICTURE) && appOpsManager.checkOpNoThrow(
+                    AppOpsManager.OPSTR_PICTURE_IN_PICTURE,
+                    this.getPackageManager().getApplicationInfo(this.getPackageName(),
+                            PackageManager.GET_META_DATA).uid, this.getPackageName())
+                    == AppOpsManager.MODE_ALLOWED) {
+                mediaSessionConnector.setPlayer(null);
+                mediaSession.setActive(false);
+                player.release();
+                playerView.setPlayer(null);
+                simpleCache.release();
+                finish();
+            }
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
         }
         super.onStop();
-    }
+    }*/
 
     public void onResume(){
         super.onResume();
@@ -285,12 +304,21 @@ public class VideoPlayer extends AppCompatActivity {
     }
 
     public void onBackPressed() {
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N
-                && this.getPackageManager()
-                .hasSystemFeature(
-                        PackageManager.FEATURE_PICTURE_IN_PICTURE)) {
-            enterPIPMode();
-        } else {
+        try {
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N
+                    && this.getPackageManager()
+                    .hasSystemFeature(
+                            PackageManager.FEATURE_PICTURE_IN_PICTURE) && appOpsManager.checkOpNoThrow(
+                    AppOpsManager.OPSTR_PICTURE_IN_PICTURE,
+                    this.getPackageManager().getApplicationInfo(this.getPackageName(),
+                            PackageManager.GET_META_DATA).uid, this.getPackageName())
+                    == AppOpsManager.MODE_ALLOWED) {
+                enterPIPMode();
+            } else {
+                super.onBackPressed();
+            }
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
             super.onBackPressed();
         }
     }
