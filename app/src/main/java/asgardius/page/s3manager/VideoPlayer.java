@@ -139,6 +139,7 @@ public class VideoPlayer extends AppCompatActivity {
         // Prepare the player.
         player.setPlayWhenReady(true);
         playerNotificationManager = new PlayerNotificationManager.Builder(this, notificationId, "playback").build();
+        playerNotificationManager.setMediaSessionToken(mediaSession.getSessionToken());
         playerNotificationManager.setPlayer(player);
         player.setMediaSource(mediaSource);
         player.prepare();
