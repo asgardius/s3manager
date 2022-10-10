@@ -9,8 +9,8 @@ android {
         applicationId "asgardius.page.s3manager"
         minSdk 23
         targetSdk 33
-        versionCode 31
-        versionName "0.1.28"
+        versionCode 32
+        versionName "0.1.29"
         setProperty("archivesBaseName", "s3-manager-$versionName")
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
