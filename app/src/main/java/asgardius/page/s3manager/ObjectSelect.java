@@ -5,8 +5,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.AppOpsManager;
+import android.app.PictureInPictureParams;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -51,6 +56,7 @@ public class ObjectSelect extends AppCompatActivity {
     AmazonS3 s3client;
     ProgressBar simpleProgressBar;
     int videocache, videotime, buffersize;
+    AppOpsManager appOpsManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,6 +72,7 @@ public class ObjectSelect extends AppCompatActivity {
         videocache = getIntent().getIntExtra("videocache", 40);
         videotime = getIntent().getIntExtra("videotime", 1);
         buffersize = getIntent().getIntExtra("buffersize", 2000);
+        appOpsManager = (AppOpsManager)getSystemService(Context.APP_OPS_SERVICE);
         setContentView(R.layout.activity_object_select);
         getSupportActionBar().setTitle(bucket+"/"+prefix);
         region = Region.getRegion(location);
@@ -406,11 +413,30 @@ public class ObjectSelect extends AppCompatActivity {
 
     private void videoPlayer(String url) {
 
-        Intent intent = new Intent(this, VideoPlayer.class);
-        intent.putExtra("video_url", url);
-        intent.putExtra("videocache", videocache);
-        intent.putExtra("buffersize", buffersize);
-        startActivity(intent);
+        try {
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N
+                    && this.getPackageManager()
+                    .hasSystemFeature(
+                            PackageManager.FEATURE_PICTURE_IN_PICTURE) && appOpsManager.checkOpNoThrow(
+                    AppOpsManager.OPSTR_PICTURE_IN_PICTURE,
+                    this.getPackageManager().getApplicationInfo(this.getPackageName(),
+                            PackageManager.GET_META_DATA).uid, this.getPackageName())
+                    == AppOpsManager.MODE_ALLOWED) {
+                Intent intent = new Intent(this, VideoPlayerPip.class);
+                intent.putExtra("video_url", url);
+                intent.putExtra("videocache", videocache);
+                intent.putExtra("buffersize", buffersize);
+                startActivity(intent);
+            } else {
+                Intent intent = new Intent(this, VideoPlayer.class);
+                intent.putExtra("video_url", url);
+                intent.putExtra("videocache", videocache);
+                intent.putExtra("buffersize", buffersize);
+                startActivity(intent);
+            }
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
 
     }
     private void textViewer(String url) {
