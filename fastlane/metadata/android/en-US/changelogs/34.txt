@@ -1,1 +1,1 @@
-Picture in Picture support
+Playback notifications for media player
