@@ -71,7 +71,6 @@ public class VideoPlayer extends AppCompatActivity {
     private PlayerNotificationManager playerNotificationManager;
     private int notificationId = 1234;
     Intent playerIntent;
-    TaskStackBuilder stackBuilder;
     PendingIntent playerPendingIntent;
 
     @Override
@@ -86,15 +85,11 @@ public class VideoPlayer extends AppCompatActivity {
             manager.createNotificationChannel(channel);
         }
         // Create an Intent for the activity you want to start
-        playerIntent = new Intent(this, VideoPlayer.class);
-        // Create the TaskStackBuilder and add the intent, which inflates the back stack
-        stackBuilder = TaskStackBuilder.create(this);
-        stackBuilder.addNextIntentWithParentStack(playerIntent);
+        playerIntent = new Intent(getApplicationContext(), VideoPlayer.class);
+        playerIntent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
         // Get the PendingIntent containing the entire back stack
-        playerPendingIntent =
-                stackBuilder.getPendingIntent(0,
-                        PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
-        appOpsManager = (AppOpsManager)getSystemService(Context.APP_OPS_SERVICE);
+        playerPendingIntent = PendingIntent.getActivity
+                (getApplicationContext(), 0, playerIntent, PendingIntent.FLAG_IMMUTABLE);
         mediaSession = new MediaSessionCompat(this, getPackageName());
         mediaSessionConnector = new MediaSessionConnector(mediaSession);
         hideSystemBars();
@@ -321,7 +316,7 @@ public class VideoPlayer extends AppCompatActivity {
                 simpleCache.release();
                 finish();
             }
-        } catch (PackageManager.NameNotFoundException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         super.onStop();
@@ -354,7 +349,7 @@ public class VideoPlayer extends AppCompatActivity {
             } else {
                 super.onBackPressed();
             }
-        } catch (PackageManager.NameNotFoundException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             super.onBackPressed();
         }
