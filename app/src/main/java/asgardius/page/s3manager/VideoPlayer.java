@@ -260,20 +260,6 @@ public class VideoPlayer extends AppCompatActivity {
     }
 
     @Override
-    /*public void onWindowFocusChanged(boolean hasFocus) {
-        super.onWindowFocusChanged(hasFocus);
-
-
-        View decorView = getWindow().getDecorView();
-        decorView.setSystemUiVisibility(
-                View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                        | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                        | View.SYSTEM_UI_FLAG_FULLSCREEN
-                        | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
-
-    }*/
 
     public void onDestroy() {
         mediaSessionConnector.setPlayer(null);
@@ -284,30 +270,6 @@ public class VideoPlayer extends AppCompatActivity {
         simpleCache.release();
         super.onDestroy();
     }
-
-    /*public void onStop() {
-        try {
-            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N
-                    && this.getPackageManager()
-                    .hasSystemFeature(
-                            PackageManager.FEATURE_PICTURE_IN_PICTURE) && appOpsManager.checkOpNoThrow(
-                    AppOpsManager.OPSTR_PICTURE_IN_PICTURE,
-                    this.getPackageManager().getApplicationInfo(this.getPackageName(),
-                            PackageManager.GET_META_DATA).uid, this.getPackageName())
-                    == AppOpsManager.MODE_ALLOWED) {
-                mediaSessionConnector.setPlayer(null);
-                mediaSession.setActive(false);
-                playerNotificationManager.setPlayer(null);
-                player.release();
-                playerView.setPlayer(null);
-                simpleCache.release();
-                finish();
-            }
-        } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
-        }
-        super.onStop();
-    }*/
 
     public void onResume(){
         super.onResume();
@@ -322,7 +284,7 @@ public class VideoPlayer extends AppCompatActivity {
         enterPIPMode();
     }
 
-    public void onBackPressed() {
+    /*public void onBackPressed() {
         try {
             if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N
                     && this.getPackageManager()
@@ -340,7 +302,7 @@ public class VideoPlayer extends AppCompatActivity {
             e.printStackTrace();
             super.onBackPressed();
         }
-    }
+    }*/
 
     private class DescriptionAdapter implements
             PlayerNotificationManager.MediaDescriptionAdapter {
