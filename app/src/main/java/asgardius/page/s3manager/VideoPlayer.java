@@ -2,6 +2,7 @@ package asgardius.page.s3manager;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.TaskStackBuilder;
 
 import android.app.AppOpsManager;
 import android.app.NotificationChannel;
@@ -9,6 +10,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.PictureInPictureParams;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -68,6 +70,9 @@ public class VideoPlayer extends AppCompatActivity {
     AppOpsManager appOpsManager;
     private PlayerNotificationManager playerNotificationManager;
     private int notificationId = 1234;
+    Intent playerIntent;
+    TaskStackBuilder stackBuilder;
+    PendingIntent playerPendingIntent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,8 +82,18 @@ public class VideoPlayer extends AppCompatActivity {
 
             NotificationChannel channel= new NotificationChannel("playback","Video Playback", NotificationManager.IMPORTANCE_DEFAULT);
             NotificationManager manager =getSystemService(NotificationManager.class);
+            channel.setSound(null, null);
             manager.createNotificationChannel(channel);
         }
+        // Create an Intent for the activity you want to start
+        playerIntent = new Intent(this, VideoPlayer.class);
+        // Create the TaskStackBuilder and add the intent, which inflates the back stack
+        stackBuilder = TaskStackBuilder.create(this);
+        stackBuilder.addNextIntentWithParentStack(playerIntent);
+        // Get the PendingIntent containing the entire back stack
+        playerPendingIntent =
+                stackBuilder.getPendingIntent(0,
+                        PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
         appOpsManager = (AppOpsManager)getSystemService(Context.APP_OPS_SERVICE);
         mediaSession = new MediaSessionCompat(this, getPackageName());
         mediaSessionConnector = new MediaSessionConnector(mediaSession);
@@ -138,7 +153,11 @@ public class VideoPlayer extends AppCompatActivity {
         //player.setMediaItem(mediaItem);
         // Prepare the player.
         player.setPlayWhenReady(true);
-        playerNotificationManager = new PlayerNotificationManager.Builder(this, notificationId, "playback").build();
+        //playerNotificationManager = new PlayerNotificationManager.Builder(this, notificationId, "playback").build();
+        playerNotificationManager =
+                new PlayerNotificationManager.Builder(this, notificationId, "playback")
+                        .setChannelImportance(NotificationManager.IMPORTANCE_HIGH)
+                        .setMediaDescriptionAdapter(new DescriptionAdapter()).build();
         playerNotificationManager.setMediaSessionToken(mediaSession.getSessionToken());
         playerNotificationManager.setPlayer(player);
         player.setMediaSource(mediaSource);
@@ -346,37 +365,40 @@ public class VideoPlayer extends AppCompatActivity {
 
         @Override
         public String getCurrentContentTitle(Player player) {
-            int window = player.getCurrentMediaItemIndex();
+            //int window = player.getCurrentMediaItemIndex();
             return getTitle().toString();
         }
 
         @Nullable
         @Override
         public String getCurrentContentText(Player player) {
-            int window = player.getCurrentMediaItemIndex();
-            return getCurrentContentText(player);
+            //int window = player.getCurrentMediaItemIndex();
+            //return getCurrentContentText(player);
+            return "Video Player";
         }
 
         @Nullable
         @Override
         public Bitmap getCurrentLargeIcon(Player player,
                                           PlayerNotificationManager.BitmapCallback callback) {
-            int window = player.getCurrentMediaItemIndex();
-            Bitmap largeIcon = getCurrentLargeIcon(player, callback);
+            //int window = player.getCurrentMediaItemIndex();
+            //Bitmap largeIcon = getCurrentLargeIcon(player, callback);
             /*if (largeIcon == null && getLargeIconUri(window) != null) {
                 // load bitmap async
                 loadBitmap(getLargeIconUri(window), callback);
                 return getPlaceholderBitmap();
             }*/
-            return largeIcon;
+            //return largeIcon;
+            return null;
         }
 
         @Nullable
         @Override
         public PendingIntent createCurrentContentIntent(Player player) {
-            int window = player.getCurrentMediaItemIndex();
+            //int window = player.getCurrentMediaItemIndex();
             //return createPendingIntent(window);
-            return null;
+            //return null;
+            return playerPendingIntent;
         }
     }
 }
