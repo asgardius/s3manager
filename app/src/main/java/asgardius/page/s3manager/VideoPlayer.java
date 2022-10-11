@@ -284,7 +284,7 @@ public class VideoPlayer extends AppCompatActivity {
         enterPIPMode();
     }
 
-    /*public void onBackPressed() {
+    public void onBackPressed() {
         try {
             if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N
                     && this.getPackageManager()
@@ -302,7 +302,7 @@ public class VideoPlayer extends AppCompatActivity {
             e.printStackTrace();
             super.onBackPressed();
         }
-    }*/
+    }
 
     private class DescriptionAdapter implements
             PlayerNotificationManager.MediaDescriptionAdapter {

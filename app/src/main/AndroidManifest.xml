@@ -91,7 +91,7 @@
             android:supportsPictureInPicture="true"
             android:configChanges="orientation|keyboardHidden|screenSize|smallestScreenSize|screenLayout|uiMode|keyboardHidden"
             android:exported="false"
-            android:launchMode="singleTask"
+            android:launchMode="singleInstance"
             android:theme="@style/Theme.AsgardiusS3Manager.NoActionBar" />
         <activity
             android:name=".MainActivity"
