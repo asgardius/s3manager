@@ -234,31 +234,6 @@ public class VideoPlayer extends AppCompatActivity {
                         | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
     }
 
-
-    protected void enterPIPMode() {
-        try {
-            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N
-                    && this.getPackageManager()
-                    .hasSystemFeature(
-                            PackageManager.FEATURE_PICTURE_IN_PICTURE) && appOpsManager.checkOpNoThrow(
-                    AppOpsManager.OPSTR_PICTURE_IN_PICTURE,
-                    this.getPackageManager().getApplicationInfo(this.getPackageName(),
-                            PackageManager.GET_META_DATA).uid, this.getPackageName())
-                    == AppOpsManager.MODE_ALLOWED) {
-                videoPosition = player.getCurrentPosition();
-                playerView.setUseController(false);
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    PictureInPictureParams params = new PictureInPictureParams.Builder().build();
-                    this.enterPictureInPictureMode(params);
-                }else {
-                    this.enterPictureInPictureMode();
-                }
-            }
-        } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
-        }
-    }
-
     @Override
 
     public void onDestroy() {
@@ -281,65 +256,8 @@ public class VideoPlayer extends AppCompatActivity {
 
     public void onUserLeaveHint() {
         super.onUserLeaveHint();
-        enterPIPMode();
-    }
-
-    public void onBackPressed() {
-        try {
-            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N
-                    && this.getPackageManager()
-                    .hasSystemFeature(
-                            PackageManager.FEATURE_PICTURE_IN_PICTURE) && appOpsManager.checkOpNoThrow(
-                    AppOpsManager.OPSTR_PICTURE_IN_PICTURE,
-                    this.getPackageManager().getApplicationInfo(this.getPackageName(),
-                            PackageManager.GET_META_DATA).uid, this.getPackageName())
-                    == AppOpsManager.MODE_ALLOWED) {
-                enterPIPMode();
-            } else {
-                super.onBackPressed();
-            }
-        } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
-            super.onBackPressed();
-        }
-    }
-
-    private class DescriptionAdapter implements
-            PlayerNotificationManager.MediaDescriptionAdapter {
-
-        @Override
-        public String getCurrentContentTitle(Player player) {
-            int window = player.getCurrentMediaItemIndex();
-            return getTitle().toString();
-        }
-
-        @Nullable
-        @Override
-        public String getCurrentContentText(Player player) {
-            int window = player.getCurrentMediaItemIndex();
-            return getCurrentContentText(player);
-        }
-
-        @Nullable
-        @Override
-        public Bitmap getCurrentLargeIcon(Player player,
-                                          PlayerNotificationManager.BitmapCallback callback) {
-            int window = player.getCurrentMediaItemIndex();
-            Bitmap largeIcon = getCurrentLargeIcon(player, callback);
-            /*if (largeIcon == null && getLargeIconUri(window) != null) {
-                // load bitmap async
-                loadBitmap(getLargeIconUri(window), callback);
-                return getPlaceholderBitmap();
-            }*/
-            return largeIcon;
-        }
-
-        @Nullable
-        @Override
-        public PendingIntent createCurrentContentIntent(Player player) {
-            int window = player.getCurrentMediaItemIndex();
-            //return createPendingIntent(window);
-            return null;
+        if (playerView.getUseController()) {
+            playerView.setUseController(false);
         }
     }
 }

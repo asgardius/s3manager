@@ -303,43 +303,4 @@ public class VideoPlayerPip extends AppCompatActivity {
             super.onBackPressed();
         }
     }
-
-    private class DescriptionAdapter implements
-            PlayerNotificationManager.MediaDescriptionAdapter {
-
-        @Override
-        public String getCurrentContentTitle(Player player) {
-            int window = player.getCurrentMediaItemIndex();
-            return getTitle().toString();
-        }
-
-        @Nullable
-        @Override
-        public String getCurrentContentText(Player player) {
-            int window = player.getCurrentMediaItemIndex();
-            return getCurrentContentText(player);
-        }
-
-        @Nullable
-        @Override
-        public Bitmap getCurrentLargeIcon(Player player,
-                                          PlayerNotificationManager.BitmapCallback callback) {
-            int window = player.getCurrentMediaItemIndex();
-            Bitmap largeIcon = getCurrentLargeIcon(player, callback);
-            /*if (largeIcon == null && getLargeIconUri(window) != null) {
-                // load bitmap async
-                loadBitmap(getLargeIconUri(window), callback);
-                return getPlaceholderBitmap();
-            }*/
-            return largeIcon;
-        }
-
-        @Nullable
-        @Override
-        public PendingIntent createCurrentContentIntent(Player player) {
-            int window = player.getCurrentMediaItemIndex();
-            //return createPendingIntent(window);
-            return null;
-        }
-    }
 }
