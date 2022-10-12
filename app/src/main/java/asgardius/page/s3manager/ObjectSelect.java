@@ -549,19 +549,22 @@ public class ObjectSelect extends AppCompatActivity {
                                         for (S3ObjectSummary os : objects) {
                                             objectl.add(os.getKey());
                                         }
+                                        if (objectl.size() >= 1) {
+                                            DeleteObjectsRequest deleteObjectsRequest = new DeleteObjectsRequest(bucket).withKeys(objectl.toArray(new String[0]));
+                                            s3client.deleteObjects(deleteObjectsRequest);
+                                        }
                                         while (result.isTruncated()) {
+                                            objectl = new ArrayList<String>();
                                             result = s3client.listNextBatchOfObjects (result);
                                             objects = result.getObjectSummaries();
                                             for (S3ObjectSummary os : objects) {
                                                 objectl.add(os.getKey());
-
                                                 //i++;
                                             }
+                                            DeleteObjectsRequest deleteObjectsRequest = new DeleteObjectsRequest(bucket).withKeys(objectl.toArray(new String[0]));
+                                            s3client.deleteObjects(deleteObjectsRequest);
 
                                         }
-                                        //System.out.println(object);
-                                        DeleteObjectsRequest deleteObjectsRequest = new DeleteObjectsRequest(bucket).withKeys(objectl.toArray(new String[0]));
-                                        s3client.deleteObjects(deleteObjectsRequest);
 
                                     } else {
                                         DeleteObjectRequest deleteObjectRequest = new DeleteObjectRequest(bucket, object);

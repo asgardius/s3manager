@@ -228,21 +228,23 @@ public class BucketSelect extends AppCompatActivity {
                                     for (S3ObjectSummary os : objects) {
                                         objectl.add(os.getKey());
                                     }
-                                    while (result.isTruncated()) {
-                                        result = s3client.listNextBatchOfObjects (result);
-                                        objects = result.getObjectSummaries();
-                                        for (S3ObjectSummary os : objects) {
-                                            objectl.add(os.getKey());
-
-                                            //i++;
-                                        }
-
-                                    }
-                                    //System.out.println(object);
                                     if (objectl.size() >= 1) {
                                         DeleteObjectsRequest deleteObjectsRequest = new DeleteObjectsRequest(bucket).withKeys(objectl.toArray(new String[0]));
                                         s3client.deleteObjects(deleteObjectsRequest);
                                     }
+                                    while (result.isTruncated()) {
+                                        objectl = new ArrayList<String>();
+                                        result = s3client.listNextBatchOfObjects (result);
+                                        objects = result.getObjectSummaries();
+                                        for (S3ObjectSummary os : objects) {
+                                            objectl.add(os.getKey());
+                                            //i++;
+                                        }
+                                        DeleteObjectsRequest deleteObjectsRequest = new DeleteObjectsRequest(bucket).withKeys(objectl.toArray(new String[0]));
+                                        s3client.deleteObjects(deleteObjectsRequest);
+
+                                    }
+                                    //System.out.println("bucket items: " + objectl.size());
                                     s3client.deleteBucket(bucket);
                                     runOnUiThread(new Runnable() {
 
