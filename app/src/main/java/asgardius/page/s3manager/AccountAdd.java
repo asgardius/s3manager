@@ -96,7 +96,7 @@ public class AccountAdd extends AppCompatActivity {
                             location = "us-east-1";
                         }
                         if (edit) {
-                            db.execSQL("UPDATE account SET id=\""+id+"\", endpoint=\""+endpoint+"\", username=\""+username+"\", password=\""+password+"\", region=\""+location+"\", pdfendpoint=\""+pdfendpoint+"\" WHERE id=\""+id+"\"");
+                            db.execSQL("UPDATE account SET id=\""+alias+"\", endpoint=\""+endpoint+"\", username=\""+username+"\", password=\""+password+"\", region=\""+location+"\", pdfendpoint=\""+pdfendpoint+"\" WHERE id=\""+id+"\"");
                             Toast.makeText(getApplicationContext(),getResources().getString(R.string.accountsave_success), Toast.LENGTH_SHORT).show();
                         } else {
                             db.execSQL("INSERT INTO account VALUES (\""+alias+"\", \""+endpoint+"\", \""+username+"\", \""+password+"\", \""+location+"\", \""+pdfendpoint+"\")");
