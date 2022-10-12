@@ -115,14 +115,20 @@ public class ObjectSelect extends AppCompatActivity {
                     //System.out.println("Buckets:");
                     //int i=0;
                     List<S3ObjectSummary> objects = result.getObjectSummaries();
-                    boolean nextbatch = false;
-                    while (result.isTruncated() || !nextbatch) {
-                        if (nextbatch) {
-                            result = s3client.listNextBatchOfObjects (result);
-                            objects = result.getObjectSummaries();
-                        } else {
-                            nextbatch = true;
+                    for (S3ObjectSummary os : objects) {
+                        filename = os.getKey().split("/");
+                        if (filename.length == treelevel+1) {
+                            object.add(filename[treelevel]);
                         }
+                        else {
+                            object.add(filename[treelevel]+"/");
+                        }
+
+                        //i++;
+                    }
+                    while (result.isTruncated()) {
+                        result = s3client.listNextBatchOfObjects (result);
+                        objects = result.getObjectSummaries();
                         for (S3ObjectSummary os : objects) {
                             filename = os.getKey().split("/");
                             if (filename.length == treelevel+1) {

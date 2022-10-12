@@ -92,14 +92,13 @@ public class ObjectInfo extends AppCompatActivity {
                     }
                     ObjectListing result = s3client.listObjects(orequest);
                     List<S3ObjectSummary> objects = result.getObjectSummaries();
-                    boolean nextbatch = false;
-                    while (result.isTruncated() || !nextbatch) {
-                        if (nextbatch) {
-                            result = s3client.listNextBatchOfObjects (result);
-                            objects = result.getObjectSummaries();
-                        } else {
-                            nextbatch = true;
-                        }
+                    for (S3ObjectSummary os : objects) {
+                        totalSize += os.getSize();
+                        totalItems++;
+                    }
+                    while (result.isTruncated()) {
+                        result = s3client.listNextBatchOfObjects (result);
+                        objects = result.getObjectSummaries();
                         for (S3ObjectSummary os : objects) {
                             totalSize += os.getSize();
                             totalItems++;
