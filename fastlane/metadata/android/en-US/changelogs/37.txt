@@ -1,0 +1,2 @@
+* Better performance at listing buckets with 1000+ objects
+* Fix issue at deleting folders with 1000+ files
