@@ -59,8 +59,9 @@ Knnown issues
 Known supported providers
 
 * Amazon Web Services
-* Scaleway Elements
+* Scaleway Elements (partial)
 * Oracle Cloud (partial)
+* Wasabi Cloud
 * MinIO
 
 Known not supported providers
