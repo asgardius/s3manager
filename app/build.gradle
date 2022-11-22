@@ -10,7 +10,7 @@ android {
         minSdk 23
         targetSdk 33
         versionCode 37
-        versionName "0.2.2"
+        versionName "0.2.3"
         setProperty("archivesBaseName", "s3-manager-$versionName")
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
