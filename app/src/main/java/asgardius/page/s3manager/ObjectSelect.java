@@ -522,7 +522,7 @@ public class ObjectSelect extends AppCompatActivity {
     private void delete(String object, boolean folder) {
         AlertDialog.Builder builder = new AlertDialog.Builder(ObjectSelect.this);
         builder.setCancelable(true);
-        builder.setTitle(getResources().getString(R.string.file_del));
+        builder.setTitle(object);
         if (folder) {
             builder.setMessage(getResources().getString(R.string.folder_del_confirm));
         } else {

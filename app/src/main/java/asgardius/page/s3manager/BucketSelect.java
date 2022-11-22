@@ -207,7 +207,7 @@ public class BucketSelect extends AppCompatActivity {
     private void delete(String bucket) {
         AlertDialog.Builder builder = new AlertDialog.Builder(BucketSelect.this);
         builder.setCancelable(true);
-        builder.setTitle(getResources().getString(R.string.file_del));
+        builder.setTitle(bucket);
         builder.setMessage(getResources().getString(R.string.bucket_del_confirm));
         builder.setPositiveButton(android.R.string.ok,
                 new DialogInterface.OnClickListener() {
