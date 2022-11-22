@@ -41,7 +41,7 @@ dependencies {
     implementation "com.google.android.exoplayer:extension-mediasession:$exoplayer_version"
     implementation 'androidx.recyclerview:recyclerview:1.2.1'
     // BEGIN AWS DEPENDENCIES
-    def aws_version = "2.54.0"
+    def aws_version = "2.58.0"
     implementation "com.amazonaws:aws-android-sdk-s3:$aws_version"
     implementation ("com.amazonaws:aws-android-sdk-mobile-client:$aws_version") { transitive = true }
     // END AWS DEPENDENCIES
