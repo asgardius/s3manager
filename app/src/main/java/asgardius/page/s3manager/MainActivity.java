@@ -277,7 +277,7 @@ public class MainActivity extends AppCompatActivity {
                         else if (menuItem.getTitle() == getResources().getString(R.string.accountdel_button)) {
                             AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
                             builder.setCancelable(true);
-                            builder.setTitle(getResources().getString(R.string.accountdel_button));
+                            builder.setTitle(Name.get(position).toString());
                             builder.setMessage(getResources().getString(R.string.accountdel_confirm));
                             builder.setPositiveButton(android.R.string.ok,
                                     new DialogInterface.OnClickListener() {
