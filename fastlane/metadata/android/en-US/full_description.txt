@@ -34,7 +34,6 @@ Supported languages
 
 Knnown issues
 
-<li>Object listing can be slow on buckets with a lot of objects (4000+)</li>
 <li>Slow user interface on some low-end devices</li>
 <li>Running screen restarts after toggling system dark mode</li>
 
