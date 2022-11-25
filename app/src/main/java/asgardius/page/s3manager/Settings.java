@@ -95,6 +95,8 @@ public class Settings extends AppCompatActivity {
                     buffersize = bsizepick.getText().toString();
                     if (videocache.equals("") || videotime.equals("") || buffersize.equals("")) {
                         Toast.makeText(getApplicationContext(),getResources().getString(R.string.accountadd_null), Toast.LENGTH_SHORT).show();
+                    } else if (videocache.equals("0") || videotime.equals("0")) {
+                        Toast.makeText(getApplicationContext(),getResources().getString(R.string.not_zero), Toast.LENGTH_SHORT).show();
                     } else if (Integer.parseInt(buffersize) <= 2000) {
                         Toast.makeText(getApplicationContext(),getResources().getString(R.string.buffersize_error), Toast.LENGTH_SHORT).show();
                     }  else if (Integer.parseInt(videotime) > 168) {

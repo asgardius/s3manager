@@ -93,4 +93,5 @@
     <string name="buffersize_error">El tamaño del búfer debe ser de al menos 2001 milisegundos</string>
     <string name="mediaplayer_multierror">Solo se puede reproducir un archivo multimedia a la vez</string>
     <string name="playback_channel_name">Reproduccion de video</string>
+    <string name="not_zero">este valor no puede ser cero</string>
 </resources>
