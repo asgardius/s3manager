@@ -104,7 +104,12 @@ public class ObjectSelect extends AppCompatActivity {
                 try  {
                     //Your code goes here
                     //List<Bucket> buckets = s3client.listBuckets();
-                    ListObjectsRequest orequest = new ListObjectsRequest().withBucketName(bucket).withPrefix(prefix).withMaxKeys(8000);
+                    ListObjectsRequest orequest;
+                    if (treelevel == 0) {
+                        orequest = new ListObjectsRequest().withBucketName(bucket).withMaxKeys(8000).withDelimiter("/");
+                    } else {
+                        orequest = new ListObjectsRequest().withBucketName(bucket).withPrefix(prefix).withMaxKeys(8000).withDelimiter("/");
+                    }
                     //List<S3Object> objects = (List<S3Object>) s3client.listObjects(bucket, "/");
                     ObjectListing result = s3client.listObjects(orequest);
                     //System.out.println(objects);
@@ -114,8 +119,38 @@ public class ObjectSelect extends AppCompatActivity {
                     // Print bucket names
                     //System.out.println("Buckets:");
                     //int i=0;
-                    List<S3ObjectSummary> objects = result.getObjectSummaries();
-                    for (S3ObjectSummary os : objects) {
+                    //This get folder list
+                    List<String> od = result.getCommonPrefixes();
+                    for (String os : od) {
+                        filename = os.split("/");
+                        if (filename.length == treelevel+1) {
+                            object.add(filename[treelevel]+"/");
+                        }
+                        else {
+
+                        }
+
+                        //i++;
+                    }
+                    while (result.isTruncated()) {
+                        result = s3client.listNextBatchOfObjects (result);
+                        od = result.getCommonPrefixes();
+                        for (String os : od) {
+                            filename = os.split("/");
+                            if (filename.length == treelevel+1) {
+                                object.add(filename[treelevel]+"/");
+                            }
+                            else {
+
+                            }
+
+                            //i++;
+                        }
+
+                    }
+                    //This get file list
+                    List<S3ObjectSummary> ob = result.getObjectSummaries();
+                    for (S3ObjectSummary os : ob) {
                         filename = os.getKey().split("/");
                         if (filename.length == treelevel+1) {
                             object.add(filename[treelevel]);
@@ -128,8 +163,8 @@ public class ObjectSelect extends AppCompatActivity {
                     }
                     while (result.isTruncated()) {
                         result = s3client.listNextBatchOfObjects (result);
-                        objects = result.getObjectSummaries();
-                        for (S3ObjectSummary os : objects) {
+                        ob = result.getObjectSummaries();
+                        for (S3ObjectSummary os : ob) {
                             filename = os.getKey().split("/");
                             if (filename.length == treelevel+1) {
                                 object.add(filename[treelevel]);
