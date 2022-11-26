@@ -115,7 +115,7 @@ public class ObjectSelect extends AppCompatActivity {
                     //System.out.println(objects);
                     //This convert bucket list to an array list
                     Img = new ArrayList<String>();
-                    LinkedHashSet<String> object = new LinkedHashSet<String>();
+                    ArrayList<String> object = new ArrayList<String>();
                     // Print bucket names
                     //System.out.println("Buckets:");
                     //int i=0;
