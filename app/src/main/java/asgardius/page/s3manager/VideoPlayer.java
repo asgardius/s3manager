@@ -68,6 +68,7 @@ public class VideoPlayer extends AppCompatActivity {
     AppOpsManager appOpsManager;
     private PlayerNotificationManager playerNotificationManager;
     private int notificationId = 1234;
+    boolean hls;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,6 +97,7 @@ public class VideoPlayer extends AppCompatActivity {
         String videoURL = getIntent().getStringExtra("video_url");
         videocache = getIntent().getIntExtra("videocache", 40);
         buffersize = getIntent().getIntExtra("buffersize", 2000);
+        hls = getIntent().getBooleanExtra("hls", false);
         loadControl = new DefaultLoadControl.Builder().setBufferDurationsMs(2000, buffersize, 1500, 2000).build();
 
         @DefaultRenderersFactory.ExtensionRendererMode int extensionRendererMode = DefaultRenderersFactory.EXTENSION_RENDERER_MODE_PREFER;
@@ -142,7 +144,12 @@ public class VideoPlayer extends AppCompatActivity {
         playerNotificationManager = new PlayerNotificationManager.Builder(this, notificationId, "playback").build();
         playerNotificationManager.setMediaSessionToken(mediaSession.getSessionToken());
         playerNotificationManager.setPlayer(player);
-        player.setMediaSource(mediaSource);
+        if (hls) {
+            MediaItem mediaItem = MediaItem.fromUri(videoURL);
+            player.setMediaItem(mediaItem);
+        } else {
+            player.setMediaSource(mediaSource);
+        }
         player.prepare();
         // Start the playback.
         player.play();

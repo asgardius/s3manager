@@ -204,7 +204,7 @@ public class ObjectSelect extends AppCompatActivity {
                             Img.add(R.drawable.audiofile);
                         }
                         else if(Name.get(i).toString().toLowerCase(Locale.ROOT).endsWith(".mp4") || Name.get(i).toString().toLowerCase(Locale.ROOT).endsWith(".mkv")
-                                || Name.get(i).toString().endsWith(".webm") || Name.get(i).toString().endsWith(".m4v")) {
+                                || Name.get(i).toString().endsWith(".webm") || Name.get(i).toString().endsWith(".m4v") || Name.get(i).toString().endsWith(".m3u8")) {
                             Img.add(R.drawable.videofile);
                         }
                         else if (Name.get(i).toString().toLowerCase(Locale.ROOT).endsWith(".htm") || Name.get(i).toString().toLowerCase(Locale.ROOT).endsWith(".html")) {
@@ -350,7 +350,7 @@ public class ObjectSelect extends AppCompatActivity {
                                     @Override
                                     public void run() {
                                         // Sending reference and data to Adapter
-                                        videoPlayer(objectURL.toString());
+                                        videoPlayer(objectURL.toString(), Name.get(position).toString().endsWith(".m3u8"));
                                     }
                                 });
                                 //System.out.println("tree "+treelevel);
@@ -452,7 +452,7 @@ public class ObjectSelect extends AppCompatActivity {
         }));
     }
 
-    private void videoPlayer(String url) {
+    private void videoPlayer(String url, boolean hls) {
 
         try {
             if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N
@@ -467,12 +467,14 @@ public class ObjectSelect extends AppCompatActivity {
                 intent.putExtra("video_url", url);
                 intent.putExtra("videocache", videocache);
                 intent.putExtra("buffersize", buffersize);
+                intent.putExtra("hls", hls);
                 startActivity(intent);
             } else {
                 Intent intent = new Intent(this, VideoPlayer.class);
                 intent.putExtra("video_url", url);
                 intent.putExtra("videocache", videocache);
                 intent.putExtra("buffersize", buffersize);
+                intent.putExtra("hls", hls);
                 startActivity(intent);
             }
         } catch (PackageManager.NameNotFoundException e) {
