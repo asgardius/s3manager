@@ -10,7 +10,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/upload_prefix"
+        android:text="@string/upload_key"
         android:textAlignment="center"
         android:textSize="30sp" />
 
@@ -19,7 +19,7 @@
         android:layout_width="match_parent"
         android:layout_height="48dp"
         android:focusable="true"
-        android:hint="@string/upload_prefix"
+        android:hint="@string/upload_key"
         android:importantForAutofill="no"
         android:inputType="text"
         android:textColorHint="?attr/colorOnSecondary"
