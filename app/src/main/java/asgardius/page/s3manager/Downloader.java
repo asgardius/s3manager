@@ -87,111 +87,115 @@ public class Downloader extends AppCompatActivity {
                     downloadFile.interrupt();
                     //simpleProgressBar.setVisibility(View.INVISIBLE);
                 } else {
-                    started = true;
-                    simpleProgressBar.setVisibility(View.VISIBLE);
-                    //fileDownload.setEnabled(false);
-                    fileDownload.setText(getResources().getString(R.string.cancel_download));
-                    //Acquiring WakeLock and WifiLock if not held
-                    if (!mWifiLock.isHeld()) {
-                        mWifiLock.acquire();
-                        //System.out.println("WifiLock acquired");
-                    }
-                    if (!mWakeLock.isHeld()) {
-                        mWakeLock.acquire();
-                        //System.out.println("WakeLock acquired");
-                    }
-                    downloadFile = new Thread(new Runnable() {
-
-                        @Override
-                        public void run() {
-                            simpleProgressBar.setVisibility(View.VISIBLE);
-                            try  {
-                                //Your code goes here
-                                //s3client.createBucket(bucket, location);
-                                //System.out.println(fkey);
-                                object = s3client.getObject(bucket, prefix+filename);
-                                filesize = (object.getObjectMetadata().getContentLength())/1024;
-                                writeContentToFile(fileuri);
-                                runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        //simpleProgressBar.setProgress(100);
-                                        //Releasing WifiLock and WakeLock if held
-                                        if (mWifiLock.isHeld()) {
-                                            mWifiLock.release();
-                                            //System.out.println("WifiLock released");
-                                        }
-                                        if (mWakeLock.isHeld()) {
-                                            mWakeLock.release();
-                                            //System.out.println("WakeLock released");
-                                        }
-                                        simpleProgressBar.setProgress(100);
-                                        fileDownload.setText(getResources().getString(R.string.download_success));
-                                        fileDownload.setEnabled(false);
-                                        //simpleProgressBar.setVisibility(View.INVISIBLE);
-                                    }
-                                });
-                                //System.out.println("tree "+treelevel);
-                                //System.out.println("prefix "+prefix);
-
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                                runOnUiThread(new Runnable() {
-
-                                    @Override
-                                    public void run() {
-                                        //Releasing WifiLock and WakeLock if held
-                                        if (mWifiLock.isHeld()) {
-                                            mWifiLock.release();
-                                            //System.out.println("WifiLock released");
-                                        }
-                                        if (mWakeLock.isHeld()) {
-                                            mWakeLock.release();
-                                            //System.out.println("WakeLock released");
-                                        }
-                                        if (cancel) {
-                                            fileDownload.setText(getResources().getString(R.string.download_canceled));
-                                        } else {
-                                            fileDownload.setText(getResources().getString(R.string.download_failed));
-                                        }
-                                        fileDownload.setEnabled(false);
-                                    }
-                                });
-                                //Toast.makeText(getApplicationContext(),getResources().getString(R.string.media_list_fail), Toast.LENGTH_SHORT).show();
-                                //finish();
-                            }
-                        }
-                    });
-                    downloadProgress = new Thread(new Runnable() {
-
-                        @Override
-                        public void run() {
-                            try  {
-                                //Your code goes here
-                                while (fileDownload.isEnabled()) {
-                                    try {
-                                        if (filesize != 0) {
-                                            simpleProgressBar.setProgress((int)((transfered*100)/filesize));
-                                        }
-                                        Thread.sleep(500);
-                                    } catch (Exception e) {
-                                        e.printStackTrace();
-                                    }
-                                }
-
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                                //Toast.makeText(getApplicationContext(),getResources().getString(R.string.media_list_fail), Toast.LENGTH_SHORT).show();
-                                //finish();
-                            }
-                        }
-                    });
-                    downloadFile.start();
-                    downloadProgress.start();
+                    downloadFile();
                 }
             }
 
         });
+    }
+
+    private void downloadFile () {
+        started = true;
+        simpleProgressBar.setVisibility(View.VISIBLE);
+        //fileDownload.setEnabled(false);
+        fileDownload.setText(getResources().getString(R.string.cancel_download));
+        //Acquiring WakeLock and WifiLock if not held
+        if (!mWifiLock.isHeld()) {
+            mWifiLock.acquire();
+            //System.out.println("WifiLock acquired");
+        }
+        if (!mWakeLock.isHeld()) {
+            mWakeLock.acquire();
+            //System.out.println("WakeLock acquired");
+        }
+        downloadFile = new Thread(new Runnable() {
+
+            @Override
+            public void run() {
+                simpleProgressBar.setVisibility(View.VISIBLE);
+                try  {
+                    //Your code goes here
+                    //s3client.createBucket(bucket, location);
+                    //System.out.println(fkey);
+                    object = s3client.getObject(bucket, prefix+filename);
+                    filesize = (object.getObjectMetadata().getContentLength())/1024;
+                    writeContentToFile(fileuri);
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            //simpleProgressBar.setProgress(100);
+                            //Releasing WifiLock and WakeLock if held
+                            if (mWifiLock.isHeld()) {
+                                mWifiLock.release();
+                                //System.out.println("WifiLock released");
+                            }
+                            if (mWakeLock.isHeld()) {
+                                mWakeLock.release();
+                                //System.out.println("WakeLock released");
+                            }
+                            simpleProgressBar.setProgress(100);
+                            fileDownload.setText(getResources().getString(R.string.download_success));
+                            fileDownload.setEnabled(false);
+                            //simpleProgressBar.setVisibility(View.INVISIBLE);
+                        }
+                    });
+                    //System.out.println("tree "+treelevel);
+                    //System.out.println("prefix "+prefix);
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    runOnUiThread(new Runnable() {
+
+                        @Override
+                        public void run() {
+                            //Releasing WifiLock and WakeLock if held
+                            if (mWifiLock.isHeld()) {
+                                mWifiLock.release();
+                                //System.out.println("WifiLock released");
+                            }
+                            if (mWakeLock.isHeld()) {
+                                mWakeLock.release();
+                                //System.out.println("WakeLock released");
+                            }
+                            if (cancel) {
+                                fileDownload.setText(getResources().getString(R.string.download_canceled));
+                            } else {
+                                fileDownload.setText(getResources().getString(R.string.download_failed));
+                            }
+                            fileDownload.setEnabled(false);
+                        }
+                    });
+                    //Toast.makeText(getApplicationContext(),getResources().getString(R.string.media_list_fail), Toast.LENGTH_SHORT).show();
+                    //finish();
+                }
+            }
+        });
+        downloadProgress = new Thread(new Runnable() {
+
+            @Override
+            public void run() {
+                try  {
+                    //Your code goes here
+                    while (fileDownload.isEnabled()) {
+                        try {
+                            if (filesize != 0) {
+                                simpleProgressBar.setProgress((int)((transfered*100)/filesize));
+                            }
+                            Thread.sleep(500);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    //Toast.makeText(getApplicationContext(),getResources().getString(R.string.media_list_fail), Toast.LENGTH_SHORT).show();
+                    //finish();
+                }
+            }
+        });
+        downloadFile.start();
+        downloadProgress.start();
     }
 
     private void performFileSearch(String messageTitle) {
@@ -220,6 +224,7 @@ public class Downloader extends AppCompatActivity {
                 if (resultData != null && resultData.getData() != null) {
                     fileuri = resultData.getData();
                     System.out.println(fileuri.toString());
+                    downloadFile();
                     //System.out.println("File selected successfully");
                     //System.out.println("content://com.android.externalstorage.documents"+file.getPath());
                 } else {

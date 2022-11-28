@@ -69,6 +69,7 @@ public class VideoPlayer extends AppCompatActivity {
     private PlayerNotificationManager playerNotificationManager;
     private int notificationId = 1234;
     boolean hls;
+    boolean success = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -159,17 +160,21 @@ public class VideoPlayer extends AppCompatActivity {
 
             public void onPlayerError(PlaybackException error) {
                 Throwable cause = error.getCause();
-                if (cause instanceof HttpDataSource.HttpDataSourceException) {
-                    // An HTTP error occurred.
-                    //System.out.println("Playback error F");
-                    Toast.makeText(getApplicationContext(), getResources().getString(R.string.media_conn_fail), Toast.LENGTH_SHORT).show();
+                if(success) {
+                    player.pause();
                 } else {
-                    // An HTTP error occurred.
-                    //System.out.println("Playback error F");
-                    Toast.makeText(getApplicationContext(), getResources().getString(R.string.media_wrong_type), Toast.LENGTH_SHORT).show();
+                    if (cause instanceof HttpDataSource.HttpDataSourceException) {
+                        // An HTTP error occurred.
+                        //System.out.println("Playback error F");
+                        Toast.makeText(getApplicationContext(), getResources().getString(R.string.media_conn_fail), Toast.LENGTH_SHORT).show();
+                    } else {
+                        // An HTTP error occurred.
+                        //System.out.println("Playback error F");
+                        Toast.makeText(getApplicationContext(), getResources().getString(R.string.media_wrong_type), Toast.LENGTH_SHORT).show();
+                    }
+                    player.release();
+                    finish();
                 }
-                player.release();
-                finish();
             }
 
 
@@ -180,6 +185,7 @@ public class VideoPlayer extends AppCompatActivity {
             public void onPlaybackStateChanged(@Player.State int state) {
                 if (state == 3) {
                     // Active playback.
+                    success = true;
                     //Acquiring WakeLock and WifiLock if not held
                     if (!mWifiLock.isHeld()) {
                         mWifiLock.acquire();
