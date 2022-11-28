@@ -4,6 +4,7 @@ import static android.content.ContentValues.TAG;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -44,7 +45,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Uploader extends AppCompatActivity {
-    String  username, password, endpoint, bucket, prefix, location, fkey;
+    String  username, password, endpoint, bucket, prefix, location;
     int progress;
     Uri fileuri, folder;
     EditText fprefix;
@@ -93,7 +94,7 @@ public class Uploader extends AppCompatActivity {
         simpleProgressBar = (ProgressBar) findViewById(R.id.simpleProgressBar);
         //Toast.makeText(Uploader.this, getResources().getString(R.string.pending_feature), Toast.LENGTH_SHORT).show();
         performFileSearch("Select file to upload");
-        fprefix.setText(prefix);
+        //fprefix.setText(prefix);
         fileUpload.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
@@ -125,11 +126,6 @@ public class Uploader extends AppCompatActivity {
 
                             @Override
                             public void run() {
-                                if (fprefix.getText().toString().endsWith("/") || fprefix.getText().toString().equals("")) {
-                                    fkey = fprefix.getText().toString()+getDisplayName(fileuri);
-                                } else {
-                                    fkey = fprefix.getText().toString()+"/"+getDisplayName(fileuri);
-                                }
                                 //System.out.println(fkey);
                                 progress = 0;
                                 filesize = 0;
@@ -141,7 +137,7 @@ public class Uploader extends AppCompatActivity {
                                     filesize = ufile.length();
                                     //PutObjectRequest request = new PutObjectRequest(bucket, fkey, ufile);
                                     //upload = s3client.putObject(request);
-                                    putS3Object(bucket, fkey, ufile);
+                                    putS3Object(bucket, fprefix.getText().toString(), ufile);
                                     runOnUiThread(new Runnable() {
 
                                         @Override
@@ -265,6 +261,7 @@ public class Uploader extends AppCompatActivity {
         ((Activity) this).startActivityForResult(intent, 100);
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void onActivityResult(int requestCode, int resultCode, final Intent resultData) {
         // The ACTION_OPEN_DOCUMENT intent was sent with the request code OPEN_DIRECTORY_REQUEST_CODE.
@@ -279,6 +276,7 @@ public class Uploader extends AppCompatActivity {
                 if (resultData != null && resultData.getData() != null) {
                     fileuri = resultData.getData();
                     System.out.println(fileuri.toString());
+                    fprefix.setText(prefix+getDisplayName(fileuri));
                     //System.out.println("File selected successfully");
                     //System.out.println("content://com.android.externalstorage.documents"+file.getPath());
                 } else {
