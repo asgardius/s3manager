@@ -106,9 +106,9 @@ public class ObjectSelect extends AppCompatActivity {
                     //List<Bucket> buckets = s3client.listBuckets();
                     ListObjectsRequest orequest;
                     if (treelevel == 0) {
-                        orequest = new ListObjectsRequest().withBucketName(bucket).withMaxKeys(8000).withDelimiter("/");
+                        orequest = new ListObjectsRequest().withBucketName(bucket).withMaxKeys(1000).withDelimiter("/");
                     } else {
-                        orequest = new ListObjectsRequest().withBucketName(bucket).withPrefix(prefix).withMaxKeys(8000).withDelimiter("/");
+                        orequest = new ListObjectsRequest().withBucketName(bucket).withPrefix(prefix).withMaxKeys(1000).withDelimiter("/");
                     }
                     //List<S3Object> objects = (List<S3Object>) s3client.listObjects(bucket, "/");
                     ObjectListing result = s3client.listObjects(orequest);
@@ -578,7 +578,7 @@ public class ObjectSelect extends AppCompatActivity {
                                     //Your code goes here
                                     //List<Bucket> buckets = s3client.listBuckets();
                                     if (folder) {
-                                        ListObjectsRequest orequest = new ListObjectsRequest().withBucketName(bucket).withPrefix(object).withMaxKeys(8000);
+                                        ListObjectsRequest orequest = new ListObjectsRequest().withBucketName(bucket).withPrefix(object).withMaxKeys(1000);
                                         //List<S3Object> objects = (List<S3Object>) s3client.listObjects(bucket, "/");
                                         ObjectListing result = s3client.listObjects(orequest);
                                         ArrayList<String> objectl = new ArrayList<String>();

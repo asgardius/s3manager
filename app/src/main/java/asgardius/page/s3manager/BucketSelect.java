@@ -220,7 +220,7 @@ public class BucketSelect extends AppCompatActivity {
                             public void run() {
                                 try  {
                                     //Your code goes here
-                                    ListObjectsRequest orequest = new ListObjectsRequest().withBucketName(bucket).withMaxKeys(8000);
+                                    ListObjectsRequest orequest = new ListObjectsRequest().withBucketName(bucket).withMaxKeys(1000);
                                     //List<S3Object> objects = (List<S3Object>) s3client.listObjects(bucket, "/");
                                     ObjectListing result = s3client.listObjects(orequest);
                                     ArrayList<String> objectl = new ArrayList<String>();
