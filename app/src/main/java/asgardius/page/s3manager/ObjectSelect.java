@@ -454,32 +454,12 @@ public class ObjectSelect extends AppCompatActivity {
 
     private void videoPlayer(String url, boolean hls) {
 
-        try {
-            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N
-                    && this.getPackageManager()
-                    .hasSystemFeature(
-                            PackageManager.FEATURE_PICTURE_IN_PICTURE) && appOpsManager.checkOpNoThrow(
-                    AppOpsManager.OPSTR_PICTURE_IN_PICTURE,
-                    this.getPackageManager().getApplicationInfo(this.getPackageName(),
-                            PackageManager.GET_META_DATA).uid, this.getPackageName())
-                    == AppOpsManager.MODE_ALLOWED) {
-                Intent intent = new Intent(this, VideoPlayerPip.class);
-                intent.putExtra("video_url", url);
-                intent.putExtra("videocache", videocache);
-                intent.putExtra("buffersize", buffersize);
-                intent.putExtra("hls", hls);
-                startActivity(intent);
-            } else {
-                Intent intent = new Intent(this, VideoPlayer.class);
-                intent.putExtra("video_url", url);
-                intent.putExtra("videocache", videocache);
-                intent.putExtra("buffersize", buffersize);
-                intent.putExtra("hls", hls);
-                startActivity(intent);
-            }
-        } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
-        }
+        Intent intent = new Intent(this, VideoPlayer.class);
+        intent.putExtra("video_url", url);
+        intent.putExtra("videocache", videocache);
+        intent.putExtra("buffersize", buffersize);
+        intent.putExtra("hls", hls);
+        startActivity(intent);
 
     }
     private void textViewer(String url) {
