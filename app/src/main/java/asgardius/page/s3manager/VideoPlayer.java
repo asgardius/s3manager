@@ -3,11 +3,10 @@ package asgardius.page.s3manager;
 import android.app.AppOpsManager;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.app.PictureInPictureParams;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
 import android.hardware.display.DisplayManager;
 import android.net.Uri;
 import android.net.wifi.WifiManager;
@@ -19,7 +18,6 @@ import android.view.Display;
 import android.view.View;
 import android.widget.Toast;
 
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.exoplayer2.C;
@@ -72,6 +70,7 @@ public class VideoPlayer extends AppCompatActivity {
     private int notificationId = 1234;
     boolean hls;
     boolean success = false;
+    String videoURL;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,7 +96,7 @@ public class VideoPlayer extends AppCompatActivity {
         powerManager = (PowerManager) getSystemService(POWER_SERVICE);
         mWakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "S3Manager:wake_lock");
         //Get media url
-        String videoURL = getIntent().getStringExtra("video_url");
+        videoURL = getIntent().getStringExtra("video_url");
         videocache = getIntent().getIntExtra("videocache", 40);
         buffersize = getIntent().getIntExtra("buffersize", 2000);
         hls = getIntent().getBooleanExtra("hls", false);
@@ -278,7 +277,7 @@ public class VideoPlayer extends AppCompatActivity {
         DisplayManager dm = (DisplayManager) context.getSystemService(Context.DISPLAY_SERVICE);
         boolean screenOn = false;
         for (Display display : dm.getDisplays()) {
-            if (display.getState() != Display.STATE_OFF) {
+            if (display.getState() == Display.STATE_ON) {
                 screenOn = true;
             }
         }
@@ -310,6 +309,30 @@ public class VideoPlayer extends AppCompatActivity {
         enterPIPMode();
     }
 
+    protected void onNewIntent(Intent intent) {
+        videoURL = intent.getStringExtra("video_url");
+        videocache = intent.getIntExtra("videocache", 40);
+        buffersize = intent.getIntExtra("buffersize", 2000);
+        hls = intent.getBooleanExtra("hls", false);
+        mediaSource = new ProgressiveMediaSource.Factory(
+                new CacheDataSource.Factory()
+                        .setCache(simpleCache)
+                        .setUpstreamDataSourceFactory(new DefaultHttpDataSource.Factory()
+                                .setUserAgent("ExoplayerDemo"))
+                        .setFlags(CacheDataSource.FLAG_IGNORE_CACHE_ON_ERROR)
+        ).createMediaSource(MediaItem.fromUri(Uri.parse(videoURL)));
+        if (hls) {
+            MediaItem mediaItem = MediaItem.fromUri(videoURL);
+            player.setMediaItem(mediaItem);
+        } else {
+            player.setMediaSource(mediaSource);
+        }
+        player.prepare();
+        // Start the playback.
+        player.play();
+        super.onNewIntent(intent);
+    }
+
     public void onStop() {
         if(isScreenOn(this)) {
             finish();
@@ -317,7 +340,7 @@ public class VideoPlayer extends AppCompatActivity {
         super.onStop();
     }
 
-    /*public void onBackPressed() {
+    public void onBackPressed() {
         try {
             if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N
                     && this.getPackageManager()
@@ -335,5 +358,5 @@ public class VideoPlayer extends AppCompatActivity {
             e.printStackTrace();
             super.onBackPressed();
         }
-    }*/
+    }
 }
