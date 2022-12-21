@@ -14,6 +14,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.PowerManager;
 import android.support.v4.media.session.MediaSessionCompat;
+import android.util.Rational;
 import android.view.Display;
 import android.view.View;
 import android.widget.Toast;
@@ -40,6 +41,7 @@ import com.google.android.exoplayer2.upstream.cache.LeastRecentlyUsedCacheEvicto
 import com.google.android.exoplayer2.upstream.cache.SimpleCache;
 
 import java.io.File;
+import java.util.Objects;
 
 /**
  * An example full-screen activity that shows and hides the system UI (i.e.
@@ -71,6 +73,7 @@ public class VideoPlayer extends AppCompatActivity {
     boolean hls;
     boolean success = false;
     String videoURL;
+    Rational ratio;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -262,7 +265,14 @@ public class VideoPlayer extends AppCompatActivity {
                 videoPosition = player.getCurrentPosition();
                 playerView.setUseController(false);
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    PictureInPictureParams params = new PictureInPictureParams.Builder().build();
+                    if(player.getVideoFormat() != null) {
+                        ratio = new Rational(player.getVideoFormat().width, player.getVideoFormat().height);
+                    } else if(player.getAudioFormat() != null) {
+                        ratio = new Rational(player.getAudioFormat().width, player.getAudioFormat().height);
+                    } else {
+                        ratio = new Rational(1, 1);
+                    }
+                    PictureInPictureParams params = new PictureInPictureParams.Builder().setAspectRatio(ratio).build();
                     this.enterPictureInPictureMode(params);
                 }else {
                     this.enterPictureInPictureMode();

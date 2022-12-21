@@ -323,7 +323,7 @@ public class ObjectSelect extends AppCompatActivity {
                             }
                         }
                     });
-                    if (pdfendpoint == null) {
+                    if (pdfendpoint == null || pdfendpoint.equals("")) {
                         Toast.makeText(getApplicationContext(),getResources().getString(R.string.pdf_reader_notready), Toast.LENGTH_SHORT).show();
                     } else {
                         pdfread.start();
