@@ -334,8 +334,19 @@ public class VideoPlayer extends AppCompatActivity {
     }
 
     public void onStop() {
-        if(isScreenOn(this)) {
-            finish();
+        try {
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.S
+                    && this.getPackageManager()
+                    .hasSystemFeature(
+                            PackageManager.FEATURE_PICTURE_IN_PICTURE) && appOpsManager.checkOpNoThrow(
+                    AppOpsManager.OPSTR_PICTURE_IN_PICTURE,
+                    this.getPackageManager().getApplicationInfo(this.getPackageName(),
+                            PackageManager.GET_META_DATA).uid, this.getPackageName())
+                    == AppOpsManager.MODE_ALLOWED && isScreenOn(this)) {
+                finish();
+            }
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
         }
         super.onStop();
     }
