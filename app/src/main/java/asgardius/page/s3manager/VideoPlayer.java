@@ -72,7 +72,7 @@ public class VideoPlayer extends AppCompatActivity {
     private int notificationId = 1234;
     boolean hls;
     boolean success = false;
-    String videoURL;
+    String videoURL, title;
     Rational ratio;
 
     @Override
@@ -100,9 +100,11 @@ public class VideoPlayer extends AppCompatActivity {
         mWakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "S3Manager:wake_lock");
         //Get media url
         videoURL = getIntent().getStringExtra("video_url");
+        title = getIntent().getStringExtra("title");
         videocache = getIntent().getIntExtra("videocache", 40);
         buffersize = getIntent().getIntExtra("buffersize", 2000);
         hls = getIntent().getBooleanExtra("hls", false);
+        getSupportActionBar().setTitle(title);
         loadControl = new DefaultLoadControl.Builder().setBufferDurationsMs(2000, buffersize, 1500, 2000).build();
 
         @DefaultRenderersFactory.ExtensionRendererMode int extensionRendererMode = DefaultRenderersFactory.EXTENSION_RENDERER_MODE_PREFER;
@@ -247,8 +249,7 @@ public class VideoPlayer extends AppCompatActivity {
     private void showSystemBars() {
         View decorView = getWindow().getDecorView();
         decorView.setSystemUiVisibility(
-                View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+                View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
     }
 
 
@@ -321,9 +322,11 @@ public class VideoPlayer extends AppCompatActivity {
 
     protected void onNewIntent(Intent intent) {
         videoURL = intent.getStringExtra("video_url");
+        title = intent.getStringExtra("title");
         videocache = intent.getIntExtra("videocache", 40);
         buffersize = intent.getIntExtra("buffersize", 2000);
         hls = intent.getBooleanExtra("hls", false);
+        getSupportActionBar().setTitle(title);
         mediaSource = new ProgressiveMediaSource.Factory(
                 new CacheDataSource.Factory()
                         .setCache(simpleCache)

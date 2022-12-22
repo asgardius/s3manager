@@ -350,7 +350,7 @@ public class ObjectSelect extends AppCompatActivity {
                                     @Override
                                     public void run() {
                                         // Sending reference and data to Adapter
-                                        videoPlayer(objectURL.toString(), Name.get(position).toString().endsWith(".m3u8"));
+                                        videoPlayer(objectURL.toString(), Name.get(position).toString(), Name.get(position).toString().endsWith(".m3u8"));
                                     }
                                 });
                                 //System.out.println("tree "+treelevel);
@@ -395,7 +395,7 @@ public class ObjectSelect extends AppCompatActivity {
                                 //Toast.makeText(ObjectSelect.this, getResources().getString(R.string.pending_feature), Toast.LENGTH_SHORT).show();
                                 upload();
                             } else if (menuItem.getTitle() == getResources().getString(R.string.object_info)) {
-                                objectInfo(prefix + Name.get(position).toString());
+                                objectInfo(prefix + Name.get(position).toString(), Name.get(position).toString());
                             } else if (menuItem.getTitle() == getResources().getString(R.string.file_del)) {
                                 if (Name.size() == 1 && treelevel >= 1) {
                                     Toast.makeText(ObjectSelect.this, getResources().getString(R.string.only_item_onlist), Toast.LENGTH_SHORT).show();
@@ -426,13 +426,9 @@ public class ObjectSelect extends AppCompatActivity {
                                 //Toast.makeText(ObjectSelect.this, getResources().getString(R.string.pending_feature), Toast.LENGTH_SHORT).show();
                                 upload();
                             } else if (menuItem.getTitle() == getResources().getString(R.string.create_link)) {
-                                if (Img.get(position).equals(R.drawable.audiofile) || Img.get(position).equals(R.drawable.videofile)) {
-                                    share(prefix + Name.get(position).toString(), true);
-                                } else {
-                                    share(prefix + Name.get(position).toString(), false);
-                                }
+                                share(prefix + Name.get(position).toString(), Name.get(position).toString(), Img.get(position).equals(R.drawable.audiofile) || Img.get(position).equals(R.drawable.videofile));
                             } else if (menuItem.getTitle() == getResources().getString(R.string.object_info)) {
-                                objectInfo(prefix + Name.get(position).toString());
+                                objectInfo(prefix + Name.get(position).toString(), Name.get(position).toString());
                             } else if (menuItem.getTitle() == getResources().getString(R.string.file_del)) {
                                 if (menuItem.getTitle() == getResources().getString(R.string.file_del)) {
                                     if (Name.size() == 1 && treelevel >= 1) {
@@ -452,10 +448,11 @@ public class ObjectSelect extends AppCompatActivity {
         }));
     }
 
-    private void videoPlayer(String url, boolean hls) {
+    private void videoPlayer(String url, String title, boolean hls) {
 
         Intent intent = new Intent(this, VideoPlayer.class);
         intent.putExtra("video_url", url);
+        intent.putExtra("title", title);
         intent.putExtra("videocache", videocache);
         intent.putExtra("buffersize", buffersize);
         intent.putExtra("hls", hls);
@@ -506,7 +503,7 @@ public class ObjectSelect extends AppCompatActivity {
 
     }
 
-    private void share(String object, boolean mediafile) {
+    private void share(String object, String title, boolean mediafile) {
 
         Intent intent = new Intent(this, Share.class);
         //treelevel ++;
@@ -515,6 +512,7 @@ public class ObjectSelect extends AppCompatActivity {
         intent.putExtra("password", password);
         intent.putExtra("bucket", bucket);
         intent.putExtra("object", object);
+        intent.putExtra("title", title);
         intent.putExtra("region", location);
         intent.putExtra("mediafile", mediafile);
         intent.putExtra("videotime", videotime);
@@ -522,7 +520,7 @@ public class ObjectSelect extends AppCompatActivity {
 
     }
 
-    private void objectInfo(String object) {
+    private void objectInfo(String object, String title) {
 
         Intent intent = new Intent(this, ObjectInfo.class);
         //treelevel ++;
@@ -531,6 +529,7 @@ public class ObjectSelect extends AppCompatActivity {
         intent.putExtra("password", password);
         intent.putExtra("bucket", bucket);
         intent.putExtra("object", object);
+        intent.putExtra("title", title);
         intent.putExtra("region", location);
         startActivity(intent);
 

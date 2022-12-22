@@ -24,7 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ObjectInfo extends AppCompatActivity {
-    String username, password, endpoint, bucket, object, location;
+    String username, password, endpoint, bucket, object, location, title;
     Region region;
     S3ClientOptions s3ClientOptions;
     AWSCredentials myCredentials;
@@ -49,6 +49,7 @@ public class ObjectInfo extends AppCompatActivity {
         filesizeinfo = (TextView) findViewById(R.id.size_info);
         objectcount = (TextView) findViewById(R.id.object_count);
         endpoint = getIntent().getStringExtra("endpoint");
+        title = getIntent().getStringExtra("title");
         username = getIntent().getStringExtra("username");
         password = getIntent().getStringExtra("password");
         bucket = getIntent().getStringExtra("bucket");
@@ -57,7 +58,7 @@ public class ObjectInfo extends AppCompatActivity {
         if (object == null) {
             getSupportActionBar().setTitle(bucket+"/");
         } else {
-            getSupportActionBar().setTitle(bucket+"/"+object);
+            getSupportActionBar().setTitle(title);
         }
         region = Region.getRegion(location);
         s3ClientOptions = S3ClientOptions.builder().build();
