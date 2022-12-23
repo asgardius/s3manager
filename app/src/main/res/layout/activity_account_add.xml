@@ -7,123 +7,141 @@
     android:orientation="vertical"
     tools:context=".AccountAdd">
 
-    <LinearLayout
-        android:id="@+id/aliasLayout"
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:padding="10dp"
-        tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="20dp">
+        android:layout_height="wrap_content">
 
-        <EditText
-        android:id="@+id/alias"
-        android:layout_width="wrap_content"
-        android:layout_height="48dp"
-        android:layout_weight="1"
-        android:focusable="true"
-        android:hint="@string/accountadd_alias"
-        android:importantForAutofill="no"
-        android:inputType="text"
-        android:textColorHint="?attr/colorOnSecondary"
-        tools:ignore="MissingConstraints" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-        <EditText
-            android:id="@+id/pdfendpoint"
-            android:layout_width="wrap_content"
-            android:layout_height="48dp"
-            android:layout_weight="1"
-            android:focusable="true"
-            android:hint="@string/accountadd_pdfendpoint"
-            android:importantForAutofill="no"
-            android:inputType="textUri"
-            android:textColorHint="?attr/colorOnSecondary"
-            tools:ignore="MissingConstraints" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/accountadd_alias"
+                android:textAlignment="center"
+                android:textSize="25sp"/>
 
-    </LinearLayout>
+            <EditText
+                android:id="@+id/alias"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:focusable="true"
+                android:hint="@string/accountadd_alias"
+                android:inputType="text"
+                android:textColorHint="?attr/colorOnSecondary"/>
 
-    <LinearLayout
-        android:id="@+id/endpointLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:padding="10dp"
-        tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="20dp">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/accountadd_pdfendpoint"
+                android:textAlignment="center"
+                android:textSize="25sp"/>
 
-        <EditText
-            android:id="@+id/endpoint"
-            android:layout_width="wrap_content"
-            android:layout_height="48dp"
-            android:layout_weight="1"
-            android:focusable="true"
-            android:hint="@string/accountadd_endpoint"
-            android:importantForAutofill="no"
-            android:inputType="textUri"
-            android:textColorHint="?attr/colorOnSecondary"
-            tools:ignore="MissingConstraints" />
+            <EditText
+                android:id="@+id/pdfendpoint"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_weight="1"
+                android:focusable="true"
+                android:hint="@string/accountadd_pdfendpoint"
+                android:inputType="textUri"
+                android:textColorHint="?attr/colorOnSecondary"/>
 
-        <EditText
-            android:id="@+id/region"
-            android:layout_width="wrap_content"
-            android:layout_height="48dp"
-            android:layout_weight="1"
-            android:focusable="true"
-            android:hint="@string/accountadd_region"
-            android:importantForAutofill="no"
-            android:inputType="textNoSuggestions"
-            android:textColorHint="?attr/colorOnSecondary"
-            tools:ignore="MissingConstraints" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/accountadd_endpoint"
+                android:textAlignment="center"
+                android:textSize="25sp"/>
 
-    </LinearLayout>
+            <EditText
+                android:id="@+id/endpoint"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_weight="1"
+                android:focusable="true"
+                android:hint="@string/accountadd_endpoint"
+                android:inputType="textUri"
+                android:textColorHint="?attr/colorOnSecondary"/>
 
-    <EditText
-        android:id="@+id/username"
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:autofillHints="username"
-        android:focusable="true"
-        android:hint="@string/accountadd_username"
-        android:inputType="textNoSuggestions"
-        android:textColorHint="?attr/colorOnSecondary"
-        tools:ignore="MissingConstraints" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/accountadd_region"
+                android:textAlignment="center"
+                android:textSize="25sp"/>
 
-    <EditText
-        android:id="@+id/password"
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:autofillHints="username"
-        android:focusable="true"
-        android:hint="@string/accountadd_password"
-        android:inputType="textPassword"
-        android:textColorHint="?attr/colorOnSecondary"
-        tools:ignore="MissingConstraints" />
+            <EditText
+                android:id="@+id/region"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:focusable="true"
+                android:hint="@string/accountadd_region"
+                android:inputType="textNoSuggestions"
+                android:textColorHint="?attr/colorOnSecondary"/>
 
-    <LinearLayout
-        android:id="@+id/linearLayout"
-        android:layout_width="match_parent"
-        android:layout_height="80dp"
-        android:orientation="horizontal"
-        android:padding="10dp"
-        tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="20dp">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/accountadd_username"
+                android:textAlignment="center"
+                android:textSize="25sp"/>
 
-        <Button
-            android:id="@+id/addaccount"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:text="@string/accountadd_button"
-            tools:ignore="MissingConstraints" />
+            <EditText
+                android:id="@+id/username"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:autofillHints="username"
+                android:layout_weight="1"
+                android:focusable="true"
+                android:hint="@string/accountadd_username"
+                android:inputType="textNoSuggestions"
+                android:textColorHint="?attr/colorOnSecondary"/>
 
-        <Button
-            android:id="@+id/testaccount"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:text="@string/accounttest_button"
-            tools:ignore="MissingConstraints" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/accountadd_password"
+                android:textAlignment="center"
+                android:textSize="25sp"/>
 
-    </LinearLayout>
+            <EditText
+                android:id="@+id/password"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:autofillHints="password"
+                android:layout_weight="1"
+                android:focusable="true"
+                android:hint="@string/accountadd_password"
+                android:inputType="textPassword"
+                android:textColorHint="?attr/colorOnSecondary"/>
+
+            <com.google.android.material.switchmaterial.SwitchMaterial
+                android:id="@+id/pathstyle"
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
+                android:text="@string/path_style"
+                android:textSize="24sp" />
+
+            <Button
+                android:id="@+id/addaccount"
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
+                android:text="@string/accountadd_button"
+                android:textColor="?android:attr/colorBackground"
+                android:textSize="24sp" />
+
+            <Button
+                android:id="@+id/testaccount"
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
+                android:text="@string/accounttest_button"
+                android:textColor="?android:attr/colorBackground"
+                android:textSize="24sp" />
+
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
 
 </LinearLayout>

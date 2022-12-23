@@ -5,7 +5,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 public class MyDbHelper extends SQLiteOpenHelper {
-    private static final String usertable = "CREATE TABLE IF NOT EXISTS account(id text UNIQUE, endpoint text, username text, password text, region text, pdfendpoint text)";
+    private static final String usertable = "CREATE TABLE IF NOT EXISTS account(id text UNIQUE, endpoint text, username text, password text, region text, pdfendpoint text, style text)";
     private static final String preftable = "CREATE TABLE IF NOT EXISTS preferences(setting text UNIQUE, value text)";
     private static final String setvideocache = "INSERT INTO preferences VALUES ('videocache', '300')";
     private static final String setvideotime = "INSERT INTO preferences VALUES ('videotime', '3')";

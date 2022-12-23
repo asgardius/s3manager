@@ -94,4 +94,5 @@
     <string name="mediaplayer_multierror">Solo se puede reproducir un archivo multimedia a la vez</string>
     <string name="playback_channel_name">Reproduccion de video</string>
     <string name="not_zero">este valor no puede ser cero</string>
+    <string name="path_style">Acceso de estilo de ruta</string>
 </resources>

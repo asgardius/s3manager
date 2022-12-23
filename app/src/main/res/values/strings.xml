@@ -98,4 +98,5 @@
     <string name="mediaplayer_multierror">Only one media file can be played at once</string>
     <string name="playback_channel_name">Video Playback</string>
     <string name="not_zero">This value cannot be zero</string>
+    <string name="path_style">Path style access</string>
 </resources>

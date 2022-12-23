@@ -19,13 +19,15 @@ import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.S3ClientOptions;
 import com.amazonaws.services.s3.model.Bucket;
+import com.google.android.material.switchmaterial.SwitchMaterial;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class AccountAdd extends AppCompatActivity {
     EditText aapick, aupick, appick, aepick, arpick, pdfpick;
-    String alias, username, password, endpoint, id, location, pdfendpoint;
+    SwitchMaterial pathstyle;
+    String alias, username, password, endpoint, id, location, pdfendpoint, style;
     AWSCredentials myCredentials;
     AmazonS3 s3client;
     Region region;
@@ -41,6 +43,7 @@ public class AccountAdd extends AppCompatActivity {
         arpick = (EditText)findViewById(R.id.region);
         aupick = (EditText)findViewById(R.id.username);
         appick = (EditText)findViewById(R.id.password);
+        pathstyle = (SwitchMaterial) findViewById(R.id.pathstyle);
         Button register = (Button)findViewById(R.id.addaccount);
         Button accounttest = (Button)findViewById(R.id.testaccount);
         edit = getIntent().getBooleanExtra("edit", false);
@@ -53,6 +56,11 @@ public class AccountAdd extends AppCompatActivity {
             password = getIntent().getStringExtra("password");
             location = getIntent().getStringExtra("region");
             pdfendpoint = getIntent().getStringExtra("pdfendpoint");
+            if (getIntent().getBooleanExtra("style", false)) {
+                pathstyle.setChecked(true);
+            } else {
+                pathstyle.setChecked(false);
+            }
             aapick.setText(id);
             aepick.setText(endpoint);
             //aapick.setEnabled(false);
@@ -76,6 +84,11 @@ public class AccountAdd extends AppCompatActivity {
                 location = arpick.getText().toString();
                 username = aupick.getText().toString();
                 password = appick.getText().toString();
+                if (pathstyle.isChecked()) {
+                    style = "1";
+                } else {
+                    style = "0";
+                }
                 MyDbHelper dbHelper = new MyDbHelper(AccountAdd.this);
                 if (alias.equals("") && endpoint.equals("") && username.equals(getResources().getString(R.string.access_key))) {
                     endpoint = getResources().getString(R.string.endpoint_url);
@@ -96,10 +109,10 @@ public class AccountAdd extends AppCompatActivity {
                             location = "us-east-1";
                         }
                         if (edit) {
-                            db.execSQL("UPDATE account SET id=\""+alias+"\", endpoint=\""+endpoint+"\", username=\""+username+"\", password=\""+password+"\", region=\""+location+"\", pdfendpoint=\""+pdfendpoint+"\" WHERE id=\""+id+"\"");
+                            db.execSQL("UPDATE account SET id=\""+alias+"\", endpoint=\""+endpoint+"\", username=\""+username+"\", password=\""+password+"\", region=\""+location+"\", pdfendpoint=\""+pdfendpoint+"\", style=\""+style+"\" WHERE id=\""+id+"\"");
                             Toast.makeText(getApplicationContext(),getResources().getString(R.string.accountsave_success), Toast.LENGTH_SHORT).show();
                         } else {
-                            db.execSQL("INSERT INTO account VALUES (\""+alias+"\", \""+endpoint+"\", \""+username+"\", \""+password+"\", \""+location+"\", \""+pdfendpoint+"\")");
+                            db.execSQL("INSERT INTO account VALUES (\""+alias+"\", \""+endpoint+"\", \""+username+"\", \""+password+"\", \""+location+"\", \""+pdfendpoint+"\", \""+style+"\")");
                             Toast.makeText(getApplicationContext(),getResources().getString(R.string.accountadd_success), Toast.LENGTH_SHORT).show();
                         }
                         mainmenu();

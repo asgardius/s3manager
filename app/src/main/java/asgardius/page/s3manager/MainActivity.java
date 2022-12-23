@@ -20,7 +20,7 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
-    static boolean DEFAULT_PATH_STYLE_ACCESS = true;
+    boolean style;
     String alias, username, password, endpoint, location, pdfendpoint;
     RecyclerView recyclerView;
     SQLiteDatabase db;
@@ -219,7 +219,7 @@ public class MainActivity extends AppCompatActivity {
                     // Database Queries
                     try {
                         //This retrieves credentials from selected account
-                        String query = "SELECT endpoint, username, password, region, pdfendpoint FROM account where id=\""+ Name.get(position).toString()+ "\"";
+                        String query = "SELECT endpoint, username, password, region, pdfendpoint, style FROM account where id=\""+ Name.get(position).toString()+ "\"";
                         Cursor cursor = db.rawQuery(query,null);
                         if (cursor.moveToNext()){
                             endpoint = cursor.getString(0);
@@ -227,6 +227,11 @@ public class MainActivity extends AppCompatActivity {
                             password = cursor.getString(2);
                             location = cursor.getString(3);
                             pdfendpoint = cursor.getString(4);
+                            if (cursor.getString(5).equals("1")) {
+                                style = true;
+                            } else {
+                                style = false;
+                            }
                             db.close();
                             //This launch file explorer using selected account
                             explorer();
@@ -255,7 +260,7 @@ public class MainActivity extends AppCompatActivity {
                             try {
                                 db = dbHelper.getWritableDatabase();
                                 //This retrieves credentials from selected account
-                                String query = "SELECT id, endpoint, username, password, region, pdfendpoint FROM account where id=\""+ Name.get(position).toString()+ "\"";
+                                String query = "SELECT id, endpoint, username, password, region, pdfendpoint, style FROM account where id=\""+ Name.get(position).toString()+ "\"";
                                 System.out.println(query);
                                 Cursor cursor = db.rawQuery(query,null);
                                 if (cursor.moveToNext()){
@@ -265,6 +270,11 @@ public class MainActivity extends AppCompatActivity {
                                     password = cursor.getString(3);
                                     location = cursor.getString(4);
                                     pdfendpoint = cursor.getString(5);
+                                    if (cursor.getString(6).equals("1")) {
+                                        style = true;
+                                    } else {
+                                        style = false;
+                                    }
                                 }
                                 db.close();
                                 //This launch account editor
@@ -363,6 +373,7 @@ public class MainActivity extends AppCompatActivity {
             intent.putExtra("password", password);
             intent.putExtra("region", location);
             intent.putExtra("pdfendpoint", pdfendpoint);
+            intent.putExtra("style", style);
         }
         intent.putExtra("edit", edit);
         startActivity(intent);
