@@ -24,7 +24,7 @@ import java.util.Date;
 
 public class Share extends AppCompatActivity {
     String username, password, endpoint, bucket, object, location, title;
-    boolean mediafile;
+    boolean mediafile, style;
     Region region;
     S3ClientOptions s3ClientOptions;
     AWSCredentials myCredentials;
@@ -84,6 +84,7 @@ public class Share extends AppCompatActivity {
         password = getIntent().getStringExtra("password");
         bucket = getIntent().getStringExtra("bucket");
         location = getIntent().getStringExtra("region");
+        style = getIntent().getBooleanExtra("style", false);
         object = getIntent().getStringExtra("object");
         mediafile = getIntent().getBooleanExtra("mediafile", false);
         videotime = getIntent().getIntExtra("videotime", 1);
@@ -98,9 +99,7 @@ public class Share extends AppCompatActivity {
             Toast.makeText(getApplicationContext(),getResources().getString(R.string.media_list_fail), Toast.LENGTH_SHORT).show();
         }
         s3client.setEndpoint(endpoint);
-        if (!endpoint.contains(getResources().getString(R.string.aws_endpoint))) {
-            s3ClientOptions.setPathStyleAccess(true);
-        }
+        s3ClientOptions.setPathStyleAccess(style);
         s3client.setS3ClientOptions(s3ClientOptions);
         share.setOnClickListener(new View.OnClickListener(){
             @Override

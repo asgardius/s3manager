@@ -31,7 +31,7 @@ public class ObjectInfo extends AppCompatActivity {
     AmazonS3 s3client;
     ProgressBar simpleProgressBar;
     TextView filesize, filesizeinfo, objectcount;
-    boolean isobject, isfolder;
+    boolean isobject, isfolder, style;
     long totalSize = 0;
     int totalItems = 0;
     ListObjectsRequest orequest;
@@ -53,6 +53,7 @@ public class ObjectInfo extends AppCompatActivity {
         username = getIntent().getStringExtra("username");
         password = getIntent().getStringExtra("password");
         bucket = getIntent().getStringExtra("bucket");
+        style = getIntent().getBooleanExtra("style", false);
         location = getIntent().getStringExtra("region");
         object = getIntent().getStringExtra("object");
         if (object == null) {
@@ -69,9 +70,7 @@ public class ObjectInfo extends AppCompatActivity {
             Toast.makeText(getApplicationContext(),getResources().getString(R.string.media_list_fail), Toast.LENGTH_SHORT).show();
         }
         s3client.setEndpoint(endpoint);
-        if (!endpoint.contains(getResources().getString(R.string.aws_endpoint))) {
-            s3ClientOptions.setPathStyleAccess(true);
-        }
+        s3ClientOptions.setPathStyleAccess(style);
         s3client.setS3ClientOptions(s3ClientOptions);
         Thread getInfo = new Thread(new Runnable() {
 

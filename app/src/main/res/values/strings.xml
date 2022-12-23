@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name" translatable="false">S3 Manager</string>
-    <string name="aws_endpoint" translatable="false">.amazonaws.com</string>
     <string name="endpoint_url" translatable="false">https://s3.asgardius.company</string>
     <string name="pdf_reader" translatable="false">https://office.asgardius.company/pdfjs</string>
     <string name="pdf_reader_notready">You need to setup a pdf.js server</string>

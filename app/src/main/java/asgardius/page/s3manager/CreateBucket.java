@@ -27,6 +27,7 @@ import java.util.List;
 
 public class CreateBucket extends AppCompatActivity {
     String username, password, endpoint, bucket, location;
+    boolean style;
     EditText bname;
     Region region;
     S3ClientOptions s3ClientOptions;
@@ -42,11 +43,10 @@ public class CreateBucket extends AppCompatActivity {
         username = getIntent().getStringExtra("username");
         password = getIntent().getStringExtra("password");
         location = getIntent().getStringExtra("region");
+        style = getIntent().getBooleanExtra("style", false);
         region = Region.getRegion("us-east-1");
         s3ClientOptions = S3ClientOptions.builder().build();
-        if (!endpoint.contains(getResources().getString(R.string.aws_endpoint))) {
-            s3ClientOptions.setPathStyleAccess(true);
-        }
+        s3ClientOptions.setPathStyleAccess(style);
         myCredentials = new BasicAWSCredentials(username, password);
         s3client = new AmazonS3Client(myCredentials, region);
         s3client.setEndpoint(endpoint);

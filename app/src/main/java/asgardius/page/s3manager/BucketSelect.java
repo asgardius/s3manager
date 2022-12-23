@@ -41,6 +41,7 @@ public class BucketSelect extends AppCompatActivity {
     ArrayList Img;
     RecyclerView recyclerView;
     String username, password, endpoint, prefix, location, file, pdfendpoint;
+    boolean style;
     int treelevel;
     Region region;
     S3ClientOptions s3ClientOptions;
@@ -57,6 +58,7 @@ public class BucketSelect extends AppCompatActivity {
         password = getIntent().getStringExtra("password");
         location = getIntent().getStringExtra("region");
         pdfendpoint = getIntent().getStringExtra("pdfendpoint");
+        style = getIntent().getBooleanExtra("style", false);
         videocache = getIntent().getIntExtra("videocache", 40);
         videotime = getIntent().getIntExtra("videotime", 1);
         buffersize = getIntent().getIntExtra("buffersize", 2000);
@@ -64,9 +66,7 @@ public class BucketSelect extends AppCompatActivity {
         setContentView(R.layout.activity_bucket_select);
         region = Region.getRegion("us-east-1");
         s3ClientOptions = S3ClientOptions.builder().build();
-        if (!endpoint.contains(getResources().getString(R.string.aws_endpoint))) {
-            s3ClientOptions.setPathStyleAccess(true);
-        }
+        s3ClientOptions.setPathStyleAccess(style);
         myCredentials = new BasicAWSCredentials(username, password);
         s3client = new AmazonS3Client(myCredentials, region);
         s3client.setEndpoint(endpoint);
@@ -197,6 +197,7 @@ public class BucketSelect extends AppCompatActivity {
         intent.putExtra("treelevel", treelevel);
         intent.putExtra("region", location);
         intent.putExtra("pdfendpoint", pdfendpoint);
+        intent.putExtra("style", style);
         intent.putExtra("videocache", videocache);
         intent.putExtra("videotime", videotime);
         intent.putExtra("buffersize", buffersize);
@@ -294,6 +295,7 @@ public class BucketSelect extends AppCompatActivity {
         intent.putExtra("bucket", bucket);
         intent.putExtra("prefix", prefix);
         intent.putExtra("region", location);
+        intent.putExtra("style", style);
         startActivity(intent);
     }
 
@@ -306,6 +308,7 @@ public class BucketSelect extends AppCompatActivity {
         intent.putExtra("password", password);
         intent.putExtra("bucket", bucket);
         intent.putExtra("region", location);
+        intent.putExtra("style", style);
         startActivity(intent);
 
     }
@@ -316,6 +319,7 @@ public class BucketSelect extends AppCompatActivity {
         intent.putExtra("username", username);
         intent.putExtra("password", password);
         intent.putExtra("region", location);
+        intent.putExtra("style", style);
         startActivity(intent);
     }
 

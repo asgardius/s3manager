@@ -59,6 +59,7 @@ public class Uploader extends AppCompatActivity {
     Intent intent;
     Button fileUpload;
     Thread uploadFile, uploadProgress;
+    boolean style;
     boolean started = false;
     long transfered = 0;
     private static final long MAX_SINGLE_PART_UPLOAD_BYTES = 5 * 1024 * 1024;
@@ -79,13 +80,12 @@ public class Uploader extends AppCompatActivity {
         password = getIntent().getStringExtra("password");
         bucket = getIntent().getStringExtra("bucket");
         location = getIntent().getStringExtra("region");
+        style = getIntent().getBooleanExtra("style", false);
         prefix = getIntent().getStringExtra("prefix");
         fprefix = (EditText)findViewById(R.id.fprefix);
         region = Region.getRegion(location);
         s3ClientOptions = S3ClientOptions.builder().build();
-        if (!endpoint.contains(getResources().getString(R.string.aws_endpoint))) {
-            s3ClientOptions.setPathStyleAccess(true);
-        }
+        s3ClientOptions.setPathStyleAccess(style);
         myCredentials = new BasicAWSCredentials(username, password);
         s3client = new AmazonS3Client(myCredentials, region);
         s3client.setEndpoint(endpoint);

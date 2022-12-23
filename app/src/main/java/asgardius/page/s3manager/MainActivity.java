@@ -356,6 +356,7 @@ public class MainActivity extends AppCompatActivity {
         intent.putExtra("password", password);
         intent.putExtra("region", location);
         intent.putExtra("pdfendpoint", pdfendpoint);
+        intent.putExtra("style", style);
         intent.putExtra("videocache", videocache);
         intent.putExtra("videotime", videotime);
         intent.putExtra("buffersize", buffersize);

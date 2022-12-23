@@ -48,6 +48,7 @@ public class ObjectSelect extends AppCompatActivity {
     //ArrayList object;
     RecyclerView recyclerView;
     String username, password, endpoint, bucket, prefix, location, pdfendpoint, query;
+    boolean style;
     int treelevel;
     String[] filename;
     Region region;
@@ -67,6 +68,7 @@ public class ObjectSelect extends AppCompatActivity {
         bucket = getIntent().getStringExtra("bucket");
         location = getIntent().getStringExtra("region");
         pdfendpoint = getIntent().getStringExtra("pdfendpoint");
+        style = getIntent().getBooleanExtra("style", false);
         prefix = getIntent().getStringExtra("prefix");
         treelevel = getIntent().getIntExtra("treelevel", 0);
         videocache = getIntent().getIntExtra("videocache", 40);
@@ -84,9 +86,7 @@ public class ObjectSelect extends AppCompatActivity {
             Toast.makeText(getApplicationContext(),getResources().getString(R.string.media_list_fail), Toast.LENGTH_SHORT).show();
         }
         s3client.setEndpoint(endpoint);
-        if (!endpoint.contains(getResources().getString(R.string.aws_endpoint))) {
-            s3ClientOptions.setPathStyleAccess(true);
-        }
+        s3ClientOptions.setPathStyleAccess(style);
 
         s3client.setS3ClientOptions(s3ClientOptions);
 
@@ -496,6 +496,7 @@ public class ObjectSelect extends AppCompatActivity {
         intent.putExtra("treelevel", treelevel+1);
         intent.putExtra("region", location);
         intent.putExtra("pdfendpoint", pdfendpoint);
+        intent.putExtra("style", style);
         intent.putExtra("videocache", videocache);
         intent.putExtra("videotime", videotime);
         intent.putExtra("buffersize", buffersize);
@@ -516,6 +517,7 @@ public class ObjectSelect extends AppCompatActivity {
         intent.putExtra("region", location);
         intent.putExtra("mediafile", mediafile);
         intent.putExtra("videotime", videotime);
+        intent.putExtra("style", style);
         startActivity(intent);
 
     }
@@ -531,6 +533,7 @@ public class ObjectSelect extends AppCompatActivity {
         intent.putExtra("object", object);
         intent.putExtra("title", title);
         intent.putExtra("region", location);
+        intent.putExtra("style", style);
         startActivity(intent);
 
     }
@@ -641,6 +644,7 @@ public class ObjectSelect extends AppCompatActivity {
         intent.putExtra("bucket", bucket);
         intent.putExtra("prefix", prefix);
         intent.putExtra("region", location);
+        intent.putExtra("style", style);
         startActivity(intent);
     }
 
@@ -653,6 +657,7 @@ public class ObjectSelect extends AppCompatActivity {
         intent.putExtra("password", password);
         intent.putExtra("prefix", prefix);
         intent.putExtra("region", location);
+        intent.putExtra("style", style);
         intent.putExtra("bucket", bucket);
         startActivity(intent);
     }

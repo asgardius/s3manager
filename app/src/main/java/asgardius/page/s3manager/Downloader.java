@@ -45,6 +45,7 @@ public class Downloader extends AppCompatActivity {
     S3Object object;
     boolean started = false;
     boolean cancel = false;
+    boolean style;
     long filesize = 0;
     long transfered = 0;
     private WifiManager.WifiLock mWifiLock;
@@ -65,14 +66,13 @@ public class Downloader extends AppCompatActivity {
         password = getIntent().getStringExtra("password");
         bucket = getIntent().getStringExtra("bucket");
         location = getIntent().getStringExtra("region");
+        style = getIntent().getBooleanExtra("style", false);
         prefix = getIntent().getStringExtra("prefix");
         simpleProgressBar = (ProgressBar) findViewById(R.id.simpleProgressBar);
         fileDownload = (Button)findViewById(R.id.filedownload);
         region = Region.getRegion(location);
         s3ClientOptions = S3ClientOptions.builder().build();
-        if (!endpoint.contains(getResources().getString(R.string.aws_endpoint))) {
-            s3ClientOptions.setPathStyleAccess(true);
-        }
+        s3ClientOptions.setPathStyleAccess(style);
         myCredentials = new BasicAWSCredentials(username, password);
         s3client = new AmazonS3Client(myCredentials, region);
         s3client.setEndpoint(endpoint);

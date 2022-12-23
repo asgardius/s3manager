@@ -155,9 +155,7 @@ public class AccountAdd extends AppCompatActivity {
                                 }
                                 region = Region.getRegion("us-east-1");
                                 S3ClientOptions s3ClientOptions = S3ClientOptions.builder().build();
-                                if (!endpoint.contains(getResources().getString(R.string.aws_endpoint))) {
-                                    s3ClientOptions.setPathStyleAccess(true);
-                                }
+                                s3ClientOptions.setPathStyleAccess(pathstyle.isChecked());
                                 myCredentials = new BasicAWSCredentials(username, password);
                                 s3client = new AmazonS3Client(myCredentials, region);
                                 s3client.setEndpoint(endpoint);
