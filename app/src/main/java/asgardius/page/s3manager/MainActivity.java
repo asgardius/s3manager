@@ -227,17 +227,27 @@ public class MainActivity extends AppCompatActivity {
                             password = cursor.getString(2);
                             location = cursor.getString(3);
                             pdfendpoint = cursor.getString(4);
-                            if (cursor.getString(5).equals("1")) {
-                                style = true;
-                            } else {
+                            try {
+                                style = cursor.getString(5).equals("1");
+                            } catch (Exception e) {
+                                e.printStackTrace();
                                 style = false;
                             }
+
                             db.close();
                             //This launch file explorer using selected account
                             explorer();
                         }
                     } catch (Exception e) {
                         e.printStackTrace();
+                        try {
+                            db = dbHelper.getWritableDatabase();
+                            db.execSQL("alter table account add column style text");
+                            db.close();
+                        } catch (Exception f) {
+                            Toast.makeText(getApplicationContext(),getResources().getString(R.string.broken_database), Toast.LENGTH_SHORT).show();
+                            finish();
+                        }
                     }
 
                 }
@@ -270,9 +280,10 @@ public class MainActivity extends AppCompatActivity {
                                     password = cursor.getString(3);
                                     location = cursor.getString(4);
                                     pdfendpoint = cursor.getString(5);
-                                    if (cursor.getString(6).equals("1")) {
-                                        style = true;
-                                    } else {
+                                    try {
+                                        style = cursor.getString(6).equals("1");
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
                                         style = false;
                                     }
                                 }
@@ -282,6 +293,14 @@ public class MainActivity extends AppCompatActivity {
                                 //Toast.makeText(MainActivity.this, "This feature is not yet implemented", Toast.LENGTH_SHORT).show();
                             } catch (Exception e) {
                                 e.printStackTrace();
+                                try {
+                                    db = dbHelper.getWritableDatabase();
+                                    db.execSQL("alter table account add column style text");
+                                    db.close();
+                                } catch (Exception f) {
+                                    Toast.makeText(getApplicationContext(),getResources().getString(R.string.broken_database), Toast.LENGTH_SHORT).show();
+                                    finish();
+                                }
                             }
                         }
                         else if (menuItem.getTitle() == getResources().getString(R.string.accountdel_button)) {

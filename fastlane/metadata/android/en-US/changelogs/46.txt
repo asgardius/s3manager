@@ -1,0 +1,2 @@
+* Account edit screen redesign
+* Add option to choose between virtual host style and path style for buckets (virtual host will be used by default)
