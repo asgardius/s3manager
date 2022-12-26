@@ -18,6 +18,7 @@ Current feature list
 <li>file sharing links</li>
 <li>get object info</li>
 <li>get bucket info</li>
+<li>Set CORS policy</li>
 
 Planned feature list
 

@@ -1,0 +1,2 @@
+* CORS configuration (currently you can allow pdf endpoint, allow all origins or delete policy)
+* Fixed UI issues when using app in free form mode
