@@ -127,7 +127,7 @@ public class VideoPlayer extends AppCompatActivity {
                 new CacheDataSource.Factory()
                         .setCache(simpleCache)
                         .setUpstreamDataSourceFactory(new DefaultHttpDataSource.Factory()
-                                .setUserAgent("ExoplayerDemo"))
+                                .setUserAgent("S3 Manager"))
                         .setFlags(CacheDataSource.FLAG_IGNORE_CACHE_ON_ERROR)
         ).createMediaSource(MediaItem.fromUri(Uri.parse(videoURL)));
         playerView.setPlayer(player);
