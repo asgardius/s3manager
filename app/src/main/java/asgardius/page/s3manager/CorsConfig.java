@@ -19,10 +19,13 @@ import com.amazonaws.services.s3.model.ListObjectsRequest;
 import com.amazonaws.services.s3.model.ObjectListing;
 import com.amazonaws.services.s3.model.S3ObjectSummary;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.List;
 
 public class CorsConfig extends AppCompatActivity {
-    String username, password, endpoint, bucket, location, title, pdfendpoint;
+    String username, password, endpoint, bucket, location, title;
+    URI pdfendpoint;
     Region region;
     S3ClientOptions s3ClientOptions;
     AWSCredentials myCredentials;
@@ -43,7 +46,11 @@ public class CorsConfig extends AppCompatActivity {
         bucket = getIntent().getStringExtra("bucket");
         style = getIntent().getBooleanExtra("style", false);
         location = getIntent().getStringExtra("region");
-        pdfendpoint = getIntent().getStringExtra("pdfendpoint");
+        try {
+            pdfendpoint = new URI(getIntent().getStringExtra("pdfendpoint"));
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        }
         getSupportActionBar().setTitle(bucket+"/");
         region = Region.getRegion(location);
         s3ClientOptions = S3ClientOptions.builder().build();
@@ -73,7 +80,7 @@ public class CorsConfig extends AppCompatActivity {
                                 System.out.println("AllowedMethod: "+rule.getAllowedMethods());
                                 if (rule.getAllowedOrigins().toString().equals("[*]")) {
                                     allorigins = true;
-                                } else if (rule.getAllowedOrigins().toString().equals("["+pdfendpoint+"]")) {
+                                } else if (rule.getAllowedOrigins().toString().equals("[https://"+pdfendpoint.getHost()+"]")) {
                                     pdfcompatible = true;
                                 }
                             }
