@@ -107,4 +107,6 @@
     <string name="allow_all">Allow all</string>
     <string name="allow_pdf">Allow pdf</string>
     <string name="delete_cors">Delete CORS</string>
+    <string name="cors_error">Cannot change CORS policy</string>
+    <string name="cors_ok">CORS policy changed successfully</string>
 </resources>

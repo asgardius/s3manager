@@ -104,4 +104,6 @@
     <string name="allow_all">Permitir todo</string>
     <string name="allow_pdf">Permitir pdf</string>
     <string name="delete_cors">Eliminar CORS</string>
+    <string name="cors_error">No se pudo cambiar la política CORS</string>
+    <string name="cors_ok">Política CORS cambiada exitosamente</string>
 </resources>

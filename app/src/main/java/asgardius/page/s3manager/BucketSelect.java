@@ -123,7 +123,7 @@ public class BucketSelect extends AppCompatActivity {
 
                         @Override
                         public void run() {
-                            Toast.makeText(getApplicationContext(),getResources().getString(R.string.media_list_fail), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getApplicationContext(),e.toString(), Toast.LENGTH_SHORT).show();
                         }
                     });
                     //Toast.makeText(getApplicationContext(),getResources().getString(R.string.media_list_fail), Toast.LENGTH_SHORT).show();

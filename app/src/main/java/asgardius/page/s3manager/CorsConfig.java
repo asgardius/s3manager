@@ -22,6 +22,7 @@ import com.amazonaws.services.s3.model.S3ObjectSummary;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class CorsConfig extends AppCompatActivity {
@@ -36,6 +37,7 @@ public class CorsConfig extends AppCompatActivity {
     boolean allorigins, pdfcompatible, found = false;
     TextView origins;
     Button allowall, allowpdf, deletecors;
+    BucketCrossOriginConfiguration corsconfig;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,8 +83,8 @@ public class CorsConfig extends AppCompatActivity {
                         if (!corsRules.isEmpty()) {
                             found = true;
                             for (CORSRule rule: corsRules) {
-                                System.out.println("allowOrigins: "+rule.getAllowedOrigins());
-                                System.out.println("AllowedMethod: "+rule.getAllowedMethods());
+                                //System.out.println("allowOrigins: "+rule.getAllowedOrigins());
+                                //System.out.println("AllowedMethod: "+rule.getAllowedMethods());
                                 if (rule.getAllowedOrigins().toString().equals("[*]")) {
                                     allorigins = true;
                                 } else if (rule.getAllowedOrigins().toString().contains("https://"+pdfendpoint.getHost())) {
@@ -106,6 +108,7 @@ public class CorsConfig extends AppCompatActivity {
                             } else if (found) {
                                 origins.setText(getResources().getString(R.string.cors_npdf));
                                 deletecors.setVisibility(View.VISIBLE);
+                                allowpdf.setVisibility(View.VISIBLE);
                                 allowall.setVisibility(View.VISIBLE);
                             } else {
                                 origins.setText(getResources().getString(R.string.cors_none));
@@ -130,5 +133,140 @@ public class CorsConfig extends AppCompatActivity {
             }
         });
         getCors.start();
+        allowall.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                //buttonaction
+                setAllowall();
+            }
+        });
+        allowpdf.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                //buttonaction
+                setAllowpdf();
+            }
+        });
+        deletecors.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                //buttonaction
+                setDeletecors();
+            }
+        });
+    }
+
+    public void setAllowall() {
+        Thread addAll = new Thread(new Runnable() {
+
+            @Override
+            public void run() {
+                try  {
+                    //Your code goes here
+                    List<CORSRule.AllowedMethods> allowMethods = new ArrayList<>();
+                    allowMethods.add(CORSRule.AllowedMethods.GET);
+                    List<String> allowOrigins = new ArrayList<>();
+                    allowOrigins.add("*");
+                    CORSRule corsRules = new CORSRule().withAllowedMethods(allowMethods).withAllowedOrigins(allowOrigins);
+                    corsconfig = new BucketCrossOriginConfiguration().withRules(corsRules);
+                    s3client.setBucketCrossOriginConfiguration(bucket, corsconfig);
+
+                    runOnUiThread(new Runnable() {
+
+                        @Override
+                        public void run() {
+                            Toast.makeText(getApplicationContext(),getResources().getString(R.string.cors_ok), Toast.LENGTH_SHORT).show();
+                            finish();
+                        }
+                    });
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    runOnUiThread(new Runnable() {
+
+                        @Override
+                        public void run() {
+                            Toast.makeText(getApplicationContext(),getResources().getString(R.string.cors_error), Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                    //Toast.makeText(getApplicationContext(),getResources().getString(R.string.media_list_fail), Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+        addAll.start();
+    }
+
+    public void setAllowpdf() {
+        Thread addPdf = new Thread(new Runnable() {
+
+            @Override
+            public void run() {
+                try  {
+                    //Your code goes here
+                    List<CORSRule.AllowedMethods> allowMethods = new ArrayList<>();
+                    allowMethods.add(CORSRule.AllowedMethods.GET);
+                    List<String> allowOrigins = new ArrayList<>();
+                    allowOrigins.add("https://"+pdfendpoint.getHost());
+                    CORSRule corsRules = new CORSRule().withAllowedMethods(allowMethods).withAllowedOrigins(allowOrigins);
+                    corsconfig = new BucketCrossOriginConfiguration().withRules(corsRules);
+                    s3client.setBucketCrossOriginConfiguration(bucket, corsconfig);
+
+                    runOnUiThread(new Runnable() {
+
+                        @Override
+                        public void run() {
+                            Toast.makeText(getApplicationContext(),getResources().getString(R.string.cors_ok), Toast.LENGTH_SHORT).show();
+                            finish();
+                        }
+                    });
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    runOnUiThread(new Runnable() {
+
+                        @Override
+                        public void run() {
+                            Toast.makeText(getApplicationContext(),getResources().getString(R.string.cors_error), Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                    //Toast.makeText(getApplicationContext(),getResources().getString(R.string.media_list_fail), Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+        addPdf.start();
+    }
+
+    public void setDeletecors() {
+        Thread delCors = new Thread(new Runnable() {
+
+            @Override
+            public void run() {
+                try  {
+                    //Your code goes here
+                    s3client.deleteBucketCrossOriginConfiguration(bucket);
+
+                    runOnUiThread(new Runnable() {
+
+                        @Override
+                        public void run() {
+                            Toast.makeText(getApplicationContext(),getResources().getString(R.string.cors_ok), Toast.LENGTH_SHORT).show();
+                            finish();
+                        }
+                    });
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    runOnUiThread(new Runnable() {
+
+                        @Override
+                        public void run() {
+                            Toast.makeText(getApplicationContext(),getResources().getString(R.string.cors_error), Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                    //Toast.makeText(getApplicationContext(),getResources().getString(R.string.media_list_fail), Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+        delCors.start();
     }
 }
