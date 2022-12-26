@@ -98,4 +98,9 @@
     <string name="playback_channel_name">Video Playback</string>
     <string name="not_zero">This value cannot be zero</string>
     <string name="path_style">Path style access</string>
+    <string name="cors_config">CORS policy</string>
+    <string name="cors_status">Allowed origins</string>
+    <string name="cors_all">All origins allowed</string>
+    <string name="cors_pdf">PDF Endpoint allowed</string>
+    <string name="cors_none">PDF Endpoint not allowed</string>
 </resources>

@@ -171,6 +171,8 @@ public class BucketSelect extends AppCompatActivity {
 
                             } else if (menuItem.getTitle() == getResources().getString(R.string.object_info)) {
                                 objectInfo(Name.get(position).toString());
+                            } else if (menuItem.getTitle() == getResources().getString(R.string.cors_config)) {
+                                corsConfig(Name.get(position).toString());
                             } else if (menuItem.getTitle() == getResources().getString(R.string.file_del)) {
                                 //Toast.makeText(BucketSelect.this, getResources().getString(R.string.pending_feature), Toast.LENGTH_SHORT).show();
                                 delete(prefix + Name.get(position).toString());
@@ -320,6 +322,18 @@ public class BucketSelect extends AppCompatActivity {
         intent.putExtra("password", password);
         intent.putExtra("region", location);
         intent.putExtra("style", style);
+        startActivity(intent);
+    }
+
+    private void corsConfig(String bucket) {
+        Intent intent = new Intent(this, CorsConfig.class);
+        intent.putExtra("endpoint", endpoint);
+        intent.putExtra("username", username);
+        intent.putExtra("password", password);
+        intent.putExtra("bucket", bucket);
+        intent.putExtra("region", location);
+        intent.putExtra("style", style);
+        intent.putExtra("pdfendpoint", pdfendpoint);
         startActivity(intent);
     }
 

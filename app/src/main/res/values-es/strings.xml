@@ -95,4 +95,9 @@
     <string name="playback_channel_name">Reproduccion de video</string>
     <string name="not_zero">este valor no puede ser cero</string>
     <string name="path_style">Acceso de estilo de ruta</string>
+    <string name="cors_config">Política CORS</string>
+    <string name="cors_status">Orígenes permitidos</string>
+    <string name="cors_all">Permitidos todos los orígenes</string>
+    <string name="cors_pdf">Permitido el uso de endpoint PDF</string>
+    <string name="cors_none">Uso de endpoint PDF permitido</string>
 </resources>
