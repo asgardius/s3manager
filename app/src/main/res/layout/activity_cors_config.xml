@@ -8,13 +8,6 @@
     tools:context=".CorsConfig">
 
     <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/cors_status"
-        android:textAlignment="center"
-        android:textSize="30sp" />
-
-    <TextView
         android:id="@+id/origins"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

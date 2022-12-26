@@ -29,7 +29,7 @@ public class CorsConfig extends AppCompatActivity {
     AmazonS3 s3client;
     BucketCrossOriginConfiguration bucketcors;
     boolean style;
-    boolean allorigins, pdfcompatible = false;
+    boolean allorigins, pdfcompatible, found = false;
     TextView origins;
 
     @Override
@@ -66,13 +66,16 @@ public class CorsConfig extends AppCompatActivity {
                     bucketcors = s3client.getBucketCrossOriginConfiguration(bucket);
                     if (bucketcors != null) {
                         List<CORSRule> corsRules = bucketcors.getRules();
-                        for (CORSRule rule: corsRules) {
-                            System.out.println("allowOrigins: "+rule.getAllowedOrigins());
-                            System.out.println("AllowedMethod: "+rule.getAllowedMethods());
-                            if (rule.getAllowedOrigins().toString().equals("[*]")) {
-                                allorigins = true;
-                            } else if (rule.getAllowedOrigins().toString().equals("["+pdfendpoint+"]")) {
-                                pdfcompatible = true;
+                        if (!corsRules.isEmpty()) {
+                            found = true;
+                            for (CORSRule rule: corsRules) {
+                                System.out.println("allowOrigins: "+rule.getAllowedOrigins());
+                                System.out.println("AllowedMethod: "+rule.getAllowedMethods());
+                                if (rule.getAllowedOrigins().toString().equals("[*]")) {
+                                    allorigins = true;
+                                } else if (rule.getAllowedOrigins().toString().equals("["+pdfendpoint+"]")) {
+                                    pdfcompatible = true;
+                                }
                             }
                         }
                     }
@@ -85,6 +88,8 @@ public class CorsConfig extends AppCompatActivity {
                                 origins.setText(getResources().getString(R.string.cors_all));
                             } else if (pdfcompatible) {
                                 origins.setText(getResources().getString(R.string.cors_pdf));
+                            } else if (found) {
+                                origins.setText(getResources().getString(R.string.cors_npdf));
                             } else {
                                 origins.setText(getResources().getString(R.string.cors_none));
                             }

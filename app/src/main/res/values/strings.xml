@@ -102,5 +102,6 @@
     <string name="cors_status">Allowed origins</string>
     <string name="cors_all">All origins allowed</string>
     <string name="cors_pdf">PDF Endpoint allowed</string>
-    <string name="cors_none">PDF Endpoint not allowed</string>
+    <string name="cors_npdf">PDF Endpoint not allowed</string>
+    <string name="cors_none">CORS policy not found</string>
 </resources>

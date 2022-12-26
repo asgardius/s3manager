@@ -98,6 +98,7 @@
     <string name="cors_config">Política CORS</string>
     <string name="cors_status">Orígenes permitidos</string>
     <string name="cors_all">Permitidos todos los orígenes</string>
-    <string name="cors_pdf">Permitido el uso de endpoint PDF</string>
-    <string name="cors_none">Uso de endpoint PDF permitido</string>
+    <string name="cors_pdf">Uso de endpoint PDF permitido</string>
+    <string name="cors_npdf">Uso de endpoint PDF no permitido</string>
+    <string name="cors_none">Política CORS no encontrada</string>
 </resources>
