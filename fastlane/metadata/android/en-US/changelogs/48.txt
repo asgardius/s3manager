@@ -1,0 +1,1 @@
+* Fixed Picture in Picture issue when playing anamorphic videos
