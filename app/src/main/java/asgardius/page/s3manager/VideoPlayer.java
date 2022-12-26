@@ -267,7 +267,7 @@ public class VideoPlayer extends AppCompatActivity {
                 playerView.setUseController(false);
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                     if(player.getVideoFormat() != null) {
-                        ratio = new Rational(player.getVideoFormat().width, player.getVideoFormat().height);
+                        ratio = new Rational(Math.round(player.getVideoFormat().width*20*player.getVideoSize().pixelWidthHeightRatio), Math.round(player.getVideoFormat().height*20));
                     } else if(player.getAudioFormat() != null) {
                         ratio = new Rational(player.getAudioFormat().width, player.getAudioFormat().height);
                     } else {
