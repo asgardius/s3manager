@@ -7,48 +7,59 @@
     android:orientation="vertical"
     tools:context=".MainActivity">
 
-
-    <LinearLayout
-        android:id="@+id/linearLayout"
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="70dp"
-        android:layout_margin="20dp"
-        android:orientation="horizontal"
-        tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="20dp">
+        android:layout_height="wrap_content">
 
-        <Button
-            android:id="@+id/addaccount"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:text="@string/accountadd_button"
-            tools:ignore="MissingConstraints"
-            style="?android:attr/buttonStyle" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-        <Button
-            android:id="@+id/settings_button"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:text="@string/settings"
-            tools:ignore="MissingConstraints"
-            style="?android:attr/buttonStyle" />
+            <LinearLayout
+                android:id="@+id/linearLayout"
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
+                android:layout_margin="20dp"
+                android:orientation="horizontal"
+                tools:ignore="MissingConstraints"
+                tools:layout_editor_absoluteX="20dp">
 
-    </LinearLayout>
+                <Button
+                    android:id="@+id/addaccount"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:text="@string/accountadd_button"
+                    tools:ignore="MissingConstraints"
+                    style="?android:attr/buttonStyle" />
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/accountselect"
-        android:textAlignment="center"
-        android:textSize="25sp" />
+                <Button
+                    android:id="@+id/settings_button"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:text="@string/settings"
+                    tools:ignore="MissingConstraints"
+                    style="?android:attr/buttonStyle" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/alist"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:contentDescription="@string/account_list"
-        tools:layout_editor_absoluteX="27dp" />
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/accountselect"
+                android:textAlignment="center"
+                android:textSize="25sp" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/alist"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:contentDescription="@string/account_list"
+                tools:layout_editor_absoluteX="27dp" />
+
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
 
 </LinearLayout>
