@@ -104,4 +104,7 @@
     <string name="cors_pdf">PDF Endpoint allowed</string>
     <string name="cors_npdf">PDF Endpoint not allowed</string>
     <string name="cors_none">CORS policy not found</string>
+    <string name="allow_all">Allow all</string>
+    <string name="allow_pdf">Allow pdf</string>
+    <string name="delete_cors">Delete CORS</string>
 </resources>

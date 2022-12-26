@@ -22,6 +22,7 @@ public class Settings extends AppCompatActivity {
     SQLiteDatabase db;
     String videocache, videotime, buffersize;
     EditText vcachepick, vtimepick, bsizepick;
+    Button saveprefs, about;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,7 +85,7 @@ public class Settings extends AppCompatActivity {
         getprefs.start();
 
         //This is to add new user account
-        Button saveprefs = (Button)findViewById(R.id.saveprefs);
+        saveprefs = (Button)findViewById(R.id.saveprefs);
         saveprefs.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
@@ -119,7 +120,7 @@ public class Settings extends AppCompatActivity {
         });
 
         //This is to view app credits
-        Button about = (Button)findViewById(R.id.settings_button);
+        about = (Button)findViewById(R.id.settings_button);
         about.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {

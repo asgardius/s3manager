@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -34,6 +35,7 @@ public class CorsConfig extends AppCompatActivity {
     boolean style;
     boolean allorigins, pdfcompatible, found = false;
     TextView origins;
+    Button allowall, allowpdf, deletecors;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +48,9 @@ public class CorsConfig extends AppCompatActivity {
         bucket = getIntent().getStringExtra("bucket");
         style = getIntent().getBooleanExtra("style", false);
         location = getIntent().getStringExtra("region");
+        allowall = (Button)findViewById(R.id.allow_all);
+        allowpdf = (Button)findViewById(R.id.allow_pdf);
+        deletecors = (Button)findViewById(R.id.delete_cors);
         try {
             pdfendpoint = new URI(getIntent().getStringExtra("pdfendpoint"));
         } catch (URISyntaxException e) {
@@ -80,7 +85,7 @@ public class CorsConfig extends AppCompatActivity {
                                 System.out.println("AllowedMethod: "+rule.getAllowedMethods());
                                 if (rule.getAllowedOrigins().toString().equals("[*]")) {
                                     allorigins = true;
-                                } else if (rule.getAllowedOrigins().toString().equals("[https://"+pdfendpoint.getHost()+"]")) {
+                                } else if (rule.getAllowedOrigins().toString().contains("https://"+pdfendpoint.getHost())) {
                                     pdfcompatible = true;
                                 }
                             }
@@ -93,12 +98,19 @@ public class CorsConfig extends AppCompatActivity {
                         public void run() {
                             if (allorigins) {
                                 origins.setText(getResources().getString(R.string.cors_all));
+                                deletecors.setVisibility(View.VISIBLE);
                             } else if (pdfcompatible) {
                                 origins.setText(getResources().getString(R.string.cors_pdf));
+                                deletecors.setVisibility(View.VISIBLE);
+                                allowall.setVisibility(View.VISIBLE);
                             } else if (found) {
                                 origins.setText(getResources().getString(R.string.cors_npdf));
+                                deletecors.setVisibility(View.VISIBLE);
+                                allowall.setVisibility(View.VISIBLE);
                             } else {
                                 origins.setText(getResources().getString(R.string.cors_none));
+                                allowall.setVisibility(View.VISIBLE);
+                                allowpdf.setVisibility(View.VISIBLE);
                             }
                         }
                     });

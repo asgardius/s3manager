@@ -101,4 +101,7 @@
     <string name="cors_pdf">Uso de endpoint PDF permitido</string>
     <string name="cors_npdf">Uso de endpoint PDF no permitido</string>
     <string name="cors_none">Política CORS no encontrada</string>
+    <string name="allow_all">Permitir todo</string>
+    <string name="allow_pdf">Permitir pdf</string>
+    <string name="delete_cors">Eliminar CORS</string>
 </resources>
