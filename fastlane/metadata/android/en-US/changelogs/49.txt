@@ -1,0 +1,1 @@
+* Fixed video being closed when app is on freeform mode

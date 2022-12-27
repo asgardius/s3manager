@@ -355,7 +355,7 @@ public class VideoPlayer extends AppCompatActivity {
                     AppOpsManager.OPSTR_PICTURE_IN_PICTURE,
                     this.getPackageManager().getApplicationInfo(this.getPackageName(),
                             PackageManager.GET_META_DATA).uid, this.getPackageName())
-                    == AppOpsManager.MODE_ALLOWED && isScreenOn(this)) {
+                    == AppOpsManager.MODE_ALLOWED && isScreenOn(this) && this.isInPictureInPictureMode()) {
                 finish();
             }
         } catch (PackageManager.NameNotFoundException e) {
