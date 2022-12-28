@@ -119,7 +119,7 @@ public class Share extends AppCompatActivity {
                         minute = Integer.parseInt(minutepick.getText().toString());
                     }
                     expiration = new Date();
-                    System.out.println("today is " + mycal.getTime());
+                    //System.out.println("today is " + mycal.getTime());
                     mycal.setTime(expiration);
                     if (date == 0 && hour == 0 && minute == 0) {
                         if (mediafile) {
@@ -132,7 +132,7 @@ public class Share extends AppCompatActivity {
                         mycal.add(Calendar.HOUR, hour);
                         mycal.add(Calendar.MINUTE, minute);
                     }
-                    System.out.println("Expiration date: " + mycal.getTime());
+                    //System.out.println("Expiration date: " + mycal.getTime());
                     expiration = mycal.getTime();
                     //System.out.println(expiration);
                     request = new GeneratePresignedUrlRequest(bucket, object).withExpiration(expiration);

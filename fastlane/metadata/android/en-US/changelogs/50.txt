@@ -1,0 +1,3 @@
+* Freeform mode improvements
+* User interface more consistent
+* File sharing easier to use
