@@ -16,34 +16,21 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <LinearLayout
-                android:id="@+id/linearLayout"
+            <Button
+                android:id="@+id/addaccount"
                 android:layout_width="match_parent"
                 android:layout_height="70dp"
-                android:layout_margin="20dp"
-                android:orientation="horizontal"
+                android:text="@string/accountadd_button"
                 tools:ignore="MissingConstraints"
-                tools:layout_editor_absoluteX="20dp">
+                style="?android:attr/buttonStyle" />
 
-                <Button
-                    android:id="@+id/addaccount"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:text="@string/accountadd_button"
-                    tools:ignore="MissingConstraints"
-                    style="?android:attr/buttonStyle" />
-
-                <Button
-                    android:id="@+id/settings_button"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:text="@string/settings"
-                    tools:ignore="MissingConstraints"
-                    style="?android:attr/buttonStyle" />
-
-            </LinearLayout>
+            <Button
+                android:id="@+id/settings_button"
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
+                android:text="@string/settings"
+                tools:ignore="MissingConstraints"
+                style="?android:attr/buttonStyle" />
 
             <TextView
                 android:layout_width="match_parent"

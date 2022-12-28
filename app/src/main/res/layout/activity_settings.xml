@@ -69,17 +69,13 @@
                 android:id="@+id/saveprefs"
                 android:layout_width="match_parent"
                 android:layout_height="70dp"
-                android:text="@string/save_settings"
-                android:textColor="?android:attr/colorBackground"
-                android:textSize="24sp" />
+                android:text="@string/save_settings" />
 
             <Button
                 android:id="@+id/settings_button"
                 android:layout_width="match_parent"
                 android:layout_height="70dp"
-                android:text="@string/about_button"
-                android:textColor="?android:attr/colorBackground"
-                android:textSize="24sp" />
+                android:text="@string/about_button" />
 
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>

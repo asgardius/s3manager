@@ -74,7 +74,7 @@
     <string name="share_hour">HH</string>
     <string name="share_minute">MM</string>
     <string name="expiration_date">Fecha de expiración</string>
-    <string name="expiration_time">Hora de expiración</string>
+    <string name="expiration_time">Expira dentro de</string>
     <string name="create_link">Crear enlace al archivo</string>
     <string name="invalid_expiration_date">La fecha de caducidad debe ser inferior a 7 días</string>
     <string name="file_size">Tamaño del archivo</string>

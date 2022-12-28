@@ -19,7 +19,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/expiration_date"
+                android:text="@string/expiration_time"
                 android:textAlignment="center"
                 android:textSize="25sp" />
 
@@ -43,48 +43,6 @@
                     android:inputType="date"
                     android:textColorHint="?attr/colorOnSecondary"
                     tools:ignore="MissingConstraints" />
-
-                <EditText
-                    android:id="@+id/Month"
-                    android:layout_width="0dp"
-                    android:layout_height="48dp"
-                    android:layout_weight="1"
-                    android:focusable="true"
-                    android:hint="@string/share_month"
-                    android:maxLength="2"
-                    android:inputType="date"
-                    android:textColorHint="?attr/colorOnSecondary"
-                    tools:ignore="MissingConstraints" />
-
-                <EditText
-                    android:id="@+id/Year"
-                    android:layout_width="0dp"
-                    android:layout_height="48dp"
-                    android:layout_weight="1"
-                    android:focusable="true"
-                    android:hint="@string/share_year"
-                    android:maxLength="4"
-                    android:inputType="date"
-                    android:textColorHint="?attr/colorOnSecondary"
-                    tools:ignore="MissingConstraints" />
-
-            </LinearLayout>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/expiration_time"
-                android:textAlignment="center"
-                android:textSize="25sp" />
-
-            <LinearLayout
-                android:id="@+id/linearLayoutTime"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:padding="10dp"
-                tools:ignore="MissingConstraints"
-                tools:layout_editor_absoluteX="20dp">
 
                 <EditText
                     android:id="@+id/Hour"
@@ -112,32 +70,12 @@
 
             </LinearLayout>
 
-            <LinearLayout
-                android:id="@+id/linearLayoutSubmit"
+            <Button
+                android:id="@+id/share"
                 android:layout_width="match_parent"
                 android:layout_height="70dp"
-                android:layout_margin="20dp"
-                android:orientation="horizontal"
-                tools:ignore="MissingConstraints"
-                tools:layout_editor_absoluteX="20dp">
-
-                <Button
-                    android:id="@+id/share"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:text="@string/file_share"
-                    tools:ignore="MissingConstraints" />
-
-                <Button
-                    android:id="@+id/open_in"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:text="@string/file_external"
-                    tools:ignore="MissingConstraints" />
-
-            </LinearLayout>
+                android:text="@string/file_share"
+                tools:ignore="MissingConstraints" />
 
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>

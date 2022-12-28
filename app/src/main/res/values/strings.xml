@@ -9,7 +9,7 @@
     <string name="object_list">Object list</string>
     <string name="Image">Image</string>
     <string name="expiration_date">Expiration date</string>
-    <string name="expiration_time">Expiration time</string>
+    <string name="expiration_time">Expires within</string>
     <string name="share_hour">HH</string>
     <string name="share_minute">MM</string>
     <string name="share_date">DD</string>

@@ -129,17 +129,13 @@
                 android:id="@+id/addaccount"
                 android:layout_width="match_parent"
                 android:layout_height="70dp"
-                android:text="@string/accountadd_button"
-                android:textColor="?android:attr/colorBackground"
-                android:textSize="24sp" />
+                android:text="@string/accountadd_button" />
 
             <Button
                 android:id="@+id/testaccount"
                 android:layout_width="match_parent"
                 android:layout_height="70dp"
-                android:text="@string/accounttest_button"
-                android:textColor="?android:attr/colorBackground"
-                android:textSize="24sp" />
+                android:text="@string/accounttest_button" />
 
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
