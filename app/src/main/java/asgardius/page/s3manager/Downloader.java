@@ -45,6 +45,7 @@ public class Downloader extends AppCompatActivity {
     S3Object object;
     boolean started = false;
     boolean cancel = false;
+    boolean isfolder = false;
     boolean style;
     long filesize = 0;
     long transfered = 0;
@@ -201,12 +202,16 @@ public class Downloader extends AppCompatActivity {
     private void performFileSearch(String messageTitle) {
         //uri = Uri.parse("content://com.android.externalstorage.documents/document/home");
         intent = new Intent();
-        intent.setAction(Intent.ACTION_CREATE_DOCUMENT);
-        //intent.addCategory(Intent.CATEGORY_OPENABLE);
-        //intent.putExtra(Intent.EXTRA_LOCAL_ONLY, true);
-        //intent.putExtra("android.provider.extra.INITIAL_URI", uri);
-        intent.putExtra(Intent.EXTRA_TITLE, filename);
-        intent.setType("*/*");
+        if (isfolder) {
+            intent.setAction(Intent.ACTION_OPEN_DOCUMENT_TREE);
+        } else {
+            intent.setAction(Intent.ACTION_CREATE_DOCUMENT);
+            //intent.addCategory(Intent.CATEGORY_OPENABLE);
+            //intent.putExtra(Intent.EXTRA_LOCAL_ONLY, true);
+            //intent.putExtra("android.provider.extra.INITIAL_URI", uri);
+            intent.putExtra(Intent.EXTRA_TITLE, filename);
+            intent.setType("*/*");
+        }
         ((Activity) this).startActivityForResult(intent, 50);
     }
 
