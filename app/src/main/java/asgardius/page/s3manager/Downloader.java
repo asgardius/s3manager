@@ -120,7 +120,7 @@ public class Downloader extends AppCompatActivity {
                     //System.out.println(fkey);
                     object = s3client.getObject(bucket, prefix+filename);
                     filesize = (object.getObjectMetadata().getContentLength())/1024;
-                    writeContentToFile(fileuri);
+                    writeContentToFile(fileuri, object);
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -243,7 +243,7 @@ public class Downloader extends AppCompatActivity {
         }
     }
 
-    private void writeContentToFile(Uri uri) throws IOException {
+    private void writeContentToFile(Uri uri, S3Object object) throws IOException {
         try (
                 final InputStream in = object.getObjectContent();
                 final OutputStream out = getContentResolver().openOutputStream(uri);
