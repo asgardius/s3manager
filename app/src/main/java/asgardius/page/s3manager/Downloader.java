@@ -3,6 +3,7 @@ package asgardius.page.s3manager;
 import static android.content.ContentValues.TAG;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.documentfile.provider.DocumentFile;
 
 import android.app.Activity;
 import android.content.Context;
@@ -33,7 +34,7 @@ import java.io.OutputStream;
 
 public class Downloader extends AppCompatActivity {
     String username, password, endpoint, bucket, filename, prefix, location;
-    Uri fileuri;
+    Uri fileuri, filepath;
     Region region;
     S3ClientOptions s3ClientOptions;
     AWSCredentials myCredentials;
@@ -43,6 +44,7 @@ public class Downloader extends AppCompatActivity {
     Button fileDownload;
     Thread downloadFile, downloadProgress;
     S3Object object;
+    DocumentFile document;
     boolean started = false;
     boolean cancel = false;
     boolean isfolder = false;
@@ -118,9 +120,15 @@ public class Downloader extends AppCompatActivity {
                     //Your code goes here
                     //s3client.createBucket(bucket, location);
                     //System.out.println(fkey);
+                    document = DocumentFile.fromTreeUri(getApplicationContext(), fileuri);
                     object = s3client.getObject(bucket, prefix+filename);
                     filesize = (object.getObjectMetadata().getContentLength())/1024;
-                    writeContentToFile(fileuri, object);
+                    if (isfolder) {
+                        filepath = document.createFile(null, filename).getUri();
+                        writeContentToFile(filepath, object);
+                    } else {
+                        writeContentToFile(fileuri, object);
+                    }
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
