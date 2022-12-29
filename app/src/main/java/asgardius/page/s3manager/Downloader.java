@@ -41,6 +41,7 @@ public class Downloader extends AppCompatActivity {
     String username, password, endpoint, bucket, filename, prefix, location;
     Uri fileuri, filepath;
     Region region;
+    String[] folder;
     S3ClientOptions s3ClientOptions;
     AWSCredentials myCredentials;
     AmazonS3 s3client;
@@ -128,7 +129,6 @@ public class Downloader extends AppCompatActivity {
                     //s3client.createBucket(bucket, location);
                     //System.out.println(fkey);
                     if (isfolder) {
-                        document = DocumentFile.fromTreeUri(getApplicationContext(), fileuri);
                         if (prefix == null) {
                             orequest = new ListObjectsRequest().withBucketName(bucket).withMaxKeys(1000);
                         } else {
@@ -161,8 +161,22 @@ public class Downloader extends AppCompatActivity {
 
                         }
                         for (String os : objectlist) {
+                            document = DocumentFile.fromTreeUri(getApplicationContext(), fileuri);
                             object = s3client.getObject(bucket, os);
-                            filepath = document.createFile(null, os.replace(prefix, "")).getUri();
+                            if (os.replace(prefix, "").contains("/")) {
+                                folder = os.replace(prefix, "").split("/");
+                                for (int i = 0; i < folder.length-1; i++) {
+                                    DocumentFile subfolder = document.findFile(folder[i].replace("/", ""));
+                                    if (subfolder != null) {
+                                        document = subfolder;
+                                    } else {
+                                        document = document.createDirectory(folder[i].replace("/", ""));
+                                    }
+                                }
+                                filepath = document.createFile(null, folder[folder.length-1]).getUri();
+                            } else {
+                                filepath = document.createFile(null, os.replace(prefix, "")).getUri();
+                            }
                             writeContentToFile(filepath, object);
                         }
                     } else {
