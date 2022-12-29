@@ -6,6 +6,10 @@
         android:title="@string/upload_file_tobucket" />
 
     <item
+        android:id="@+id/download_bucket"
+        android:title="@string/download_bucket" />
+
+    <item
         android:id="@+id/newbucket"
         android:title="@string/create_bucket" />
 

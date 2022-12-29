@@ -80,7 +80,7 @@ public class ObjectInfo extends AppCompatActivity {
                     //Your code goes here
                     if (object == null) {
                         isobject = false;
-                        orequest = new ListObjectsRequest().withBucketName(bucket).withMaxKeys(8000);
+                        orequest = new ListObjectsRequest().withBucketName(bucket).withMaxKeys(1000);
                     } else {
                         isobject = true;
                         if (object.endsWith("/")) {
@@ -88,7 +88,7 @@ public class ObjectInfo extends AppCompatActivity {
                         } else {
                             isfolder = false;
                         }
-                        orequest = new ListObjectsRequest().withBucketName(bucket).withPrefix(object).withMaxKeys(8000);
+                        orequest = new ListObjectsRequest().withBucketName(bucket).withPrefix(object).withMaxKeys(1000);
                     }
                     ObjectListing result = s3client.listObjects(orequest);
                     List<S3ObjectSummary> objects = result.getObjectSummaries();

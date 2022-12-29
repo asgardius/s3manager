@@ -655,7 +655,6 @@ public class ObjectSelect extends AppCompatActivity {
         intent.putExtra("endpoint", endpoint);
         intent.putExtra("username", username);
         intent.putExtra("password", password);
-        intent.putExtra("prefix", prefix);
         intent.putExtra("region", location);
         intent.putExtra("style", style);
         intent.putExtra("bucket", bucket);

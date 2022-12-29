@@ -163,6 +163,10 @@ public class BucketSelect extends AppCompatActivity {
                                 //Toast.makeText(BucketSelect.this, getResources().getString(R.string.pending_feature), Toast.LENGTH_SHORT).show();
                                 upload(Name.get(position).toString());
 
+                            } else if (menuItem.getTitle() == getResources().getString(R.string.download_bucket)) {
+                                //Toast.makeText(BucketSelect.this, getResources().getString(R.string.pending_feature), Toast.LENGTH_SHORT).show();
+                                download(Name.get(position).toString());
+
                             } else if (menuItem.getTitle() == getResources().getString(R.string.create_bucket)) {
                                 //upload();
                                 newBucket();
@@ -322,6 +326,20 @@ public class BucketSelect extends AppCompatActivity {
         intent.putExtra("password", password);
         intent.putExtra("region", location);
         intent.putExtra("style", style);
+        startActivity(intent);
+    }
+
+    private void download(String bucket) {
+
+        Intent intent = new Intent(this, Downloader.class);
+        intent.putExtra("endpoint", endpoint);
+        intent.putExtra("username", username);
+        intent.putExtra("password", password);
+        intent.putExtra("prefix", prefix);
+        intent.putExtra("region", location);
+        intent.putExtra("style", style);
+        intent.putExtra("bucket", bucket);
+        intent.putExtra("isfolder", true);
         startActivity(intent);
     }
 

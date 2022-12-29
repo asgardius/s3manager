@@ -26,11 +26,16 @@ import com.amazonaws.regions.Region;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.S3ClientOptions;
+import com.amazonaws.services.s3.model.ListObjectsRequest;
+import com.amazonaws.services.s3.model.ObjectListing;
 import com.amazonaws.services.s3.model.S3Object;
+import com.amazonaws.services.s3.model.S3ObjectSummary;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Downloader extends AppCompatActivity {
     String username, password, endpoint, bucket, filename, prefix, location;
@@ -40,6 +45,7 @@ public class Downloader extends AppCompatActivity {
     AWSCredentials myCredentials;
     AmazonS3 s3client;
     ProgressBar simpleProgressBar;
+    ListObjectsRequest orequest;
     Intent intent;
     Button fileDownload;
     Thread downloadFile, downloadProgress;
@@ -47,9 +53,9 @@ public class Downloader extends AppCompatActivity {
     DocumentFile document;
     boolean started = false;
     boolean cancel = false;
-    boolean isfolder = false;
-    boolean style;
+    boolean style, isfolder;
     long filesize = 0;
+    long objectsize;
     long transfered = 0;
     private WifiManager.WifiLock mWifiLock;
     private PowerManager.WakeLock mWakeLock;
@@ -70,6 +76,7 @@ public class Downloader extends AppCompatActivity {
         bucket = getIntent().getStringExtra("bucket");
         location = getIntent().getStringExtra("region");
         style = getIntent().getBooleanExtra("style", false);
+        isfolder = getIntent().getBooleanExtra("isfolder", false);
         prefix = getIntent().getStringExtra("prefix");
         simpleProgressBar = (ProgressBar) findViewById(R.id.simpleProgressBar);
         fileDownload = (Button)findViewById(R.id.filedownload);
@@ -121,12 +128,44 @@ public class Downloader extends AppCompatActivity {
                     //s3client.createBucket(bucket, location);
                     //System.out.println(fkey);
                     document = DocumentFile.fromTreeUri(getApplicationContext(), fileuri);
-                    object = s3client.getObject(bucket, prefix+filename);
-                    filesize = (object.getObjectMetadata().getContentLength())/1024;
                     if (isfolder) {
-                        filepath = document.createFile(null, filename).getUri();
-                        writeContentToFile(filepath, object);
+                        if (object == null) {
+                            orequest = new ListObjectsRequest().withBucketName(bucket).withMaxKeys(1000);
+                        }
+                        ArrayList<String> objectlist = new ArrayList<String>();
+                        ObjectListing result = s3client.listObjects(orequest);
+                        List<S3ObjectSummary> objects = result.getObjectSummaries();
+                        for (S3ObjectSummary os : objects) {
+                            objectlist.add(os.getKey());
+                            objectsize = os.getSize();
+                            if (objectsize%1024 == 0) {
+                                filesize = filesize+(objectsize/1024);
+                            } else {
+                                filesize = filesize+(objectsize/1024)+1;
+                            }
+                        }
+                        while (result.isTruncated()) {
+                            result = s3client.listNextBatchOfObjects (result);
+                            objects = result.getObjectSummaries();
+                            for (S3ObjectSummary os : objects) {
+                                objectlist.add(os.getKey());
+                                objectsize = os.getSize();
+                                if (objectsize%1024 == 0) {
+                                    filesize = filesize+(objectsize/1024);
+                                } else {
+                                    filesize = filesize+(objectsize/1024)+1;
+                                }
+                            }
+
+                        }
+                        for (String os : objectlist) {
+                            object = s3client.getObject(bucket, os);
+                            filepath = document.createFile(null, os).getUri();
+                            writeContentToFile(filepath, object);
+                        }
                     } else {
+                        object = s3client.getObject(bucket, prefix+filename);
+                        filesize = (object.getObjectMetadata().getContentLength())/1024;
                         writeContentToFile(fileuri, object);
                     }
                     runOnUiThread(new Runnable() {

@@ -26,6 +26,7 @@
     <string name="file_share">Share file</string>
     <string name="file_external">Open in</string>
     <string name="download_file">Download file</string>
+    <string name="download_bucket">Download bucket</string>
     <string name="cancel_download">Cancel download</string>
     <string name="download_success">File downloaded successfully</string>
     <string name="upload_file_tobucket">Upload file to this bucket</string>
