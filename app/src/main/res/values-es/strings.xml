@@ -107,4 +107,6 @@
     <string name="cors_error">No se pudo cambiar la política CORS</string>
     <string name="cors_ok">Política CORS cambiada exitosamente</string>
     <string name="download_bucket">Descargar bucket</string>
+    <string name="download_folder">Descargar carpeta</string>
+    <string name="batch_download_success">Archivos descargados exitosamente</string>
 </resources>

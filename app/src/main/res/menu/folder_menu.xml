@@ -6,6 +6,10 @@
         android:title="@string/upload_file_here" />
 
     <item
+        android:id="@+id/download_folder"
+        android:title="@string/download_folder" />
+
+    <item
         android:id="@+id/info"
         android:title="@string/object_info" />
 

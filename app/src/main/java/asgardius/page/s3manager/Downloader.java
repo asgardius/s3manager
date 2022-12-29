@@ -127,10 +127,12 @@ public class Downloader extends AppCompatActivity {
                     //Your code goes here
                     //s3client.createBucket(bucket, location);
                     //System.out.println(fkey);
-                    document = DocumentFile.fromTreeUri(getApplicationContext(), fileuri);
                     if (isfolder) {
-                        if (object == null) {
+                        document = DocumentFile.fromTreeUri(getApplicationContext(), fileuri);
+                        if (prefix == null) {
                             orequest = new ListObjectsRequest().withBucketName(bucket).withMaxKeys(1000);
+                        } else {
+                            orequest = new ListObjectsRequest().withBucketName(bucket).withPrefix(prefix).withMaxKeys(1000);
                         }
                         ArrayList<String> objectlist = new ArrayList<String>();
                         ObjectListing result = s3client.listObjects(orequest);
@@ -160,7 +162,7 @@ public class Downloader extends AppCompatActivity {
                         }
                         for (String os : objectlist) {
                             object = s3client.getObject(bucket, os);
-                            filepath = document.createFile(null, os).getUri();
+                            filepath = document.createFile(null, os.replace(prefix, "")).getUri();
                             writeContentToFile(filepath, object);
                         }
                     } else {
@@ -182,7 +184,11 @@ public class Downloader extends AppCompatActivity {
                                 //System.out.println("WakeLock released");
                             }
                             simpleProgressBar.setProgress(100);
-                            fileDownload.setText(getResources().getString(R.string.download_success));
+                            if (isfolder) {
+                                fileDownload.setText(getResources().getString(R.string.batch_download_success));
+                            } else {
+                                fileDownload.setText(getResources().getString(R.string.download_success));
+                            }
                             fileDownload.setEnabled(false);
                             //simpleProgressBar.setVisibility(View.INVISIBLE);
                         }

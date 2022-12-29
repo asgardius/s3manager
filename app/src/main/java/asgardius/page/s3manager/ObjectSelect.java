@@ -394,6 +394,9 @@ public class ObjectSelect extends AppCompatActivity {
                             if (menuItem.getTitle() == getResources().getString(R.string.upload_file_here)) {
                                 //Toast.makeText(ObjectSelect.this, getResources().getString(R.string.pending_feature), Toast.LENGTH_SHORT).show();
                                 upload();
+                            } else if (menuItem.getTitle() == getResources().getString(R.string.download_folder)) {
+                                //Toast.makeText(ObjectSelect.this, getResources().getString(R.string.pending_feature), Toast.LENGTH_SHORT).show();
+                                download(Name.get(position).toString(), true);
                             } else if (menuItem.getTitle() == getResources().getString(R.string.object_info)) {
                                 objectInfo(prefix + Name.get(position).toString(), Name.get(position).toString());
                             } else if (menuItem.getTitle() == getResources().getString(R.string.file_del)) {
@@ -421,7 +424,7 @@ public class ObjectSelect extends AppCompatActivity {
                             //Toast.makeText(MainActivity.this, "You Clicked " + menuItem.getTitle(), Toast.LENGTH_SHORT).show();
                             if (menuItem.getTitle() == getResources().getString(R.string.download_file)) {
                                 //Toast.makeText(ObjectSelect.this, getResources().getString(R.string.pending_feature), Toast.LENGTH_SHORT).show();
-                                download(Name.get(position).toString());
+                                download(Name.get(position).toString(), false);
                             } else if (menuItem.getTitle() == getResources().getString(R.string.upload_file_here)) {
                                 //Toast.makeText(ObjectSelect.this, getResources().getString(R.string.pending_feature), Toast.LENGTH_SHORT).show();
                                 upload();
@@ -648,16 +651,22 @@ public class ObjectSelect extends AppCompatActivity {
         startActivity(intent);
     }
 
-    private void download(String filename) {
+    private void download(String filename, boolean isfolder) {
 
         Intent intent = new Intent(this, Downloader.class);
-        intent.putExtra("filename", filename);
+        if(isfolder) {
+            intent.putExtra("prefix", prefix+filename);
+        } else {
+            intent.putExtra("prefix", prefix);
+            intent.putExtra("filename", filename);
+        }
         intent.putExtra("endpoint", endpoint);
         intent.putExtra("username", username);
         intent.putExtra("password", password);
         intent.putExtra("region", location);
         intent.putExtra("style", style);
         intent.putExtra("bucket", bucket);
+        intent.putExtra("isfolder", isfolder);
         startActivity(intent);
     }
 }
