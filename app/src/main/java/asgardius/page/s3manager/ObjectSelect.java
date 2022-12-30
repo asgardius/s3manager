@@ -685,6 +685,8 @@ public class ObjectSelect extends AppCompatActivity {
             clip = ClipData.newPlainText("name", name);
         }
         clipboard.setPrimaryClip(clip);
-        Toast.makeText(getApplicationContext(),getResources().getString(R.string.copy_name_ok), Toast.LENGTH_SHORT).show();
+        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.S_V2) {
+            Toast.makeText(getApplicationContext(),getResources().getString(R.string.copy_name_ok), Toast.LENGTH_SHORT).show();
+        }
     }
 }
