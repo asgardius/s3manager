@@ -8,6 +8,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -175,6 +178,8 @@ public class BucketSelect extends AppCompatActivity {
 
                             } else if (menuItem.getTitle() == getResources().getString(R.string.object_info)) {
                                 objectInfo(Name.get(position).toString());
+                            } else if (menuItem.getTitle() == getResources().getString(R.string.copy_name)) {
+                                copyName(Name.get(position).toString());
                             } else if (menuItem.getTitle() == getResources().getString(R.string.cors_config)) {
                                 corsConfig(Name.get(position).toString());
                             } else if (menuItem.getTitle() == getResources().getString(R.string.file_del)) {
@@ -355,4 +360,10 @@ public class BucketSelect extends AppCompatActivity {
         startActivity(intent);
     }
 
+    public void copyName (String name) {
+        ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+        ClipData clip = ClipData.newPlainText("name", name);
+        clipboard.setPrimaryClip(clip);
+        Toast.makeText(getApplicationContext(),getResources().getString(R.string.copy_name_ok), Toast.LENGTH_SHORT).show();
+    }
 }

@@ -110,4 +110,6 @@
     <string name="delete_cors">Delete CORS</string>
     <string name="cors_error">Cannot change CORS policy</string>
     <string name="cors_ok">CORS policy changed successfully</string>
+    <string name="copy_name">Copy name to clipboard</string>
+    <string name="copy_name_ok">Name copied to clipboard</string>
 </resources>

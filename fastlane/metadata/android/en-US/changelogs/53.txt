@@ -1,0 +1,2 @@
+* UI fixes
+* Copy file name to clipboard

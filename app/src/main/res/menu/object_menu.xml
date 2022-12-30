@@ -18,6 +18,10 @@
         android:title="@string/object_info" />
 
     <item
+        android:id="@+id/copy_name"
+        android:title="@string/copy_name" />
+
+    <item
         android:id="@+id/deletefile"
         android:title="@string/file_del" />
 

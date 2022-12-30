@@ -7,6 +7,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.AppOpsManager;
 import android.app.PictureInPictureParams;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -399,6 +401,8 @@ public class ObjectSelect extends AppCompatActivity {
                                 download(Name.get(position).toString(), true);
                             } else if (menuItem.getTitle() == getResources().getString(R.string.object_info)) {
                                 objectInfo(prefix + Name.get(position).toString(), Name.get(position).toString());
+                            } else if (menuItem.getTitle() == getResources().getString(R.string.copy_name)) {
+                                copyName(Name.get(position).toString());
                             } else if (menuItem.getTitle() == getResources().getString(R.string.file_del)) {
                                 if (Name.size() == 1 && treelevel >= 1) {
                                     Toast.makeText(ObjectSelect.this, getResources().getString(R.string.only_item_onlist), Toast.LENGTH_SHORT).show();
@@ -432,6 +436,8 @@ public class ObjectSelect extends AppCompatActivity {
                                 share(prefix + Name.get(position).toString(), Name.get(position).toString(), Img.get(position).equals(R.drawable.audiofile) || Img.get(position).equals(R.drawable.videofile));
                             } else if (menuItem.getTitle() == getResources().getString(R.string.object_info)) {
                                 objectInfo(prefix + Name.get(position).toString(), Name.get(position).toString());
+                            } else if (menuItem.getTitle() == getResources().getString(R.string.copy_name)) {
+                                copyName(Name.get(position).toString());
                             } else if (menuItem.getTitle() == getResources().getString(R.string.file_del)) {
                                 if (menuItem.getTitle() == getResources().getString(R.string.file_del)) {
                                     if (Name.size() == 1 && treelevel >= 1) {
@@ -668,5 +674,17 @@ public class ObjectSelect extends AppCompatActivity {
         intent.putExtra("bucket", bucket);
         intent.putExtra("isfolder", isfolder);
         startActivity(intent);
+    }
+
+    public void copyName (String name) {
+        ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+        ClipData clip;
+        if(name.endsWith("/")) {
+            clip = ClipData.newPlainText("name", name.replace("/", ""));
+        } else {
+            clip = ClipData.newPlainText("name", name);
+        }
+        clipboard.setPrimaryClip(clip);
+        Toast.makeText(getApplicationContext(),getResources().getString(R.string.copy_name_ok), Toast.LENGTH_SHORT).show();
     }
 }
