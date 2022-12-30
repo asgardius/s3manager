@@ -12,9 +12,7 @@
     <string name="expiration_time">Expires within</string>
     <string name="share_hour">HH</string>
     <string name="share_minute">MM</string>
-    <string name="share_date">DD</string>
-    <string name="share_month">MM</string>
-    <string name="share_year">YYYY</string>
+    <string name="share_date">D</string>
     <string name="create_link">Create file link</string>
     <string name="invalid_expiration_date">Expiration date must be at most 7 days</string>
     <string name="null_expiration_date">You must set an expiration date to share files</string>
@@ -26,8 +24,8 @@
     <string name="file_share">Share file</string>
     <string name="file_external">Open in</string>
     <string name="download_file">Download file</string>
-    <string name="download_bucket">Download bucket</string>
-    <string name="download_folder">Download folder</string>
+    <string name="download_bucket">Download bucket content</string>
+    <string name="download_folder">Download folder content</string>
     <string name="cancel_download">Cancel download</string>
     <string name="download_success">File downloaded successfully</string>
     <string name="batch_download_success">Files downloaded successfully</string>

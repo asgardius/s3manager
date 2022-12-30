@@ -39,7 +39,7 @@
                     android:layout_weight="1"
                     android:focusable="true"
                     android:hint="@string/share_date"
-                    android:maxLength="2"
+                    android:maxLength="1"
                     android:inputType="date"
                     android:textColorHint="?attr/colorOnSecondary"
                     tools:ignore="MissingConstraints" />

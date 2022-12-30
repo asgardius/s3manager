@@ -68,9 +68,7 @@
     <string name="dummy_content">Contenido de prueba</string>
     <string name="accountadd_pdfendpoint">servidor pdfjs</string>
     <string name="pdf_reader_notready">Necesita configurar un servidor pdf.js</string>
-    <string name="share_date">DD</string>
-    <string name="share_month">MM</string>
-    <string name="share_year">AAAA</string>
+    <string name="share_date">D</string>
     <string name="share_hour">HH</string>
     <string name="share_minute">MM</string>
     <string name="expiration_date">Fecha de expiración</string>
@@ -106,7 +104,7 @@
     <string name="delete_cors">Eliminar CORS</string>
     <string name="cors_error">No se pudo cambiar la política CORS</string>
     <string name="cors_ok">Política CORS cambiada exitosamente</string>
-    <string name="download_bucket">Descargar bucket</string>
-    <string name="download_folder">Descargar carpeta</string>
+    <string name="download_bucket">Descargar contenido del bucket</string>
+    <string name="download_folder">Descargar contenido de la carpeta</string>
     <string name="batch_download_success">Archivos descargados exitosamente</string>
 </resources>
