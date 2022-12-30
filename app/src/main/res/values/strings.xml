@@ -34,9 +34,12 @@
     <string name="feature_not_supported">Your device is not compatible with this feature</string>
     <string name="file_path_fail">File uri not found</string>
     <string name="upload_button">Upload file</string>
+    <string name="batch_upload_button">Upload files</string>
     <string name="upload_key">Object name</string>
+    <string name="upload_prefix">Object prefix</string>
     <string name="no_file_selected">Please select a file</string>
     <string name="upload_success">File uploaded successfully</string>
+    <string name="batch_upload_success">Files uploaded successfully</string>
     <string name="cancel_upload">Cancel Upload</string>
     <string name="retry">Retry</string>
     <string name="download_failed">Download failed</string>

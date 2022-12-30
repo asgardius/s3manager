@@ -19,6 +19,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.amazonaws.auth.AWSCredentials;
@@ -49,6 +50,7 @@ public class Uploader extends AppCompatActivity {
     int progress;
     Uri fileuri, folder;
     EditText fprefix;
+    TextView fprefixlabel;
     Region region;
     S3ClientOptions s3ClientOptions;
     AWSCredentials myCredentials;
@@ -59,7 +61,7 @@ public class Uploader extends AppCompatActivity {
     Intent intent;
     Button fileUpload;
     Thread uploadFile, uploadProgress;
-    boolean style;
+    boolean style, isfolder;
     boolean started = false;
     long transfered = 0;
     private static final long MAX_SINGLE_PART_UPLOAD_BYTES = 5 * 1024 * 1024;
@@ -81,8 +83,10 @@ public class Uploader extends AppCompatActivity {
         bucket = getIntent().getStringExtra("bucket");
         location = getIntent().getStringExtra("region");
         style = getIntent().getBooleanExtra("style", false);
+        isfolder = getIntent().getBooleanExtra("isfolder", false);
         prefix = getIntent().getStringExtra("prefix");
         fprefix = (EditText)findViewById(R.id.fprefix);
+        fprefixlabel = (TextView) findViewById(R.id.fprefixlabel);
         region = Region.getRegion(location);
         s3ClientOptions = S3ClientOptions.builder().build();
         s3ClientOptions.setPathStyleAccess(style);
@@ -133,11 +137,15 @@ public class Uploader extends AppCompatActivity {
                                     //Your code goes here
                                     //s3client.createBucket(bucket, location);
                                     //System.out.println(fkey);
-                                    ufile = readContentToFile(fileuri);
-                                    filesize = ufile.length();
-                                    //PutObjectRequest request = new PutObjectRequest(bucket, fkey, ufile);
-                                    //upload = s3client.putObject(request);
-                                    putS3Object(bucket, fprefix.getText().toString(), ufile);
+                                    if (isfolder) {
+                                        //Nothing for now
+                                    } else {
+                                        ufile = readContentToFile(fileuri);
+                                        filesize = ufile.length();
+                                        //PutObjectRequest request = new PutObjectRequest(bucket, fkey, ufile);
+                                        //upload = s3client.putObject(request);
+                                        putS3Object(bucket, fprefix.getText().toString(), ufile);
+                                    }
                                     runOnUiThread(new Runnable() {
 
                                         @Override
@@ -153,7 +161,11 @@ public class Uploader extends AppCompatActivity {
                                             }
                                             simpleProgressBar.setProgress(100);
                                             //simpleProgressBar.setVisibility(View.INVISIBLE);
-                                            fileUpload.setText(getResources().getString(R.string.upload_success));
+                                            if (isfolder) {
+                                                fileUpload.setText(getResources().getString(R.string.batch_upload_success));
+                                            } else {
+                                                fileUpload.setText(getResources().getString(R.string.upload_success));
+                                            }
                                             started = false;
                                             fileUpload.setEnabled(false);
                                             //Toast.makeText(getApplicationContext(),getResources().getString(R.string.upload_success), Toast.LENGTH_SHORT).show();
@@ -253,11 +265,15 @@ public class Uploader extends AppCompatActivity {
     private void performFileSearch(String messageTitle) {
         //uri = Uri.parse("content://com.android.externalstorage.documents/document/home");
         intent = new Intent();
-        intent.setAction(Intent.ACTION_OPEN_DOCUMENT);
-        intent.addCategory(Intent.CATEGORY_OPENABLE);
-        //intent.putExtra(Intent.EXTRA_LOCAL_ONLY, true);
-        //intent.putExtra("android.provider.extra.INITIAL_URI", uri);
-        intent.setType("*/*");
+        if (isfolder) {
+            intent.setAction(Intent.ACTION_OPEN_DOCUMENT_TREE);
+        } else {
+            intent.setAction(Intent.ACTION_OPEN_DOCUMENT);
+            intent.addCategory(Intent.CATEGORY_OPENABLE);
+            //intent.putExtra(Intent.EXTRA_LOCAL_ONLY, true);
+            //intent.putExtra("android.provider.extra.INITIAL_URI", uri);
+            intent.setType("*/*");
+        }
         ((Activity) this).startActivityForResult(intent, 100);
     }
 
@@ -276,7 +292,14 @@ public class Uploader extends AppCompatActivity {
                 if (resultData != null && resultData.getData() != null) {
                     fileuri = resultData.getData();
                     System.out.println(fileuri.toString());
-                    fprefix.setText(prefix+getDisplayName(fileuri));
+                    if (isfolder) {
+                        fprefix.setText(prefix);
+                        fprefix.setHint(getResources().getString(R.string.upload_prefix));
+                        fprefixlabel.setText(getResources().getString(R.string.upload_prefix));
+                        fileUpload.setText(getResources().getString(R.string.batch_upload_button));
+                    } else {
+                        fprefix.setText(prefix+getDisplayName(fileuri));
+                    }
                     //System.out.println("File selected successfully");
                     //System.out.println("content://com.android.externalstorage.documents"+file.getPath());
                 } else {

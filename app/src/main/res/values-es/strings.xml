@@ -18,9 +18,12 @@
     <string name="feature_not_supported">Su dispositivo no es compatible con esta característica</string>
     <string name="file_path_fail">No se encuentra el uri del archivo</string>
     <string name="upload_button">Subir archivo</string>
+    <string name="batch_upload_button">Subir archivos</string>
     <string name="upload_key">Nombre del objeto</string>
+    <string name="upload_prefix">Prefijo de los objetos</string>
     <string name="no_file_selected">Favor de seleccionar un archivo</string>
     <string name="upload_success">Archivo subido exitosamente</string>
+    <string name="batch_upload_success">Archivos subidos exitosamente</string>
     <string name="cancel_upload">Cancelar subida</string>
     <string name="retry">Reintentar</string>
     <string name="download_failed">Descarga fallida</string>

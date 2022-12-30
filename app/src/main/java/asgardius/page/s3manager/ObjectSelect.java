@@ -395,7 +395,10 @@ public class ObjectSelect extends AppCompatActivity {
                             //Toast.makeText(MainActivity.this, "You Clicked " + menuItem.getTitle(), Toast.LENGTH_SHORT).show();
                             if (menuItem.getTitle() == getResources().getString(R.string.upload_file_here)) {
                                 //Toast.makeText(ObjectSelect.this, getResources().getString(R.string.pending_feature), Toast.LENGTH_SHORT).show();
-                                upload();
+                                upload(false);
+                            } else if (menuItem.getTitle() == getResources().getString(R.string.upload_folder_here)) {
+                                //Toast.makeText(ObjectSelect.this, getResources().getString(R.string.pending_feature), Toast.LENGTH_SHORT).show();
+                                upload(true);
                             } else if (menuItem.getTitle() == getResources().getString(R.string.download_folder)) {
                                 //Toast.makeText(ObjectSelect.this, getResources().getString(R.string.pending_feature), Toast.LENGTH_SHORT).show();
                                 download(Name.get(position).toString(), true);
@@ -431,7 +434,10 @@ public class ObjectSelect extends AppCompatActivity {
                                 download(Name.get(position).toString(), false);
                             } else if (menuItem.getTitle() == getResources().getString(R.string.upload_file_here)) {
                                 //Toast.makeText(ObjectSelect.this, getResources().getString(R.string.pending_feature), Toast.LENGTH_SHORT).show();
-                                upload();
+                                upload(false);
+                            } else if (menuItem.getTitle() == getResources().getString(R.string.upload_folder_here)) {
+                                //Toast.makeText(ObjectSelect.this, getResources().getString(R.string.pending_feature), Toast.LENGTH_SHORT).show();
+                                upload(true);
                             } else if (menuItem.getTitle() == getResources().getString(R.string.create_link)) {
                                 share(prefix + Name.get(position).toString(), Name.get(position).toString(), Img.get(position).equals(R.drawable.audiofile) || Img.get(position).equals(R.drawable.videofile));
                             } else if (menuItem.getTitle() == getResources().getString(R.string.object_info)) {
@@ -645,7 +651,7 @@ public class ObjectSelect extends AppCompatActivity {
         dialog.show();
     }
 
-    private void upload() {
+    private void upload(boolean isfolder) {
         Intent intent = new Intent(this, Uploader.class);
         intent.putExtra("endpoint", endpoint);
         intent.putExtra("username", username);
@@ -654,6 +660,7 @@ public class ObjectSelect extends AppCompatActivity {
         intent.putExtra("prefix", prefix);
         intent.putExtra("region", location);
         intent.putExtra("style", style);
+        intent.putExtra("isfolder", isfolder);
         startActivity(intent);
     }
 
