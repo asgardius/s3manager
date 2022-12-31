@@ -117,4 +117,5 @@
     <string name="cors_ok">CORS policy changed successfully</string>
     <string name="copy_name">Copy name to clipboard</string>
     <string name="copy_name_ok">Name copied to clipboard</string>
+    <string name="upload_calculate">Calculating folder size</string>
 </resources>

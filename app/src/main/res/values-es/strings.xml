@@ -114,4 +114,5 @@
     <string name="batch_download_success">Archivos descargados exitosamente</string>
     <string name="copy_name">Copiar nombre al portapapeles</string>
     <string name="copy_name_ok">Nombre copiado al portapapeles</string>
+    <string name="upload_calculate">Calculando tamaño de la carpeta</string>
 </resources>

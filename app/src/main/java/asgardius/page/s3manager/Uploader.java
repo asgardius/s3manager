@@ -62,7 +62,7 @@ public class Uploader extends AppCompatActivity {
     DocumentFile document;
     Intent intent;
     Button fileUpload;
-    Thread uploadFile, uploadProgress;
+    Thread uploadFile, uploadProgress, calculateProgress;
     boolean style, isfolder;
     boolean started = false;
     boolean cancel = false;
@@ -363,7 +363,9 @@ public class Uploader extends AppCompatActivity {
                         fprefix.setText(prefix);
                         fprefix.setHint(getResources().getString(R.string.upload_prefix));
                         fprefixlabel.setText(getResources().getString(R.string.upload_prefix));
-                        fileUpload.setText(getResources().getString(R.string.batch_upload_button));
+                        fileUpload.setText(getResources().getString(R.string.upload_calculate));
+                        fileUpload.setEnabled(false);
+                        calculateSize();
                     } else {
                         fprefix.setText(prefix+getDisplayName(fileuri));
                     }
@@ -462,6 +464,86 @@ public class Uploader extends AppCompatActivity {
         // Complete the multipart upload.
         CompleteMultipartUploadRequest compRequest = new CompleteMultipartUploadRequest(bucket, objectKey, initResponse.getUploadId(), partETags);
         s3client.completeMultipartUpload(compRequest);
+    }
+
+    private void calculateSize() {
+        calculateProgress = new Thread(new Runnable() {
+
+            @Override
+            public void run() {
+                try  {
+                    //Your code goes here
+                    document = DocumentFile.fromTreeUri(getApplicationContext(), fileuri);
+                    DocumentFile[] filelist = document.listFiles();
+                    ArrayList<String> filepath = new ArrayList<String>();
+                    int treelevel = 0;
+                    ArrayList<Integer> fileindex = new ArrayList<Integer>();
+                    fileindex.add(0);
+                    for (int i = 0; i < filelist.length; i++) {
+                        filepath.add(filelist[i].getName());
+                        if(filelist[i].isDirectory()) {
+                            treelevel++;
+                            fileindex.add(0);
+                            document = filelist[i];
+                            filelist = document.listFiles();
+                            while (treelevel >= 1 && fileindex.get(treelevel) < filelist.length+1) {
+                                if(fileindex.get(treelevel) == filelist.length) {
+                                    fileindex.remove(treelevel);
+                                    document = document.getParentFile();
+                                    filelist = document.listFiles();
+                                    treelevel--;
+                                    filepath.remove(treelevel);
+                                    fileindex.set(treelevel, fileindex.get(treelevel)+1);
+                                } else {
+                                    filepath.add(filelist[fileindex.get(treelevel)].getName());
+                                    if (filelist[fileindex.get(treelevel)].isDirectory()) {
+                                        document = filelist[fileindex.get(treelevel)];
+                                        filelist = document.listFiles();
+                                        treelevel++;
+                                        fileindex.add(0);
+                                    } else {
+                                        filepath.remove(treelevel);
+                                        if(filelist[fileindex.get(treelevel)].length()%MAX_SINGLE_PART_UPLOAD_BYTES == 0) {
+                                            filesize = filesize+(filelist[fileindex.get(treelevel)].length()/MAX_SINGLE_PART_UPLOAD_BYTES);
+                                        } else {
+                                            filesize = filesize+((filelist[fileindex.get(treelevel)].length()/MAX_SINGLE_PART_UPLOAD_BYTES)+1);
+                                        }
+                                        fileindex.set(treelevel, fileindex.get(treelevel)+1);
+                                    }
+                                }
+                            }
+                            //document = document.getParentFile();
+                            //filelist = document.listFiles();
+                            //treelevel--;
+                        } else {
+                            if(filelist[i].length()%MAX_SINGLE_PART_UPLOAD_BYTES == 0) {
+                                filesize = filesize+(filelist[i].length()/MAX_SINGLE_PART_UPLOAD_BYTES);
+                            } else {
+                                filesize = filesize+((filelist[i].length()/MAX_SINGLE_PART_UPLOAD_BYTES)+1);
+                            }
+                        }
+                        filepath.clear();
+                        fileindex.clear();
+                        fileindex.add(0);
+                    }
+
+                    runOnUiThread(new Runnable() {
+
+                        @Override
+                        public void run() {
+                            fileUpload.setText(getResources().getString(R.string.batch_upload_button));
+                            fileUpload.setEnabled(true);
+                        }
+                    });
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    //Toast.makeText(getApplicationContext(),getResources().getString(R.string.media_list_fail), Toast.LENGTH_SHORT).show();
+                    //finish();
+                }
+            }
+        });
+        calculateProgress.start();
     }
 
 }
