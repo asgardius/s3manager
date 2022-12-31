@@ -142,6 +142,12 @@ public class Uploader extends AppCompatActivity {
                                     //s3client.createBucket(bucket, location);
                                     //System.out.println(fkey);
                                     if (isfolder) {
+                                        if(prefix.endsWith("/")) {
+                                            prefix = fprefix.getText().toString();
+                                        } else {
+                                            prefix = fprefix.getText().toString().concat("/");
+                                        }
+                                        fprefix.setEnabled(false);
                                         document = DocumentFile.fromTreeUri(getApplicationContext(), fileuri);
                                         DocumentFile[] filelist = document.listFiles();
                                         ArrayList<String> filepath = new ArrayList<String>();
@@ -171,27 +177,16 @@ public class Uploader extends AppCompatActivity {
                                                             treelevel++;
                                                             fileindex.add(0);
                                                         } else {
-                                                            System.out.println(String.join("/", filepath));
+                                                            ufile = readContentToFile(filelist[fileindex.get(treelevel)].getUri());
+                                                            putS3Object(bucket, prefix+String.join("/", filepath), ufile);
                                                             filepath.remove(treelevel);
-                                                            if(filelist[fileindex.get(treelevel)].length()%MAX_SINGLE_PART_UPLOAD_BYTES == 0) {
-                                                                System.out.println((filelist[fileindex.get(treelevel)].length()/MAX_SINGLE_PART_UPLOAD_BYTES)+" parts");
-                                                            } else {
-                                                                System.out.println(((filelist[fileindex.get(treelevel)].length()/MAX_SINGLE_PART_UPLOAD_BYTES)+1)+" parts");
-                                                            }
                                                             fileindex.set(treelevel, fileindex.get(treelevel)+1);
                                                         }
                                                     }
                                                 }
-                                                //document = document.getParentFile();
-                                                //filelist = document.listFiles();
-                                                //treelevel--;
                                             } else {
-                                                System.out.println(String.join("/", filepath));
-                                                if(filelist[i].length()%MAX_SINGLE_PART_UPLOAD_BYTES == 0) {
-                                                    System.out.println((filelist[i].length()/MAX_SINGLE_PART_UPLOAD_BYTES)+" parts");
-                                                } else {
-                                                    System.out.println(((filelist[i].length()/MAX_SINGLE_PART_UPLOAD_BYTES)+1)+" parts");
-                                                }
+                                                ufile = readContentToFile(filelist[i].getUri());
+                                                putS3Object(bucket, prefix+String.join("/", filepath), ufile);
                                             }
                                             filepath.clear();
                                             fileindex.clear();
