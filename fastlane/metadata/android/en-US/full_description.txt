@@ -3,7 +3,7 @@ File Explorer to manage servers compatible with S3 Object Storage Protocol
 Current feature list
 
 <li>Audio and Video playback (opus, ogg, oga, mp3, m4a, flac, mka, mkv, mp4, m4v, webm)</li>
-<li>Picture preview (jpg, jpeg, png, gif)</li>
+<li>Picture preview (jpg, jpeg, png, gif, webp)</li>
 <li>Plain text file preview (txt, md)</li>
 <li>Webpage viewer (htm, html)</li>
 <li>Multiple account support</li>

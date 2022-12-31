@@ -9,7 +9,7 @@ android {
         applicationId "asgardius.page.s3manager"
         minSdk 23
         targetSdk 33
-        versionCode 57
+        versionCode 58
         versionName "0.6.0"
         setProperty("archivesBaseName", "s3-manager-$versionName")
 

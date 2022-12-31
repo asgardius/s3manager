@@ -190,7 +190,9 @@ public class ObjectSelect extends AppCompatActivity {
                         else if (Name.get(i).toString().toLowerCase(Locale.ROOT).endsWith(".pdf")) {
                             Img.add(R.drawable.pdffile);
                         }
-                        else if (Name.get(i).toString().toLowerCase(Locale.ROOT).endsWith(".jpg") || Name.get(i).toString().toLowerCase(Locale.ROOT).endsWith(".jpeg") || Name.get(i).toString().toLowerCase(Locale.ROOT).endsWith(".png") || Name.get(i).toString().toLowerCase(Locale.ROOT).endsWith(".gif")) {
+                        else if (Name.get(i).toString().toLowerCase(Locale.ROOT).endsWith(".jpg") || Name.get(i).toString().toLowerCase(Locale.ROOT).endsWith(".jpeg")
+                                || Name.get(i).toString().toLowerCase(Locale.ROOT).endsWith(".png") || Name.get(i).toString().toLowerCase(Locale.ROOT).endsWith(".gif")
+                                || Name.get(i).toString().toLowerCase(Locale.ROOT).endsWith(".webp")) {
                             Img.add(R.drawable.imagefile);
                         }
                         else if (Name.get(i).toString().toLowerCase(Locale.ROOT).endsWith(".opus") || Name.get(i).toString().toLowerCase(Locale.ROOT).endsWith(".ogg")
@@ -255,7 +257,7 @@ public class ObjectSelect extends AppCompatActivity {
                     try {
                         GeneratePresignedUrlRequest request = new GeneratePresignedUrlRequest(bucket, prefix + Name.get(position).toString());
                         URL objectURL = s3client.generatePresignedUrl(request);
-                        imageViewer(objectURL.toString());
+                        imageViewer(objectURL.toString(), Name.get(position).toString());
                     } catch (Exception e) {
                         Toast.makeText(getApplicationContext(),getResources().getString(R.string.media_list_fail), Toast.LENGTH_SHORT).show();
                     }
@@ -476,10 +478,11 @@ public class ObjectSelect extends AppCompatActivity {
 
     }
 
-    private void imageViewer(String url) {
+    private void imageViewer(String url, String title) {
 
         Intent intent = new Intent(this, ImageViewer.class);
         intent.putExtra("video_url", url);
+        intent.putExtra("title", title);
         startActivity(intent);
 
     }

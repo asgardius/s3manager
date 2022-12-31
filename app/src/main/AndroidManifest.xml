@@ -64,6 +64,7 @@
             android:exported="false" />
         <activity
             android:name=".ImageViewer"
+            android:hardwareAccelerated="false"
             android:configChanges="orientation|keyboardHidden|screenSize|smallestScreenSize|screenLayout|uiMode|keyboardHidden"
             android:exported="false" />
         <activity
