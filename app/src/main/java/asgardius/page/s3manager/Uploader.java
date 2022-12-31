@@ -48,7 +48,6 @@ import java.util.List;
 
 public class Uploader extends AppCompatActivity {
     String  username, password, endpoint, bucket, prefix, location;
-    int progress;
     Uri fileuri, folder;
     EditText fprefix;
     TextView fprefixlabel;
@@ -130,13 +129,13 @@ public class Uploader extends AppCompatActivity {
                         }
                         //eUpload.setEnabled(false);
                         fileUpload.setText(getResources().getString(R.string.cancel_upload));
+                        fprefix.setEnabled(false);
                         uploadFile = new Thread(new Runnable() {
 
                             @Override
                             public void run() {
                                 //System.out.println(fkey);
-                                progress = 0;
-                                filesize = 0;
+                                //filesize = 0;
                                 try  {
                                     //Your code goes here
                                     //s3client.createBucket(bucket, location);
@@ -147,7 +146,6 @@ public class Uploader extends AppCompatActivity {
                                         } else {
                                             prefix = fprefix.getText().toString().concat("/");
                                         }
-                                        fprefix.setEnabled(false);
                                         document = DocumentFile.fromTreeUri(getApplicationContext(), fileuri);
                                         DocumentFile[] filelist = document.listFiles();
                                         ArrayList<String> filepath = new ArrayList<String>();
