@@ -128,9 +128,6 @@ public class ObjectSelect extends AppCompatActivity {
                         if (filename.length == treelevel+1) {
                             object.add(filename[treelevel]+"/");
                         }
-                        else {
-
-                        }
 
                         //i++;
                     }
@@ -141,9 +138,6 @@ public class ObjectSelect extends AppCompatActivity {
                             filename = os.split("/");
                             if (filename.length == treelevel+1) {
                                 object.add(filename[treelevel]+"/");
-                            }
-                            else {
-
                             }
 
                             //i++;

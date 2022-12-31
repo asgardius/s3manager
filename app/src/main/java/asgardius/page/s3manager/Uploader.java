@@ -3,6 +3,7 @@ package asgardius.page.s3manager;
 import static android.content.ContentValues.TAG;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.documentfile.provider.DocumentFile;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -58,6 +59,7 @@ public class Uploader extends AppCompatActivity {
     ProgressBar simpleProgressBar;
     long filesize;
     File ufile;
+    DocumentFile document;
     Intent intent;
     Button fileUpload;
     Thread uploadFile, uploadProgress;
@@ -138,7 +140,46 @@ public class Uploader extends AppCompatActivity {
                                     //s3client.createBucket(bucket, location);
                                     //System.out.println(fkey);
                                     if (isfolder) {
-                                        //Nothing for now
+                                        document = DocumentFile.fromTreeUri(getApplicationContext(), fileuri);
+                                        DocumentFile[] filelist = document.listFiles();
+                                        ArrayList<String> filepath = new ArrayList<String>();
+                                        int treelevel = 0;
+                                        ArrayList<Integer> fileindex = new ArrayList<Integer>();
+                                        fileindex.add(0);
+                                        for (int i = 0; i < filelist.length; i++) {
+                                            filepath.add(filelist[i].getName());
+                                            if(filelist[i].isDirectory()) {
+                                                //Nothing for now
+                                                treelevel++;
+                                                fileindex.add(0);
+                                                document = filelist[i];
+                                                filelist = document.listFiles();
+                                                while (treelevel >= 1 && fileindex.get(treelevel) < filelist.length) {
+                                                    filepath.add(filelist[fileindex.get(treelevel)].getName());
+                                                    System.out.println(String.join("/", filepath));
+                                                    if(filelist[fileindex.get(treelevel)].length()%MAX_SINGLE_PART_UPLOAD_BYTES == 0) {
+                                                        System.out.println((filelist[fileindex.get(treelevel)].length()/MAX_SINGLE_PART_UPLOAD_BYTES)+" parts");
+                                                    } else {
+                                                        System.out.println(((filelist[fileindex.get(treelevel)].length()/MAX_SINGLE_PART_UPLOAD_BYTES)+1)+" parts");
+                                                    }
+                                                    filepath.remove(treelevel);
+                                                    fileindex.set(treelevel, fileindex.get(treelevel)+1);
+                                                }
+                                                document = document.getParentFile();
+                                                filelist = document.listFiles();
+                                                treelevel--;
+                                            } else {
+                                                System.out.println(String.join("/", filepath));
+                                                if(filelist[i].length()%MAX_SINGLE_PART_UPLOAD_BYTES == 0) {
+                                                    System.out.println((filelist[i].length()/MAX_SINGLE_PART_UPLOAD_BYTES)+" parts");
+                                                } else {
+                                                    System.out.println(((filelist[i].length()/MAX_SINGLE_PART_UPLOAD_BYTES)+1)+" parts");
+                                                }
+                                            }
+                                            filepath.clear();
+                                            fileindex.clear();
+                                            fileindex.add(0);
+                                        }
                                     } else {
                                         ufile = readContentToFile(fileuri);
                                         filesize = ufile.length();
