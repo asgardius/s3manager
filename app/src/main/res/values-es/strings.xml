@@ -27,6 +27,7 @@
     <string name="cancel_upload">Cancelar subida</string>
     <string name="retry">Reintentar</string>
     <string name="download_failed">Descarga fallida</string>
+    <string name="upload_failed">Subida fallida</string>
     <string name="success">Éxito</string>
     <string name="create_bucket">Crear nuevo bucket</string>
     <string name="create_bucket_success">Bucket creado exitosamente</string>
@@ -86,6 +87,7 @@
     <string name="file_count">Archivos</string>
     <string name="null_expiration_date">Debe establecer una fecha de expiración para compartir archivos</string>
     <string name="download_canceled">Descarga cancelada</string>
+    <string name="upload_canceled">Subida cancelada</string>
     <string name="settings">Ajustes</string>
     <string name="save_settings">Guardar ajustes</string>
     <string name="videocache">Tamaño máximo de cache multimedia (en MiB)</string>

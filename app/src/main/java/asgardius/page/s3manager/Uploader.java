@@ -65,6 +65,7 @@ public class Uploader extends AppCompatActivity {
     Thread uploadFile, uploadProgress;
     boolean style, isfolder;
     boolean started = false;
+    boolean cancel = false;
     long transfered = 0;
     private static final long MAX_SINGLE_PART_UPLOAD_BYTES = 5 * 1024 * 1024;
     private WifiManager.WifiLock mWifiLock;
@@ -107,6 +108,7 @@ public class Uploader extends AppCompatActivity {
                 //buttonaction
                 if (started) {
                     started = false;
+                    cancel = true;
                     uploadFile.interrupt();
                     //simpleProgressBar.setVisibility(View.INVISIBLE);
                 } else {
@@ -149,21 +151,35 @@ public class Uploader extends AppCompatActivity {
                                         for (int i = 0; i < filelist.length; i++) {
                                             filepath.add(filelist[i].getName());
                                             if(filelist[i].isDirectory()) {
-                                                //Nothing for now
                                                 treelevel++;
                                                 fileindex.add(0);
                                                 document = filelist[i];
                                                 filelist = document.listFiles();
                                                 while (treelevel >= 1 && fileindex.get(treelevel) < filelist.length) {
                                                     filepath.add(filelist[fileindex.get(treelevel)].getName());
-                                                    System.out.println(String.join("/", filepath));
-                                                    if(filelist[fileindex.get(treelevel)].length()%MAX_SINGLE_PART_UPLOAD_BYTES == 0) {
-                                                        System.out.println((filelist[fileindex.get(treelevel)].length()/MAX_SINGLE_PART_UPLOAD_BYTES)+" parts");
+                                                    if (filelist[fileindex.get(treelevel)].isDirectory()) {
+                                                        treelevel++;
+                                                        fileindex.add(0);
+                                                        document = filelist[i];
+                                                        filelist = document.listFiles();
                                                     } else {
-                                                        System.out.println(((filelist[fileindex.get(treelevel)].length()/MAX_SINGLE_PART_UPLOAD_BYTES)+1)+" parts");
+                                                        System.out.println(String.join("/", filepath));
+                                                        filepath.remove(treelevel);
+                                                        if(filelist[fileindex.get(treelevel)].length()%MAX_SINGLE_PART_UPLOAD_BYTES == 0) {
+                                                            System.out.println((filelist[fileindex.get(treelevel)].length()/MAX_SINGLE_PART_UPLOAD_BYTES)+" parts");
+                                                        } else {
+                                                            System.out.println(((filelist[fileindex.get(treelevel)].length()/MAX_SINGLE_PART_UPLOAD_BYTES)+1)+" parts");
+                                                        }
+                                                        fileindex.set(treelevel, fileindex.get(treelevel)+1);
                                                     }
-                                                    filepath.remove(treelevel);
-                                                    fileindex.set(treelevel, fileindex.get(treelevel)+1);
+                                                    if(fileindex.get(treelevel) == filelist.length) {
+                                                        fileindex.remove(treelevel);
+                                                        document = document.getParentFile();
+                                                        filelist = document.listFiles();
+                                                        treelevel--;
+                                                        filepath.remove(treelevel);
+                                                        fileindex.set(treelevel, fileindex.get(treelevel)+1);
+                                                    }
                                                 }
                                                 document = document.getParentFile();
                                                 filelist = document.listFiles();
@@ -182,7 +198,11 @@ public class Uploader extends AppCompatActivity {
                                         }
                                     } else {
                                         ufile = readContentToFile(fileuri);
-                                        filesize = ufile.length();
+                                        if(ufile.length()%MAX_SINGLE_PART_UPLOAD_BYTES == 0) {
+                                            filesize = ufile.length()/MAX_SINGLE_PART_UPLOAD_BYTES;
+                                        } else {
+                                            filesize = (ufile.length()/MAX_SINGLE_PART_UPLOAD_BYTES)+1;
+                                        }
                                         //PutObjectRequest request = new PutObjectRequest(bucket, fkey, ufile);
                                         //upload = s3client.putObject(request);
                                         putS3Object(bucket, fprefix.getText().toString(), ufile);
@@ -234,7 +254,12 @@ public class Uploader extends AppCompatActivity {
                                             started = false;
                                             //simpleProgressBar.setVisibility(View.INVISIBLE);
                                             //fileUpload.setEnabled(true);
-                                            fileUpload.setText(getResources().getString(R.string.retry));
+                                            if (cancel) {
+                                                fileUpload.setText(getResources().getString(R.string.upload_canceled));
+                                            } else {
+                                                fileUpload.setText(getResources().getString(R.string.upload_failed));
+                                            }
+                                            fileUpload.setEnabled(false);
                                             //Toast.makeText(getApplicationContext(),getResources().getString(R.string.media_list_fail), Toast.LENGTH_SHORT).show();
                                         }
                                     });
@@ -395,6 +420,7 @@ public class Uploader extends AppCompatActivity {
         PutObjectRequest request = new PutObjectRequest(bucket, objectKey, file);
         PutObjectResult result = s3client.putObject(request);
         long bytesPushed = result.getMetadata().getContentLength();
+        transfered++;
         //LOGGER.info("Pushed {} bytes to s3://{}/{}", bytesPushed, bucket, objectKey);
     }
 
@@ -429,7 +455,7 @@ public class Uploader extends AppCompatActivity {
             partETags.add(uploadResult.getPartETag());
 
             fileOffset += partSize;
-            transfered = fileOffset;
+            transfered++;
         }
 
         // Complete the multipart upload.
