@@ -155,23 +155,7 @@ public class Uploader extends AppCompatActivity {
                                                 fileindex.add(0);
                                                 document = filelist[i];
                                                 filelist = document.listFiles();
-                                                while (treelevel >= 1 && fileindex.get(treelevel) < filelist.length) {
-                                                    filepath.add(filelist[fileindex.get(treelevel)].getName());
-                                                    if (filelist[fileindex.get(treelevel)].isDirectory()) {
-                                                        treelevel++;
-                                                        fileindex.add(0);
-                                                        document = filelist[i];
-                                                        filelist = document.listFiles();
-                                                    } else {
-                                                        System.out.println(String.join("/", filepath));
-                                                        filepath.remove(treelevel);
-                                                        if(filelist[fileindex.get(treelevel)].length()%MAX_SINGLE_PART_UPLOAD_BYTES == 0) {
-                                                            System.out.println((filelist[fileindex.get(treelevel)].length()/MAX_SINGLE_PART_UPLOAD_BYTES)+" parts");
-                                                        } else {
-                                                            System.out.println(((filelist[fileindex.get(treelevel)].length()/MAX_SINGLE_PART_UPLOAD_BYTES)+1)+" parts");
-                                                        }
-                                                        fileindex.set(treelevel, fileindex.get(treelevel)+1);
-                                                    }
+                                                while (treelevel >= 1 && fileindex.get(treelevel) < filelist.length+1) {
                                                     if(fileindex.get(treelevel) == filelist.length) {
                                                         fileindex.remove(treelevel);
                                                         document = document.getParentFile();
@@ -179,11 +163,28 @@ public class Uploader extends AppCompatActivity {
                                                         treelevel--;
                                                         filepath.remove(treelevel);
                                                         fileindex.set(treelevel, fileindex.get(treelevel)+1);
+                                                    } else {
+                                                        filepath.add(filelist[fileindex.get(treelevel)].getName());
+                                                        if (filelist[fileindex.get(treelevel)].isDirectory()) {
+                                                            document = filelist[fileindex.get(treelevel)];
+                                                            filelist = document.listFiles();
+                                                            treelevel++;
+                                                            fileindex.add(0);
+                                                        } else {
+                                                            System.out.println(String.join("/", filepath));
+                                                            filepath.remove(treelevel);
+                                                            if(filelist[fileindex.get(treelevel)].length()%MAX_SINGLE_PART_UPLOAD_BYTES == 0) {
+                                                                System.out.println((filelist[fileindex.get(treelevel)].length()/MAX_SINGLE_PART_UPLOAD_BYTES)+" parts");
+                                                            } else {
+                                                                System.out.println(((filelist[fileindex.get(treelevel)].length()/MAX_SINGLE_PART_UPLOAD_BYTES)+1)+" parts");
+                                                            }
+                                                            fileindex.set(treelevel, fileindex.get(treelevel)+1);
+                                                        }
                                                     }
                                                 }
-                                                document = document.getParentFile();
-                                                filelist = document.listFiles();
-                                                treelevel--;
+                                                //document = document.getParentFile();
+                                                //filelist = document.listFiles();
+                                                //treelevel--;
                                             } else {
                                                 System.out.println(String.join("/", filepath));
                                                 if(filelist[i].length()%MAX_SINGLE_PART_UPLOAD_BYTES == 0) {
