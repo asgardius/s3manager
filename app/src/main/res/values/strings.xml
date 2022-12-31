@@ -24,6 +24,7 @@
     <string name="file_share">Share file</string>
     <string name="file_external">Open in</string>
     <string name="download_file">Download file</string>
+    <string name="download_files">Download files</string>
     <string name="download_bucket">Download bucket content</string>
     <string name="download_folder">Download folder content</string>
     <string name="cancel_download">Cancel download</string>

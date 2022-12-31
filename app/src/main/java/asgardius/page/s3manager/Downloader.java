@@ -79,6 +79,11 @@ public class Downloader extends AppCompatActivity {
         style = getIntent().getBooleanExtra("style", false);
         isfolder = getIntent().getBooleanExtra("isfolder", false);
         prefix = getIntent().getStringExtra("prefix");
+        if(isfolder) {
+            getSupportActionBar().setTitle(getResources().getString(R.string.download_files));
+        } else {
+            getSupportActionBar().setTitle(getResources().getString(R.string.download_file));
+        }
         simpleProgressBar = (ProgressBar) findViewById(R.id.simpleProgressBar);
         fileDownload = (Button)findViewById(R.id.filedownload);
         region = Region.getRegion(location);

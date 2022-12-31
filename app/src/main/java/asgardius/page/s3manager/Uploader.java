@@ -23,12 +23,15 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.amazonaws.AbortedException;
 import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.regions.Region;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.S3ClientOptions;
+import com.amazonaws.services.s3.model.AbortMultipartUploadRequest;
+import com.amazonaws.services.s3.model.AmazonS3Exception;
 import com.amazonaws.services.s3.model.CompleteMultipartUploadRequest;
 import com.amazonaws.services.s3.model.InitiateMultipartUploadRequest;
 import com.amazonaws.services.s3.model.InitiateMultipartUploadResult;
@@ -87,6 +90,11 @@ public class Uploader extends AppCompatActivity {
         style = getIntent().getBooleanExtra("style", false);
         isfolder = getIntent().getBooleanExtra("isfolder", false);
         prefix = getIntent().getStringExtra("prefix");
+        if(isfolder) {
+            getSupportActionBar().setTitle(getResources().getString(R.string.batch_upload_button));
+        } else {
+            getSupportActionBar().setTitle(getResources().getString(R.string.upload_button));
+        }
         fprefix = (EditText)findViewById(R.id.fprefix);
         fprefixlabel = (TextView) findViewById(R.id.fprefixlabel);
         region = Region.getRegion(location);
@@ -152,14 +160,14 @@ public class Uploader extends AppCompatActivity {
                                         int treelevel = 0;
                                         ArrayList<Integer> fileindex = new ArrayList<Integer>();
                                         fileindex.add(0);
-                                        for (int i = 0; i < filelist.length; i++) {
+                                        for (int i = 0; i < filelist.length && !cancel; i++) {
                                             filepath.add(filelist[i].getName());
                                             if(filelist[i].isDirectory()) {
                                                 treelevel++;
                                                 fileindex.add(0);
                                                 document = filelist[i];
                                                 filelist = document.listFiles();
-                                                while (treelevel >= 1 && fileindex.get(treelevel) < filelist.length+1) {
+                                                while (treelevel >= 1 && fileindex.get(treelevel) < filelist.length+1 && !cancel) {
                                                     if(fileindex.get(treelevel) == filelist.length) {
                                                         fileindex.remove(treelevel);
                                                         document = document.getParentFile();
@@ -214,9 +222,13 @@ public class Uploader extends AppCompatActivity {
                                                 mWakeLock.release();
                                                 //System.out.println("WakeLock released");
                                             }
-                                            simpleProgressBar.setProgress(100);
+                                            if(!cancel) {
+                                                simpleProgressBar.setProgress(100);
+                                            }
                                             //simpleProgressBar.setVisibility(View.INVISIBLE);
-                                            if (isfolder) {
+                                            if (cancel) {
+                                                fileUpload.setText(getResources().getString(R.string.upload_canceled));
+                                            } else if (isfolder) {
                                                 fileUpload.setText(getResources().getString(R.string.batch_upload_success));
                                             } else {
                                                 fileUpload.setText(getResources().getString(R.string.upload_success));
@@ -431,32 +443,40 @@ public class Uploader extends AppCompatActivity {
 
         // Upload the file parts.
         long fileOffset = 0;
-        for (int partNumber = 1; fileOffset < contentLength; ++partNumber) {
-            // Because the last part could be less than 5 MB, adjust the part size as needed.
-            partSize = Math.min(partSize, (contentLength - fileOffset));
+        try{
+            for (int partNumber = 1; fileOffset < contentLength && !cancel; ++partNumber) {
+                // Because the last part could be less than 5 MB, adjust the part size as needed.
+                partSize = Math.min(partSize, (contentLength - fileOffset));
 
-            // Create the request to upload a part.
-            UploadPartRequest uploadRequest = new UploadPartRequest()
-                    .withBucketName(bucket)
-                    .withKey(objectKey)
-                    .withUploadId(initResponse.getUploadId())
-                    .withPartNumber(partNumber)
-                    .withFileOffset(fileOffset)
-                    .withFile(file)
-                    .withPartSize(partSize);
+                // Create the request to upload a part.
+                UploadPartRequest uploadRequest = new UploadPartRequest()
+                        .withBucketName(bucket)
+                        .withKey(objectKey)
+                        .withUploadId(initResponse.getUploadId())
+                        .withPartNumber(partNumber)
+                        .withFileOffset(fileOffset)
+                        .withFile(file)
+                        .withPartSize(partSize);
 
-            // Upload the part and add the response's ETag to our list.
-            UploadPartResult uploadResult = s3client.uploadPart(uploadRequest);
-            //LOGGER.info("Uploading part {} of Object s3://{}/{}", partNumber, bucket, objectKey);
-            partETags.add(uploadResult.getPartETag());
+                // Upload the part and add the response's ETag to our list.
+                UploadPartResult uploadResult = s3client.uploadPart(uploadRequest);
+                //LOGGER.info("Uploading part {} of Object s3://{}/{}", partNumber, bucket, objectKey);
+                partETags.add(uploadResult.getPartETag());
 
-            fileOffset += partSize;
-            transfered++;
+                fileOffset += partSize;
+                transfered++;
+            }
+
+            // Complete the multipart upload.
+            CompleteMultipartUploadRequest compRequest = new CompleteMultipartUploadRequest(bucket, objectKey, initResponse.getUploadId(), partETags);
+            s3client.completeMultipartUpload(compRequest);
+        } catch (AbortedException | AmazonS3Exception e) {
+            e.printStackTrace();
+            AbortMultipartUploadRequest abort = new AbortMultipartUploadRequest(bucket, objectKey, initResponse.getUploadId());
+            s3client.abortMultipartUpload(abort);
+            //Toast.makeText(getApplicationContext(),getResources().getString(R.string.media_list_fail), Toast.LENGTH_SHORT).show();
+            //finish();
         }
-
-        // Complete the multipart upload.
-        CompleteMultipartUploadRequest compRequest = new CompleteMultipartUploadRequest(bucket, objectKey, initResponse.getUploadId(), partETags);
-        s3client.completeMultipartUpload(compRequest);
     }
 
     private void calculateSize() {

@@ -52,8 +52,7 @@
         <activity
             android:name=".Downloader"
             android:configChanges="orientation|keyboardHidden|screenSize|smallestScreenSize|screenLayout|uiMode|keyboardHidden"
-            android:exported="false"
-            android:label="@string/download_file" />
+            android:exported="false" />
         <activity
             android:name=".CreateBucket"
             android:configChanges="orientation|keyboardHidden|screenSize|smallestScreenSize|screenLayout|uiMode|keyboardHidden"
@@ -62,8 +61,7 @@
         <activity
             android:name=".Uploader"
             android:configChanges="orientation|keyboardHidden|screenSize|smallestScreenSize|screenLayout|uiMode|keyboardHidden"
-            android:exported="false"
-            android:label="@string/upload_button" />
+            android:exported="false" />
         <activity
             android:name=".ImageViewer"
             android:configChanges="orientation|keyboardHidden|screenSize|smallestScreenSize|screenLayout|uiMode|keyboardHidden"
