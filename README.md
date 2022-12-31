@@ -22,6 +22,7 @@ Current feature list
 * file sharing links
 * get object info
 * get bucket info
+* Set CORS policy
 
 Planned feature list
 
