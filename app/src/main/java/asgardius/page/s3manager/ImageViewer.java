@@ -2,12 +2,16 @@ package asgardius.page.s3manager;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
+
+import com.otaliastudios.zoom.ZoomImageView;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -16,9 +20,11 @@ import java.util.stream.Collectors;
 
 public class ImageViewer extends AppCompatActivity {
     String videoURL, title;
-    ImageView iv;
+    ZoomImageView iv;
     boolean controls = false;
+    float cursorx, cursory;
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -27,7 +33,7 @@ public class ImageViewer extends AppCompatActivity {
         title = getIntent().getStringExtra("title");
         getSupportActionBar().setTitle(title);
         final ProgressBar simpleProgressBar = (ProgressBar) findViewById(R.id.simpleProgressBar);
-        iv = (ImageView) findViewById(R.id.imageViewer);
+        iv = (ZoomImageView) findViewById(R.id.imageViewer);
         //System.out.println(videoURL);
         Thread imgread = new Thread(new Runnable() {
 
@@ -74,20 +80,28 @@ public class ImageViewer extends AppCompatActivity {
             }
         });
         imgread.start();
-        iv.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View view) {
-                //buttonaction
-                if(controls) {
-                    controls = false;
-                    hideSystemBars();
-                }
-                else {
-                    controls = true;
-                    showSystemBars();
-                }
-            }
+        iv.setOnTouchListener((v, event) -> {
 
+            if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                cursorx = event.getX();
+                cursory = event.getY();
+                iv.performClick();
+
+                return true;
+            } else if (event.getAction() == MotionEvent.ACTION_UP) {
+                if(Math.abs(event.getX() - cursorx) < 5 || Math.abs(event.getY() - cursory) < 5) {
+                    if(controls) {
+                        controls = false;
+                        hideSystemBars();
+                    }
+                    else {
+                        controls = true;
+                        showSystemBars();
+                    }
+                }
+                return true;
+            }
+            return false;
         });
     }
 

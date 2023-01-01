@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".ImageViewer">
 
-    <ImageView
+    <com.otaliastudios.zoom.ZoomImageView
         android:id="@+id/imageViewer"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
@@ -14,7 +14,9 @@
         app:srcCompat="@drawable/empty"
         tools:ignore="MissingConstraints"
         tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="82dp" />
+        tools:layout_editor_absoluteY="82dp"
+        app:minZoom="1.0"
+        app:maxZoom="25.5" />
 
     <ProgressBar
         android:id="@+id/simpleProgressBar"
