@@ -146,6 +146,8 @@ public class VideoPlayer extends AppCompatActivity {
         // Prepare the player.
         player.setPlayWhenReady(true);
         playerNotificationManager = new PlayerNotificationManager.Builder(this, notificationId, "playback").build();
+        playerNotificationManager.setUseNextActionInCompactView(true);
+        playerNotificationManager.setUsePreviousActionInCompactView(true);
         playerNotificationManager.setMediaSessionToken(mediaSession.getSessionToken());
         playerNotificationManager.setPlayer(player);
         if (isplaylist) {
@@ -225,6 +227,9 @@ public class VideoPlayer extends AppCompatActivity {
                         mWakeLock.acquire();
                         //System.out.println("WakeLock acquired");
                     }
+                    if(isplaylist) {
+                        getSupportActionBar().setTitle(names.get(player.getCurrentMediaItemIndex()));
+                    }
                 } else if (state == 2) {
                     // Buffering.
                     //Acquiring WakeLock and WifiLock if not held
@@ -235,6 +240,9 @@ public class VideoPlayer extends AppCompatActivity {
                     if (!mWakeLock.isHeld()) {
                         mWakeLock.acquire();
                         //System.out.println("WakeLock acquired");
+                    }
+                    if(isplaylist) {
+                        getSupportActionBar().setTitle(names.get(player.getCurrentMediaItemIndex()));
                     }
                 } else {
                     //Player inactive
@@ -323,6 +331,7 @@ public class VideoPlayer extends AppCompatActivity {
 
     public void onDestroy() {
         mediaSessionConnector.setPlayer(null);
+        standaloneDatabaseProvider.close();
         mediaSession.setActive(false);
         playerNotificationManager.setPlayer(null);
         player.release();
@@ -350,21 +359,43 @@ public class VideoPlayer extends AppCompatActivity {
         videocache = intent.getIntExtra("videocache", 40);
         buffersize = intent.getIntExtra("buffersize", 2000);
         isplaylist = intent.getBooleanExtra("isplaylist", false);
+        queue = intent.getStringArrayListExtra("queue");
+        names = intent.getStringArrayListExtra("names");
         getSupportActionBar().setTitle(title);
-        mediaSource = new ProgressiveMediaSource.Factory(
-                new CacheDataSource.Factory()
-                        .setCache(simpleCache)
-                        .setUpstreamDataSourceFactory(new DefaultHttpDataSource.Factory()
-                                .setUserAgent("ExoplayerDemo"))
-                        .setFlags(CacheDataSource.FLAG_IGNORE_CACHE_ON_ERROR)
-        ).createMediaSource(MediaItem.fromUri(Uri.parse(videoURL)));
-        if (title.endsWith(".m3u8")) {
-            MediaItem mediaItem = MediaItem.fromUri(videoURL);
-            player.setMediaItem(mediaItem);
+        if (isplaylist) {
+            for (int i = 0; i < queue.size(); i++) {
+                if (names.get(i).endsWith(".m3u8")) {
+                    MediaItem mediaItem = MediaItem.fromUri(queue.get(i));
+                    player.addMediaItem(mediaItem);
+                } else {
+                    mediaSource = new ProgressiveMediaSource.Factory(
+                            new CacheDataSource.Factory()
+                                    .setCache(simpleCache)
+                                    .setUpstreamDataSourceFactory(new DefaultHttpDataSource.Factory()
+                                            .setUserAgent("S3 Manager"))
+                                    .setFlags(CacheDataSource.FLAG_IGNORE_CACHE_ON_ERROR)
+                    ).createMediaSource(MediaItem.fromUri(Uri.parse(queue.get(i))));
+                    player.addMediaSource(mediaSource);
+                }
+            }
+            player.prepare();
+            player.seekTo(names.indexOf(title), 0);
         } else {
-            player.setMediaSource(mediaSource);
+            if (title.endsWith(".m3u8")) {
+                MediaItem mediaItem = MediaItem.fromUri(videoURL);
+                player.setMediaItem(mediaItem);
+            } else {
+                mediaSource = new ProgressiveMediaSource.Factory(
+                        new CacheDataSource.Factory()
+                                .setCache(simpleCache)
+                                .setUpstreamDataSourceFactory(new DefaultHttpDataSource.Factory()
+                                        .setUserAgent("S3 Manager"))
+                                .setFlags(CacheDataSource.FLAG_IGNORE_CACHE_ON_ERROR)
+                ).createMediaSource(MediaItem.fromUri(Uri.parse(videoURL)));
+                player.setMediaSource(mediaSource);
+            }
+            player.prepare();
         }
-        player.prepare();
         // Start the playback.
         player.play();
         super.onNewIntent(intent);

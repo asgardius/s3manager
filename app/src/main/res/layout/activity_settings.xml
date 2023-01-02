@@ -65,6 +65,30 @@
                 android:inputType="number"
                 android:textColorHint="?attr/colorOnSecondary"/>
 
+            <com.google.android.material.switchmaterial.SwitchMaterial
+                android:id="@+id/isplaylist"
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
+                android:text="@string/playlist_playback"
+                android:textSize="24sp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/playlisttime"
+                android:textAlignment="center"
+                android:textSize="25sp"/>
+
+            <EditText
+                android:id="@+id/playlisttime"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_weight="1"
+                android:focusable="true"
+                android:hint="@string/playlisttime"
+                android:inputType="number"
+                android:textColorHint="?attr/colorOnSecondary"/>
+
             <Button
                 android:id="@+id/saveprefs"
                 android:layout_width="match_parent"

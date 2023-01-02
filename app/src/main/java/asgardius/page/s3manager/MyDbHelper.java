@@ -10,6 +10,8 @@ public class MyDbHelper extends SQLiteOpenHelper {
     private static final String setvideocache = "INSERT INTO preferences VALUES ('videocache', '300')";
     private static final String setvideotime = "INSERT INTO preferences VALUES ('videotime', '3')";
     private static final String setbuffersize = "INSERT INTO preferences VALUES ('buffersize', '12000')";
+    private static final String setplaylisttime = "INSERT INTO preferences VALUES ('playlisttime', '5')";
+    private static final String setisplaylist = "INSERT INTO preferences VALUES ('isplaylist', '0')";
     //private static final String upgrade = "ALTER TABLE account add column pdfendpoint text";
     private static final int DATABASE_VERSION = 1;
     private static final String dbname = "accounts.sqlite3";
@@ -24,6 +26,8 @@ public class MyDbHelper extends SQLiteOpenHelper {
         db.execSQL(setvideocache);
         db.execSQL(setvideotime);
         db.execSQL(setbuffersize);
+        db.execSQL(setplaylisttime);
+        db.execSQL(setisplaylist);
     }
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {

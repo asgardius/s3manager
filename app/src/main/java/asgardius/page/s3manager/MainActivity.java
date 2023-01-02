@@ -33,8 +33,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        isplaylist = true;
-        playlisttime = 1;
 
         recyclerView = findViewById(R.id.alist);
 
@@ -70,6 +68,8 @@ public class MainActivity extends AppCompatActivity {
                                 db.execSQL("INSERT INTO preferences VALUES ('videocache', '300')");
                                 db.execSQL("INSERT INTO preferences VALUES ('videotime', '3')");
                                 db.execSQL("INSERT INTO preferences VALUES ('buffersize', '12000')");
+                                db.execSQL("INSERT INTO preferences VALUES ('playlisttime', '5')");
+                                db.execSQL("INSERT INTO preferences VALUES ('isplaylist', '0')");
                                 videocache = 300;
                                 //videotime = 3;
                                 db.close();
@@ -100,6 +100,74 @@ public class MainActivity extends AppCompatActivity {
                                 db = dbHelper.getWritableDatabase();
                                 db.execSQL("INSERT INTO preferences VALUES ('videotime', '3')");
                                 videotime = 3;
+                                db.close();
+                            } catch (Exception e) {
+                                db = dbHelper.getWritableDatabase();
+                                db.execSQL("CREATE TABLE IF NOT EXISTS preferences(setting text UNIQUE, value text)");
+                                db.close();
+                            }
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        runOnUiThread(new Runnable() {
+
+                            @Override
+                            public void run() {
+                                Toast.makeText(getApplicationContext(),getResources().getString(R.string.broken_database), Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                        //Toast.makeText(getApplicationContext(),getResources().getString(R.string.media_list_fail), Toast.LENGTH_SHORT).show();
+                        finish();
+                    }
+                    try {
+                        db = dbHelper.getWritableDatabase();
+                        String query = "SELECT value FROM preferences where setting='playlisttime'";
+                        Cursor cursor = db.rawQuery(query,null);
+                        while (cursor.moveToNext()){
+                            playlisttime = (Integer.parseInt(cursor.getString(0)));
+                        }
+                        db.close();
+                        if (playlisttime == 0) {
+                            try {
+                                db = dbHelper.getWritableDatabase();
+                                db.execSQL("INSERT INTO preferences VALUES ('playlisttime', '5')");
+                                playlisttime = 5;
+                                db.close();
+                            } catch (Exception e) {
+                                db = dbHelper.getWritableDatabase();
+                                db.execSQL("CREATE TABLE IF NOT EXISTS preferences(setting text UNIQUE, value text)");
+                                db.close();
+                            }
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        runOnUiThread(new Runnable() {
+
+                            @Override
+                            public void run() {
+                                Toast.makeText(getApplicationContext(),getResources().getString(R.string.broken_database), Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                        //Toast.makeText(getApplicationContext(),getResources().getString(R.string.media_list_fail), Toast.LENGTH_SHORT).show();
+                        finish();
+                    }
+                    try {
+                        db = dbHelper.getWritableDatabase();
+                        String query = "SELECT value FROM preferences where setting='isplaylist'";
+                        Cursor cursor = db.rawQuery(query,null);
+                        String update = null;
+                        while (cursor.moveToNext()){
+                            isplaylist = cursor.getString(0).equals("1");
+                            if(!isplaylist) {
+                                update = cursor.getString(0);
+                            }
+                        }
+                        db.close();
+                        if (!isplaylist && update == null) {
+                            try {
+                                db = dbHelper.getWritableDatabase();
+                                db.execSQL("INSERT INTO preferences VALUES ('isplaylist', '0')");
+                                isplaylist = false;
                                 db.close();
                             } catch (Exception e) {
                                 db = dbHelper.getWritableDatabase();
