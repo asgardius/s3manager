@@ -41,6 +41,7 @@ import com.google.android.exoplayer2.upstream.cache.LeastRecentlyUsedCacheEvicto
 import com.google.android.exoplayer2.upstream.cache.SimpleCache;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Objects;
 
 /**
@@ -55,6 +56,7 @@ public class VideoPlayer extends AppCompatActivity {
     private PowerManager.WakeLock mWakeLock;
     private PowerManager powerManager;
     private long maxCacheSize;
+    ArrayList<String> queue;
     LeastRecentlyUsedCacheEvictor evictor;
     StandaloneDatabaseProvider standaloneDatabaseProvider;
     SimpleCache simpleCache;
@@ -70,7 +72,7 @@ public class VideoPlayer extends AppCompatActivity {
     AppOpsManager appOpsManager;
     private PlayerNotificationManager playerNotificationManager;
     private int notificationId = 1234;
-    boolean hls;
+    boolean isplaylist;
     boolean success = false;
     String videoURL, title;
     Rational ratio;
@@ -103,7 +105,8 @@ public class VideoPlayer extends AppCompatActivity {
         title = getIntent().getStringExtra("title");
         videocache = getIntent().getIntExtra("videocache", 40);
         buffersize = getIntent().getIntExtra("buffersize", 2000);
-        hls = getIntent().getBooleanExtra("hls", false);
+        isplaylist = getIntent().getBooleanExtra("hls", false);
+        queue = getIntent().getStringArrayListExtra("queue");
         getSupportActionBar().setTitle(title);
         loadControl = new DefaultLoadControl.Builder().setBufferDurationsMs(2000, buffersize, 1500, 2000).build();
 
@@ -151,7 +154,7 @@ public class VideoPlayer extends AppCompatActivity {
         playerNotificationManager = new PlayerNotificationManager.Builder(this, notificationId, "playback").build();
         playerNotificationManager.setMediaSessionToken(mediaSession.getSessionToken());
         playerNotificationManager.setPlayer(player);
-        if (hls) {
+        if (title.endsWith(".m3u8")) {
             MediaItem mediaItem = MediaItem.fromUri(videoURL);
             player.setMediaItem(mediaItem);
         } else {
@@ -325,7 +328,7 @@ public class VideoPlayer extends AppCompatActivity {
         title = intent.getStringExtra("title");
         videocache = intent.getIntExtra("videocache", 40);
         buffersize = intent.getIntExtra("buffersize", 2000);
-        hls = intent.getBooleanExtra("hls", false);
+        isplaylist = intent.getBooleanExtra("hls", false);
         getSupportActionBar().setTitle(title);
         mediaSource = new ProgressiveMediaSource.Factory(
                 new CacheDataSource.Factory()
@@ -334,7 +337,7 @@ public class VideoPlayer extends AppCompatActivity {
                                 .setUserAgent("ExoplayerDemo"))
                         .setFlags(CacheDataSource.FLAG_IGNORE_CACHE_ON_ERROR)
         ).createMediaSource(MediaItem.fromUri(Uri.parse(videoURL)));
-        if (hls) {
+        if (title.endsWith(".m3u8")) {
             MediaItem mediaItem = MediaItem.fromUri(videoURL);
             player.setMediaItem(mediaItem);
         } else {
