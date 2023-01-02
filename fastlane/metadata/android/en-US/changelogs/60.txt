@@ -1,0 +1,1 @@
+* Add option to play all media items on current folder

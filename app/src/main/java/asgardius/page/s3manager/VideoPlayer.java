@@ -363,6 +363,7 @@ public class VideoPlayer extends AppCompatActivity {
         names = intent.getStringArrayListExtra("names");
         getSupportActionBar().setTitle(title);
         if (isplaylist) {
+            player.clearMediaItems();
             for (int i = 0; i < queue.size(); i++) {
                 if (names.get(i).endsWith(".m3u8")) {
                     MediaItem mediaItem = MediaItem.fromUri(queue.get(i));
