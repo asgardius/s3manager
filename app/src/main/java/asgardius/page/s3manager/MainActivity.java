@@ -20,19 +20,21 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
-    boolean style;
+    boolean style, isplaylist;
     String alias, username, password, endpoint, location, pdfendpoint;
     RecyclerView recyclerView;
     SQLiteDatabase db;
     ArrayList Name;
     ArrayList Img;
     MyDbHelper dbHelper;
-    int videocache, videotime, buffersize;
+    int videocache, videotime, buffersize, playlisttime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        isplaylist = true;
+        playlisttime = 1;
 
         recyclerView = findViewById(R.id.alist);
 
@@ -379,6 +381,8 @@ public class MainActivity extends AppCompatActivity {
         intent.putExtra("videocache", videocache);
         intent.putExtra("videotime", videotime);
         intent.putExtra("buffersize", buffersize);
+        intent.putExtra("playlisttime", playlisttime);
+        intent.putExtra("isplaylist", isplaylist);
         startActivity(intent);
 
     }

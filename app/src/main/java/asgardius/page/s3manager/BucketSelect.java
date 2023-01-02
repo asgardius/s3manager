@@ -44,14 +44,13 @@ public class BucketSelect extends AppCompatActivity {
     ArrayList Img;
     RecyclerView recyclerView;
     String username, password, endpoint, prefix, location, file, pdfendpoint;
-    boolean style;
-    int treelevel;
+    boolean style, isplaylist;
     Region region;
     S3ClientOptions s3ClientOptions;
     AWSCredentials myCredentials;
     AmazonS3 s3client;
     ProgressBar simpleProgressBar;
-    int videocache, videotime, buffersize;
+    int videocache, videotime, buffersize, treelevel, playlisttime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,7 +63,9 @@ public class BucketSelect extends AppCompatActivity {
         style = getIntent().getBooleanExtra("style", false);
         videocache = getIntent().getIntExtra("videocache", 40);
         videotime = getIntent().getIntExtra("videotime", 1);
+        playlisttime = getIntent().getIntExtra("playlisttime", 1);
         buffersize = getIntent().getIntExtra("buffersize", 2000);
+        isplaylist = getIntent().getBooleanExtra("isplaylist", false);
         prefix = "";
         setContentView(R.layout.activity_bucket_select);
         region = Region.getRegion("us-east-1");
@@ -216,6 +217,8 @@ public class BucketSelect extends AppCompatActivity {
         intent.putExtra("videocache", videocache);
         intent.putExtra("videotime", videotime);
         intent.putExtra("buffersize", buffersize);
+        intent.putExtra("playlisttime", playlisttime);
+        intent.putExtra("isplaylist", isplaylist);
         startActivity(intent);
 
     }

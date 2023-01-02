@@ -56,7 +56,7 @@ public class VideoPlayer extends AppCompatActivity {
     private PowerManager.WakeLock mWakeLock;
     private PowerManager powerManager;
     private long maxCacheSize;
-    ArrayList<String> queue;
+    ArrayList<String> queue, names;
     LeastRecentlyUsedCacheEvictor evictor;
     StandaloneDatabaseProvider standaloneDatabaseProvider;
     SimpleCache simpleCache;
@@ -105,8 +105,9 @@ public class VideoPlayer extends AppCompatActivity {
         title = getIntent().getStringExtra("title");
         videocache = getIntent().getIntExtra("videocache", 40);
         buffersize = getIntent().getIntExtra("buffersize", 2000);
-        isplaylist = getIntent().getBooleanExtra("hls", false);
+        isplaylist = getIntent().getBooleanExtra("isplaylist", false);
         queue = getIntent().getStringArrayListExtra("queue");
+        names = getIntent().getStringArrayListExtra("names");
         getSupportActionBar().setTitle(title);
         loadControl = new DefaultLoadControl.Builder().setBufferDurationsMs(2000, buffersize, 1500, 2000).build();
 
@@ -328,7 +329,7 @@ public class VideoPlayer extends AppCompatActivity {
         title = intent.getStringExtra("title");
         videocache = intent.getIntExtra("videocache", 40);
         buffersize = intent.getIntExtra("buffersize", 2000);
-        isplaylist = intent.getBooleanExtra("hls", false);
+        isplaylist = intent.getBooleanExtra("isplaylist", false);
         getSupportActionBar().setTitle(title);
         mediaSource = new ProgressiveMediaSource.Factory(
                 new CacheDataSource.Factory()

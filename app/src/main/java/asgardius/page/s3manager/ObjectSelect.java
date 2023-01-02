@@ -4,15 +4,11 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import android.app.AppOpsManager;
-import android.app.PictureInPictureParams;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -39,7 +35,6 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
 
@@ -50,16 +45,14 @@ public class ObjectSelect extends AppCompatActivity {
     //ArrayList object;
     RecyclerView recyclerView;
     String username, password, endpoint, bucket, prefix, location, pdfendpoint, query;
-    boolean style;
-    int treelevel;
+    boolean style, isplaylist;
     String[] filename;
     Region region;
     S3ClientOptions s3ClientOptions;
     AWSCredentials myCredentials;
     AmazonS3 s3client;
     ProgressBar simpleProgressBar;
-    int videocache, videotime, buffersize;
-    AppOpsManager appOpsManager;
+    int videocache, videotime, buffersize, treelevel, playlisttime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,8 +68,9 @@ public class ObjectSelect extends AppCompatActivity {
         treelevel = getIntent().getIntExtra("treelevel", 0);
         videocache = getIntent().getIntExtra("videocache", 40);
         videotime = getIntent().getIntExtra("videotime", 1);
+        playlisttime = getIntent().getIntExtra("playlisttime", 1);
         buffersize = getIntent().getIntExtra("buffersize", 2000);
-        appOpsManager = (AppOpsManager)getSystemService(Context.APP_OPS_SERVICE);
+        isplaylist = getIntent().getBooleanExtra("isplaylist", false);
         setContentView(R.layout.activity_object_select);
         getSupportActionBar().setTitle(bucket+"/"+prefix);
         region = Region.getRegion(location);
@@ -327,48 +321,52 @@ public class ObjectSelect extends AppCompatActivity {
                         pdfread.start();
                     }
                 } else if (Img.get(position).equals(R.drawable.audiofile) || Img.get(position).equals(R.drawable.videofile)) {
-                    Thread mediaread = new Thread(new Runnable() {
+                    if (isplaylist) {
+                        videoPlayer(null, Name.get(position).toString());
+                    } else {
+                        Thread mediaread = new Thread(new Runnable() {
 
-                        @Override
-                        public void run() {
-                            try  {
-                                //load media file
-                                Date expiration = new Date();
-                                Calendar mycal = Calendar.getInstance();
-                                mycal.setTime(expiration);
-                                //System.out.println("today is " + mycal.getTime());
-                                mycal.add(Calendar.HOUR, videotime);
-                                //System.out.println("Expiration date: " + mycal.getTime());
-                                expiration = mycal.getTime();
-                                GeneratePresignedUrlRequest request = new GeneratePresignedUrlRequest(bucket, prefix + Name.get(position).toString()).withExpiration(expiration);;
-                                URL objectURL = s3client.generatePresignedUrl(request);
+                            @Override
+                            public void run() {
+                                try  {
+                                    //load media file
+                                    Date expiration = new Date();
+                                    Calendar mycal = Calendar.getInstance();
+                                    mycal.setTime(expiration);
+                                    //System.out.println("today is " + mycal.getTime());
+                                    mycal.add(Calendar.HOUR, videotime);
+                                    //System.out.println("Expiration date: " + mycal.getTime());
+                                    expiration = mycal.getTime();
+                                    GeneratePresignedUrlRequest request = new GeneratePresignedUrlRequest(bucket, prefix + Name.get(position).toString()).withExpiration(expiration);;
+                                    URL objectURL = s3client.generatePresignedUrl(request);
 
-                                runOnUiThread(new Runnable() {
+                                    runOnUiThread(new Runnable() {
 
-                                    @Override
-                                    public void run() {
-                                        // Sending reference and data to Adapter
-                                        videoPlayer(objectURL.toString(), Name.get(position).toString(), Name.get(position).toString().endsWith(".m3u8"));
-                                    }
-                                });
-                                //System.out.println("tree "+treelevel);
-                                //System.out.println("prefix "+prefix);
+                                        @Override
+                                        public void run() {
+                                            // Sending reference and data to Adapter
+                                            videoPlayer(objectURL.toString(), Name.get(position).toString());
+                                        }
+                                    });
+                                    //System.out.println("tree "+treelevel);
+                                    //System.out.println("prefix "+prefix);
 
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                                runOnUiThread(new Runnable() {
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                    runOnUiThread(new Runnable() {
 
-                                    @Override
-                                    public void run() {
-                                        Toast.makeText(getApplicationContext(),getResources().getString(R.string.media_list_fail), Toast.LENGTH_SHORT).show();
-                                    }
-                                });
-                                //Toast.makeText(getApplicationContext(),getResources().getString(R.string.media_list_fail), Toast.LENGTH_SHORT).show();
-                                finish();
+                                        @Override
+                                        public void run() {
+                                            Toast.makeText(getApplicationContext(),getResources().getString(R.string.media_list_fail), Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
+                                    //Toast.makeText(getApplicationContext(),getResources().getString(R.string.media_list_fail), Toast.LENGTH_SHORT).show();
+                                    finish();
+                                }
                             }
-                        }
-                    });
-                    mediaread.start();
+                        });
+                        mediaread.start();
+                    }
                 }  else {
                     Toast.makeText(ObjectSelect.this, getResources().getString(R.string.unsupported_file), Toast.LENGTH_SHORT).show();
                 }
@@ -459,15 +457,60 @@ public class ObjectSelect extends AppCompatActivity {
         }));
     }
 
-    private void videoPlayer(String url, String title, boolean hls) {
+    private void videoPlayer(String url, String title) {
 
-        Intent intent = new Intent(this, VideoPlayer.class);
-        intent.putExtra("video_url", url);
-        intent.putExtra("title", title);
-        intent.putExtra("videocache", videocache);
-        intent.putExtra("buffersize", buffersize);
-        intent.putExtra("hls", hls);
-        startActivity(intent);
+        if (isplaylist) {
+            Thread mediaread = new Thread(new Runnable() {
+
+                @Override
+                public void run() {
+                    try  {
+                        //load media file
+                        ArrayList<String> medialist = new ArrayList<String>();
+                        for (int i = 0; i < Name.size(); i++) {
+                            if (Img.get(i).equals(R.drawable.audiofile) || Img.get(i).equals(R.drawable.videofile)) {
+                                medialist.add(Name.get(i).toString());
+                            }
+                        }
+                        ArrayList<String> links = getLinks(medialist);
+                        for (int i = 0; i < links.size(); i++) {
+                            System.out.println(links.get(i));
+                        }
+                        System.out.println("Position of selected file: "+medialist.indexOf(title));
+
+                        runOnUiThread(new Runnable() {
+
+                            @Override
+                            public void run() {
+                                // Sending reference and data to Adapter
+                                //videoPlayer(objectURL.toString(), Name.get(position).toString());
+                            }
+                        });
+                        //System.out.println("tree "+treelevel);
+                        //System.out.println("prefix "+prefix);
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        runOnUiThread(new Runnable() {
+
+                            @Override
+                            public void run() {
+                                Toast.makeText(getApplicationContext(),getResources().getString(R.string.media_list_fail), Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    }
+                }
+            });
+            mediaread.start();
+        } else {
+            Intent intent = new Intent(this, VideoPlayer.class);
+            intent.putExtra("video_url", url);
+            intent.putExtra("title", title);
+            intent.putExtra("videocache", videocache);
+            intent.putExtra("buffersize", buffersize);
+            intent.putExtra("isplaylist", isplaylist);
+            startActivity(intent);
+        }
 
     }
     private void textViewer(String url) {
@@ -512,6 +555,8 @@ public class ObjectSelect extends AppCompatActivity {
         intent.putExtra("videocache", videocache);
         intent.putExtra("videotime", videotime);
         intent.putExtra("buffersize", buffersize);
+        intent.putExtra("playlisttime", playlisttime);
+        intent.putExtra("isplaylist", isplaylist);
         startActivity(intent);
 
     }
@@ -692,5 +737,21 @@ public class ObjectSelect extends AppCompatActivity {
         if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.S_V2) {
             Toast.makeText(getApplicationContext(),getResources().getString(R.string.copy_name_ok), Toast.LENGTH_SHORT).show();
         }
+    }
+
+    public ArrayList<String> getLinks (ArrayList<String> medialist) throws InterruptedException {
+        ArrayList<String> links = new ArrayList<String>();
+        Date expiration = new Date();
+        Calendar mycal = Calendar.getInstance();
+        mycal.setTime(expiration);
+        //System.out.println("today is " + mycal.getTime());
+        mycal.add(Calendar.HOUR, playlisttime);
+        //System.out.println("Expiration date: " + mycal.getTime());
+        expiration = mycal.getTime();
+        for (int i = 0; i < medialist.size(); i++) {
+            GeneratePresignedUrlRequest request = new GeneratePresignedUrlRequest(bucket, prefix+medialist.get(i)).withExpiration(expiration);;
+            links.add(s3client.generatePresignedUrl(request).toString());
+        }
+        return links;
     }
 }
