@@ -127,13 +127,6 @@ public class VideoPlayer extends AppCompatActivity {
                 new File(this.getCacheDir(), "media"),
                 evictor,
                 standaloneDatabaseProvider);
-        mediaSource = new ProgressiveMediaSource.Factory(
-                new CacheDataSource.Factory()
-                        .setCache(simpleCache)
-                        .setUpstreamDataSourceFactory(new DefaultHttpDataSource.Factory()
-                                .setUserAgent("S3 Manager"))
-                        .setFlags(CacheDataSource.FLAG_IGNORE_CACHE_ON_ERROR)
-        ).createMediaSource(MediaItem.fromUri(Uri.parse(videoURL)));
         playerView.setPlayer(player);
         control = new StyledPlayerView.ControllerVisibilityListener() {
             @Override
@@ -155,13 +148,40 @@ public class VideoPlayer extends AppCompatActivity {
         playerNotificationManager = new PlayerNotificationManager.Builder(this, notificationId, "playback").build();
         playerNotificationManager.setMediaSessionToken(mediaSession.getSessionToken());
         playerNotificationManager.setPlayer(player);
-        if (title.endsWith(".m3u8")) {
-            MediaItem mediaItem = MediaItem.fromUri(videoURL);
-            player.setMediaItem(mediaItem);
+        if (isplaylist) {
+            for (int i = 0; i < queue.size(); i++) {
+                if (names.get(i).endsWith(".m3u8")) {
+                    MediaItem mediaItem = MediaItem.fromUri(queue.get(i));
+                    player.addMediaItem(mediaItem);
+                } else {
+                    mediaSource = new ProgressiveMediaSource.Factory(
+                            new CacheDataSource.Factory()
+                                    .setCache(simpleCache)
+                                    .setUpstreamDataSourceFactory(new DefaultHttpDataSource.Factory()
+                                            .setUserAgent("S3 Manager"))
+                                    .setFlags(CacheDataSource.FLAG_IGNORE_CACHE_ON_ERROR)
+                    ).createMediaSource(MediaItem.fromUri(Uri.parse(queue.get(i))));
+                    player.addMediaSource(mediaSource);
+                }
+            }
+            player.prepare();
+            player.seekTo(names.indexOf(title), 0);
         } else {
-            player.setMediaSource(mediaSource);
+            if (title.endsWith(".m3u8")) {
+                MediaItem mediaItem = MediaItem.fromUri(videoURL);
+                player.setMediaItem(mediaItem);
+            } else {
+                mediaSource = new ProgressiveMediaSource.Factory(
+                        new CacheDataSource.Factory()
+                                .setCache(simpleCache)
+                                .setUpstreamDataSourceFactory(new DefaultHttpDataSource.Factory()
+                                        .setUserAgent("S3 Manager"))
+                                .setFlags(CacheDataSource.FLAG_IGNORE_CACHE_ON_ERROR)
+                ).createMediaSource(MediaItem.fromUri(Uri.parse(videoURL)));
+                player.setMediaSource(mediaSource);
+            }
+            player.prepare();
         }
-        player.prepare();
         // Start the playback.
         player.play();
 

@@ -458,7 +458,6 @@ public class ObjectSelect extends AppCompatActivity {
     }
 
     private void videoPlayer(String url, String title) {
-
         if (isplaylist) {
             Thread mediaread = new Thread(new Runnable() {
 
@@ -473,10 +472,6 @@ public class ObjectSelect extends AppCompatActivity {
                             }
                         }
                         ArrayList<String> links = getLinks(medialist);
-                        for (int i = 0; i < links.size(); i++) {
-                            System.out.println(links.get(i));
-                        }
-                        System.out.println("Position of selected file: "+medialist.indexOf(title));
 
                         runOnUiThread(new Runnable() {
 
@@ -484,6 +479,15 @@ public class ObjectSelect extends AppCompatActivity {
                             public void run() {
                                 // Sending reference and data to Adapter
                                 //videoPlayer(objectURL.toString(), Name.get(position).toString());
+                                Intent intent = new Intent(getApplicationContext(), VideoPlayer.class);
+                                intent.putExtra("video_url", url);
+                                intent.putExtra("title", title);
+                                intent.putExtra("videocache", videocache);
+                                intent.putExtra("buffersize", buffersize);
+                                intent.putExtra("isplaylist", isplaylist);
+                                intent.putExtra("queue", links);
+                                intent.putExtra("names", medialist);
+                                startActivity(intent);
                             }
                         });
                         //System.out.println("tree "+treelevel);
