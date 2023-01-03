@@ -331,6 +331,7 @@ public class VideoPlayer extends AppCompatActivity {
 
     public void onDestroy() {
         mediaSessionConnector.setPlayer(null);
+        deleteCache(this, standaloneDatabaseProvider);
         standaloneDatabaseProvider.close();
         mediaSession.setActive(false);
         playerNotificationManager.setPlayer(null);
@@ -418,6 +419,10 @@ public class VideoPlayer extends AppCompatActivity {
             e.printStackTrace();
         }
         super.onStop();
+    }
+
+    static void deleteCache(Context context, StandaloneDatabaseProvider database) {
+        SimpleCache.delete(new File(context.getCacheDir(), "media"), database);
     }
 
     public void onBackPressed() {
