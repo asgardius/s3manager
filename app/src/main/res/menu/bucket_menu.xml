@@ -14,6 +14,10 @@
         android:title="@string/download_bucket" />
 
     <item
+        android:id="@+id/sharefile"
+        android:title="@string/create_link" />
+
+    <item
         android:id="@+id/newbucket"
         android:title="@string/create_bucket" />
 

@@ -2,8 +2,11 @@ package asgardius.page.s3manager;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.content.Intent;
-import android.database.sqlite.SQLiteDatabase;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -17,26 +20,32 @@ import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.S3ClientOptions;
 import com.amazonaws.services.s3.model.GeneratePresignedUrlRequest;
+import com.amazonaws.services.s3.model.ListObjectsRequest;
+import com.amazonaws.services.s3.model.ObjectListing;
+import com.amazonaws.services.s3.model.S3ObjectSummary;
 
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 public class Share extends AppCompatActivity {
-    String username, password, endpoint, bucket, object, location, title;
+    String username, password, endpoint, bucket, object, location, title, objectlist;
     boolean mediafile, style;
     Region region;
     S3ClientOptions s3ClientOptions;
     AWSCredentials myCredentials;
     AmazonS3 s3client;
+    ListObjectsRequest orequest;
     Calendar mycal;
     EditText datepick, hourpick, minutepick;
     int date, hour, minute;
-    Button share;
+    Button share, copylinks, savelinks;
     GeneratePresignedUrlRequest request;
     Date expiration;
     URL objectURL;
-    int videotime;
+    int videotime, playlisttime;
 
     public static String URLify(String str) {
         str = str.trim();
@@ -76,6 +85,8 @@ public class Share extends AppCompatActivity {
         hourpick = (EditText)findViewById(R.id.Hour);
         minutepick = (EditText)findViewById(R.id.Minute);
         share = (Button)findViewById(R.id.share);
+        copylinks = (Button)findViewById(R.id.copy_links);
+        savelinks = (Button)findViewById(R.id.save_links);
         endpoint = getIntent().getStringExtra("endpoint");
         username = getIntent().getStringExtra("username");
         password = getIntent().getStringExtra("password");
@@ -85,6 +96,7 @@ public class Share extends AppCompatActivity {
         object = getIntent().getStringExtra("object");
         mediafile = getIntent().getBooleanExtra("mediafile", false);
         videotime = getIntent().getIntExtra("videotime", 1);
+        playlisttime = getIntent().getIntExtra("playlisttime", 1);
         title = getIntent().getStringExtra("title");
         getSupportActionBar().setTitle(title);
         region = Region.getRegion(location);
@@ -98,6 +110,12 @@ public class Share extends AppCompatActivity {
         s3client.setEndpoint(endpoint);
         s3ClientOptions.setPathStyleAccess(style);
         s3client.setS3ClientOptions(s3ClientOptions);
+        if(object == null || object.endsWith("/")) {
+            copylinks.setVisibility(View.VISIBLE);
+            savelinks.setVisibility(View.VISIBLE);
+        } else {
+            share.setVisibility(View.VISIBLE);
+        }
         share.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
@@ -146,6 +164,103 @@ public class Share extends AppCompatActivity {
                         Toast.makeText(getApplicationContext(),getResources().getString(R.string.invalid_expiration_date), Toast.LENGTH_SHORT).show();
                     }
                 }
+
+        });
+        copylinks.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                //buttonaction
+                Thread getLinks = new Thread(new Runnable() {
+
+                    @Override
+                    public void run() {
+                        try  {
+                            //load media file
+                            if (datepick.getText().toString().equals("")) {
+                                date = 0;
+                            } else {
+                                date = Integer.parseInt(datepick.getText().toString());
+                            }
+                            if (hourpick.getText().toString().equals("")) {
+                                hour = 0;
+                            } else {
+                                hour = Integer.parseInt(hourpick.getText().toString());
+                            }
+                            if (minutepick.getText().toString().equals("")) {
+                                minute = 0;
+                            } else {
+                                minute = Integer.parseInt(minutepick.getText().toString());
+                            }
+                            expiration = new Date();
+                            //System.out.println("today is " + mycal.getTime());
+                            mycal.setTime(expiration);
+                            if (date == 0 && hour == 0 && minute == 0) {
+                                if (mediafile) {
+                                    mycal.add(Calendar.HOUR, playlisttime);
+                                } else {
+                                    mycal.add(Calendar.MINUTE, 15);
+                                }
+                            } else {
+                                mycal.add(Calendar.DATE, date);
+                                mycal.add(Calendar.HOUR, hour);
+                                mycal.add(Calendar.MINUTE, minute);
+                            }
+                            //System.out.println("Expiration date: " + mycal.getTime());
+                            expiration = mycal.getTime();
+                            //System.out.println(expiration);
+                            if (object == null) {
+                                orequest = new ListObjectsRequest().withBucketName(bucket).withMaxKeys(1000);
+                            } else {
+                                orequest = new ListObjectsRequest().withBucketName(bucket).withPrefix(object).withMaxKeys(1000);
+                            }
+                            ObjectListing result = s3client.listObjects(orequest);
+                            objectlist = "";
+                            List<S3ObjectSummary> objects = result.getObjectSummaries();
+                            for (S3ObjectSummary os : objects) {
+                                request = new GeneratePresignedUrlRequest(bucket, os.getKey()).withExpiration(expiration);
+                                objectlist = objectlist+s3client.generatePresignedUrl(request).toString()+"\n";
+                            }
+                            while (result.isTruncated()) {
+                                result = s3client.listNextBatchOfObjects (result);
+                                objects = result.getObjectSummaries();
+                                for (S3ObjectSummary os : objects) {
+                                    request = new GeneratePresignedUrlRequest(bucket, os.getKey()).withExpiration(expiration);
+                                    objectlist = objectlist+s3client.generatePresignedUrl(request).toString()+"\n";
+                                }
+
+                            }
+
+                            runOnUiThread(new Runnable() {
+
+                                @Override
+                                public void run() {
+                                    // Sending reference and data to Adapter
+                                    ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+                                    ClipData clip;
+                                    clip = ClipData.newPlainText("name", objectlist);
+                                    clipboard.setPrimaryClip(clip);
+                                    if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.S_V2) {
+                                        Toast.makeText(getApplicationContext(),getResources().getString(R.string.copy_ok), Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                            });
+                            //System.out.println("tree "+treelevel);
+                            //System.out.println("prefix "+prefix);
+
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            runOnUiThread(new Runnable() {
+
+                                @Override
+                                public void run() {
+                                    Toast.makeText(getApplicationContext(),getResources().getString(R.string.invalid_expiration_date), Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                        }
+                    }
+                });
+                getLinks.start();
+            }
 
         });
     }

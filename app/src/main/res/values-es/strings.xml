@@ -78,7 +78,7 @@
     <string name="share_minute">MM</string>
     <string name="expiration_date">Fecha de expiración</string>
     <string name="expiration_time">Expira dentro de</string>
-    <string name="create_link">Crear enlace al archivo</string>
+    <string name="create_link">Crear enlace</string>
     <string name="invalid_expiration_date">La fecha de caducidad debe ser inferior a 7 días</string>
     <string name="file_size">Tamaño del archivo</string>
     <string name="object_info">Propiedades</string>
@@ -116,7 +116,9 @@
     <string name="download_folder">Descargar contenido de la carpeta</string>
     <string name="batch_download_success">Archivos descargados exitosamente</string>
     <string name="copy_name">Copiar nombre al portapapeles</string>
-    <string name="copy_name_ok">Nombre copiado al portapapeles</string>
+    <string name="copy_ok">Copiado al portapapeles</string>
     <string name="upload_calculate">Calculando tamaño de la carpeta</string>
     <string name="picture_too_big">Imagen demasiado grande</string>
+    <string name="save_links">Guardar enlaces en archivo</string>
+    <string name="copy_links">Copiar enlaces al potapapeles</string>
 </resources>

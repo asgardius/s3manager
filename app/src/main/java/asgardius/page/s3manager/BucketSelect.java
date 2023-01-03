@@ -1,8 +1,5 @@
 package asgardius.page.s3manager;
 
-import static android.media.MediaExtractor.MetricsConstants.MIME_TYPE;
-import static com.amazonaws.regions.Regions.US_EAST_1;
-
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -13,7 +10,6 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -29,7 +25,6 @@ import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.S3ClientOptions;
 import com.amazonaws.services.s3.model.Bucket;
-import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.DeleteObjectsRequest;
 import com.amazonaws.services.s3.model.ListObjectsRequest;
 import com.amazonaws.services.s3.model.ObjectListing;
@@ -171,6 +166,8 @@ public class BucketSelect extends AppCompatActivity {
                                 //Toast.makeText(BucketSelect.this, getResources().getString(R.string.pending_feature), Toast.LENGTH_SHORT).show();
                                 upload(Name.get(position).toString(), true);
 
+                            } else if (menuItem.getTitle() == getResources().getString(R.string.create_link)) {
+                                share(Name.get(position).toString());
                             } else if (menuItem.getTitle() == getResources().getString(R.string.download_bucket)) {
                                 //Toast.makeText(BucketSelect.this, getResources().getString(R.string.pending_feature), Toast.LENGTH_SHORT).show();
                                 download(Name.get(position).toString());
@@ -219,6 +216,23 @@ public class BucketSelect extends AppCompatActivity {
         intent.putExtra("buffersize", buffersize);
         intent.putExtra("playlisttime", playlisttime);
         intent.putExtra("isplaylist", isplaylist);
+        startActivity(intent);
+
+    }
+
+    private void share(String bucket) {
+
+        Intent intent = new Intent(this, Share.class);
+        //treelevel ++;
+        intent.putExtra("endpoint", endpoint);
+        intent.putExtra("username", username);
+        intent.putExtra("password", password);
+        intent.putExtra("bucket", bucket);
+        intent.putExtra("title", bucket);
+        intent.putExtra("region", location);
+        intent.putExtra("videotime", videotime);
+        intent.putExtra("playlisttime", playlisttime);
+        intent.putExtra("style", style);
         startActivity(intent);
 
     }
@@ -373,7 +387,7 @@ public class BucketSelect extends AppCompatActivity {
         ClipData clip = ClipData.newPlainText("name", name);
         clipboard.setPrimaryClip(clip);
         if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.S_V2) {
-            Toast.makeText(getApplicationContext(),getResources().getString(R.string.copy_name_ok), Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(),getResources().getString(R.string.copy_ok), Toast.LENGTH_SHORT).show();
         }
     }
 }

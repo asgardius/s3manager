@@ -14,6 +14,10 @@
         android:title="@string/download_folder" />
 
     <item
+        android:id="@+id/sharefile"
+        android:title="@string/create_link" />
+
+    <item
         android:id="@+id/info"
         android:title="@string/object_info" />
 

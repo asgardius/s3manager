@@ -396,6 +396,8 @@ public class ObjectSelect extends AppCompatActivity {
                             } else if (menuItem.getTitle() == getResources().getString(R.string.download_folder)) {
                                 //Toast.makeText(ObjectSelect.this, getResources().getString(R.string.pending_feature), Toast.LENGTH_SHORT).show();
                                 download(Name.get(position).toString(), true);
+                            } else if (menuItem.getTitle() == getResources().getString(R.string.create_link)) {
+                                share( Name.get(position).toString(), Img.get(position).equals(R.drawable.audiofile) || Img.get(position).equals(R.drawable.videofile));
                             } else if (menuItem.getTitle() == getResources().getString(R.string.object_info)) {
                                 objectInfo(prefix + Name.get(position).toString(), Name.get(position).toString());
                             } else if (menuItem.getTitle() == getResources().getString(R.string.copy_name)) {
@@ -433,7 +435,7 @@ public class ObjectSelect extends AppCompatActivity {
                                 //Toast.makeText(ObjectSelect.this, getResources().getString(R.string.pending_feature), Toast.LENGTH_SHORT).show();
                                 upload(true);
                             } else if (menuItem.getTitle() == getResources().getString(R.string.create_link)) {
-                                share(prefix + Name.get(position).toString(), Name.get(position).toString(), Img.get(position).equals(R.drawable.audiofile) || Img.get(position).equals(R.drawable.videofile));
+                                share(Name.get(position).toString(), Img.get(position).equals(R.drawable.audiofile) || Img.get(position).equals(R.drawable.videofile));
                             } else if (menuItem.getTitle() == getResources().getString(R.string.object_info)) {
                                 objectInfo(prefix + Name.get(position).toString(), Name.get(position).toString());
                             } else if (menuItem.getTitle() == getResources().getString(R.string.copy_name)) {
@@ -565,7 +567,7 @@ public class ObjectSelect extends AppCompatActivity {
 
     }
 
-    private void share(String object, String title, boolean mediafile) {
+    private void share(String object, boolean mediafile) {
 
         Intent intent = new Intent(this, Share.class);
         //treelevel ++;
@@ -573,11 +575,12 @@ public class ObjectSelect extends AppCompatActivity {
         intent.putExtra("username", username);
         intent.putExtra("password", password);
         intent.putExtra("bucket", bucket);
-        intent.putExtra("object", object);
-        intent.putExtra("title", title);
+        intent.putExtra("object", prefix+object);
+        intent.putExtra("title", object);
         intent.putExtra("region", location);
         intent.putExtra("mediafile", mediafile);
         intent.putExtra("videotime", videotime);
+        intent.putExtra("playlisttime", playlisttime);
         intent.putExtra("style", style);
         startActivity(intent);
 
@@ -739,7 +742,7 @@ public class ObjectSelect extends AppCompatActivity {
         }
         clipboard.setPrimaryClip(clip);
         if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.S_V2) {
-            Toast.makeText(getApplicationContext(),getResources().getString(R.string.copy_name_ok), Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(),getResources().getString(R.string.copy_ok), Toast.LENGTH_SHORT).show();
         }
     }
 

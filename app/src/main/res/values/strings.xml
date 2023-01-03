@@ -13,7 +13,7 @@
     <string name="share_hour">HH</string>
     <string name="share_minute">MM</string>
     <string name="share_date">D</string>
-    <string name="create_link">Create file link</string>
+    <string name="create_link">Create link</string>
     <string name="invalid_expiration_date">Expiration date must be at most 7 days</string>
     <string name="null_expiration_date">You must set an expiration date to share files</string>
     <string name="broken_database">Local database is corrupted. Please reinstall this app</string>
@@ -119,7 +119,9 @@
     <string name="cors_error">Cannot change CORS policy</string>
     <string name="cors_ok">CORS policy changed successfully</string>
     <string name="copy_name">Copy name to clipboard</string>
-    <string name="copy_name_ok">Name copied to clipboard</string>
+    <string name="copy_ok">Copied to clipboard</string>
     <string name="upload_calculate">Calculating folder size</string>
     <string name="picture_too_big">Picture too big</string>
+    <string name="save_links">Save links to file</string>
+    <string name="copy_links">Copy links to clipboard</string>
 </resources>
