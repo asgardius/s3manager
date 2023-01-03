@@ -1,0 +1,2 @@
+* Add option to play all media items on current folder
+* Add option to share entire folders and save on clipboard or txt file
