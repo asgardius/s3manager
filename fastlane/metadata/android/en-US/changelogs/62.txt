@@ -1,0 +1,1 @@
+* Delete cached media when is not longer needed
