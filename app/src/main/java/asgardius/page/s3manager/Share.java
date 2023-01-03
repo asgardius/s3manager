@@ -2,10 +2,12 @@ package asgardius.page.s3manager;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
@@ -24,8 +26,8 @@ import com.amazonaws.services.s3.model.ListObjectsRequest;
 import com.amazonaws.services.s3.model.ObjectListing;
 import com.amazonaws.services.s3.model.S3ObjectSummary;
 
+import java.io.OutputStreamWriter;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -45,6 +47,8 @@ public class Share extends AppCompatActivity {
     GeneratePresignedUrlRequest request;
     Date expiration;
     URL objectURL;
+    Uri fileuri;
+    Intent intent;
     int videotime, playlisttime;
 
     public static String URLify(String str) {
@@ -170,65 +174,13 @@ public class Share extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 //buttonaction
-                Thread getLinks = new Thread(new Runnable() {
+                Thread copyLinks = new Thread(new Runnable() {
 
                     @Override
                     public void run() {
                         try  {
                             //load media file
-                            if (datepick.getText().toString().equals("")) {
-                                date = 0;
-                            } else {
-                                date = Integer.parseInt(datepick.getText().toString());
-                            }
-                            if (hourpick.getText().toString().equals("")) {
-                                hour = 0;
-                            } else {
-                                hour = Integer.parseInt(hourpick.getText().toString());
-                            }
-                            if (minutepick.getText().toString().equals("")) {
-                                minute = 0;
-                            } else {
-                                minute = Integer.parseInt(minutepick.getText().toString());
-                            }
-                            expiration = new Date();
-                            //System.out.println("today is " + mycal.getTime());
-                            mycal.setTime(expiration);
-                            if (date == 0 && hour == 0 && minute == 0) {
-                                if (mediafile) {
-                                    mycal.add(Calendar.HOUR, playlisttime);
-                                } else {
-                                    mycal.add(Calendar.MINUTE, 15);
-                                }
-                            } else {
-                                mycal.add(Calendar.DATE, date);
-                                mycal.add(Calendar.HOUR, hour);
-                                mycal.add(Calendar.MINUTE, minute);
-                            }
-                            //System.out.println("Expiration date: " + mycal.getTime());
-                            expiration = mycal.getTime();
-                            //System.out.println(expiration);
-                            if (object == null) {
-                                orequest = new ListObjectsRequest().withBucketName(bucket).withMaxKeys(1000);
-                            } else {
-                                orequest = new ListObjectsRequest().withBucketName(bucket).withPrefix(object).withMaxKeys(1000);
-                            }
-                            ObjectListing result = s3client.listObjects(orequest);
-                            objectlist = "";
-                            List<S3ObjectSummary> objects = result.getObjectSummaries();
-                            for (S3ObjectSummary os : objects) {
-                                request = new GeneratePresignedUrlRequest(bucket, os.getKey()).withExpiration(expiration);
-                                objectlist = objectlist+s3client.generatePresignedUrl(request).toString()+"\n";
-                            }
-                            while (result.isTruncated()) {
-                                result = s3client.listNextBatchOfObjects (result);
-                                objects = result.getObjectSummaries();
-                                for (S3ObjectSummary os : objects) {
-                                    request = new GeneratePresignedUrlRequest(bucket, os.getKey()).withExpiration(expiration);
-                                    objectlist = objectlist+s3client.generatePresignedUrl(request).toString()+"\n";
-                                }
-
-                            }
+                            getLinks();
 
                             runOnUiThread(new Runnable() {
 
@@ -259,9 +211,146 @@ public class Share extends AppCompatActivity {
                         }
                     }
                 });
-                getLinks.start();
+                copyLinks.start();
             }
 
         });
+        savelinks.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                //buttonaction
+                performFileSearch("Select download location");
+            }
+
+        });
+    }
+
+    private void performFileSearch(String messageTitle) {
+        //uri = Uri.parse("content://com.android.externalstorage.documents/document/home");
+        intent = new Intent();
+        intent.setAction(Intent.ACTION_CREATE_DOCUMENT);
+        //intent.addCategory(Intent.CATEGORY_OPENABLE);
+        //intent.putExtra(Intent.EXTRA_LOCAL_ONLY, true);
+        //intent.putExtra("android.provider.extra.INITIAL_URI", uri);
+        intent.putExtra(Intent.EXTRA_TITLE, "links.txt");
+        intent.setType("*/*");
+        ((Activity) this).startActivityForResult(intent, 70);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, final Intent resultData) {
+        // The ACTION_OPEN_DOCUMENT intent was sent with the request code OPEN_DIRECTORY_REQUEST_CODE.
+        // If the request code seen here doesn't match, it's the response to some other intent,
+        // and the below code shouldn't run at all.
+        super.onActivityResult(requestCode, resultCode, resultData);
+        if (requestCode == 70) {
+            if (resultCode == Activity.RESULT_OK) {
+                // The document selected by the user won't be returned in the intent.
+                // Instead, a URI to that document will be contained in the return intent
+                // provided to this method as a parameter.  Pull that uri using "resultData.getData()"
+                if (resultData != null && resultData.getData() != null) {
+                    fileuri = resultData.getData();
+                    System.out.println(fileuri.toString());
+                    savelinks();
+                    //System.out.println("File selected successfully");
+                    //System.out.println("content://com.android.externalstorage.documents"+file.getPath());
+                } else {
+                    Toast.makeText(Share.this, getResources().getString(R.string.file_path_fail), Toast.LENGTH_SHORT).show();
+                    finish();
+                }
+            } else {
+                //System.out.println("User cancelled file browsing {}");
+                finish();
+            }
+        }
+    }
+
+    private void getLinks() {
+        if (datepick.getText().toString().equals("")) {
+            date = 0;
+        } else {
+            date = Integer.parseInt(datepick.getText().toString());
+        }
+        if (hourpick.getText().toString().equals("")) {
+            hour = 0;
+        } else {
+            hour = Integer.parseInt(hourpick.getText().toString());
+        }
+        if (minutepick.getText().toString().equals("")) {
+            minute = 0;
+        } else {
+            minute = Integer.parseInt(minutepick.getText().toString());
+        }
+        expiration = new Date();
+        //System.out.println("today is " + mycal.getTime());
+        mycal.setTime(expiration);
+        if (date == 0 && hour == 0 && minute == 0) {
+            mycal.add(Calendar.HOUR, playlisttime);
+        } else {
+            mycal.add(Calendar.DATE, date);
+            mycal.add(Calendar.HOUR, hour);
+            mycal.add(Calendar.MINUTE, minute);
+        }
+        //System.out.println("Expiration date: " + mycal.getTime());
+        expiration = mycal.getTime();
+        //System.out.println(expiration);
+        if (object == null) {
+            orequest = new ListObjectsRequest().withBucketName(bucket).withMaxKeys(1000);
+        } else {
+            orequest = new ListObjectsRequest().withBucketName(bucket).withPrefix(object).withMaxKeys(1000);
+        }
+        ObjectListing result = s3client.listObjects(orequest);
+        objectlist = "";
+        List<S3ObjectSummary> objects = result.getObjectSummaries();
+        for (S3ObjectSummary os : objects) {
+            request = new GeneratePresignedUrlRequest(bucket, os.getKey()).withExpiration(expiration);
+            objectlist = objectlist+s3client.generatePresignedUrl(request).toString()+"\n";
+        }
+        while (result.isTruncated()) {
+            result = s3client.listNextBatchOfObjects (result);
+            objects = result.getObjectSummaries();
+            for (S3ObjectSummary os : objects) {
+                request = new GeneratePresignedUrlRequest(bucket, os.getKey()).withExpiration(expiration);
+                objectlist = objectlist+s3client.generatePresignedUrl(request).toString()+"\n";
+            }
+
+        }
+    }
+
+    private void savelinks() {
+        Thread saveLinks = new Thread(new Runnable() {
+
+            @Override
+            public void run() {
+                try  {
+                    getLinks();
+                    OutputStreamWriter outputStreamWriter = new OutputStreamWriter(getContentResolver().openOutputStream(fileuri));
+                    outputStreamWriter.write(objectlist);
+                    outputStreamWriter.close();
+
+                    runOnUiThread(new Runnable() {
+
+                        @Override
+                        public void run() {
+                            // Sending reference and data to Adapter
+                            Toast.makeText(getApplicationContext(),getResources().getString(R.string.save_ok), Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                    //System.out.println("tree "+treelevel);
+                    //System.out.println("prefix "+prefix);
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    runOnUiThread(new Runnable() {
+
+                        @Override
+                        public void run() {
+                            Toast.makeText(getApplicationContext(),getResources().getString(R.string.invalid_expiration_date), Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
+            }
+        });
+        saveLinks.start();
     }
 }

@@ -123,5 +123,6 @@
     <string name="upload_calculate">Calculating folder size</string>
     <string name="picture_too_big">Picture too big</string>
     <string name="save_links">Save links to file</string>
+    <string name="save_ok">File saved successfully</string>
     <string name="copy_links">Copy links to clipboard</string>
 </resources>
