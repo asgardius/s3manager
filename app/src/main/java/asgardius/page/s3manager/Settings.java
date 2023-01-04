@@ -117,7 +117,7 @@ public class Settings extends AppCompatActivity {
                         Toast.makeText(getApplicationContext(),getResources().getString(R.string.not_zero), Toast.LENGTH_SHORT).show();
                     } else if (Integer.parseInt(buffersize) <= 2000) {
                         Toast.makeText(getApplicationContext(),getResources().getString(R.string.buffersize_error), Toast.LENGTH_SHORT).show();
-                    }  else if (Integer.parseInt(videotime) > 168) {
+                    }  else if (Integer.parseInt(videotime) > 168 || Integer.parseInt(playlisttime) > 168) {
                         Toast.makeText(getApplicationContext(),getResources().getString(R.string.invalid_expiration_date), Toast.LENGTH_SHORT).show();
                     } else {
                         db = dbHelper.getWritableDatabase();
