@@ -332,12 +332,12 @@ public class VideoPlayer extends AppCompatActivity {
     public void onDestroy() {
         mediaSessionConnector.setPlayer(null);
         deleteCache(this, standaloneDatabaseProvider);
-        standaloneDatabaseProvider.close();
         mediaSession.setActive(false);
         playerNotificationManager.setPlayer(null);
         player.release();
         playerView.setPlayer(null);
         simpleCache.release();
+        standaloneDatabaseProvider.close();
         super.onDestroy();
     }
 
