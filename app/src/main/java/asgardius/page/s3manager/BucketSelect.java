@@ -63,7 +63,11 @@ public class BucketSelect extends AppCompatActivity {
         isplaylist = getIntent().getBooleanExtra("isplaylist", false);
         prefix = "";
         setContentView(R.layout.activity_bucket_select);
-        region = Region.getRegion("us-east-1");
+        if (endpoint.contains(getResources().getString(R.string.aws_endpoint))) {
+            region = Region.getRegion("us-east-1");
+        } else {
+            region = Region.getRegion(location);
+        }
         s3ClientOptions = S3ClientOptions.builder().build();
         s3ClientOptions.setPathStyleAccess(style);
         myCredentials = new BasicAWSCredentials(username, password);

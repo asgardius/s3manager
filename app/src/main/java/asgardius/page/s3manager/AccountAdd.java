@@ -150,10 +150,11 @@ public class AccountAdd extends AppCompatActivity {
                         public void run() {
                             try  {
                                 //Your code goes here
-                                if (location.equals("")) {
-                                    location = "us-east-1";
+                                if (endpoint.contains(getResources().getString(R.string.aws_endpoint)) || location.equals("")) {
+                                    region = Region.getRegion("us-east-1");
+                                } else {
+                                    region = Region.getRegion(location);
                                 }
-                                region = Region.getRegion("us-east-1");
                                 S3ClientOptions s3ClientOptions = S3ClientOptions.builder().build();
                                 s3ClientOptions.setPathStyleAccess(pathstyle.isChecked());
                                 myCredentials = new BasicAWSCredentials(username, password);
