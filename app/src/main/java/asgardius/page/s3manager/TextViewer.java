@@ -1,7 +1,5 @@
 package asgardius.page.s3manager;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
@@ -9,18 +7,11 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import com.amazonaws.services.s3.model.ListObjectsRequest;
-import com.amazonaws.services.s3.model.ObjectListing;
-import com.amazonaws.services.s3.model.S3ObjectSummary;
+import androidx.appcompat.app.AppCompatActivity;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
-import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.LinkedHashSet;
-import java.util.List;
 import java.util.stream.Collectors;
 
 public class TextViewer extends AppCompatActivity {
@@ -66,11 +57,11 @@ public class TextViewer extends AppCompatActivity {
 
                             @Override
                             public void run() {
-                                Toast.makeText(getApplicationContext(),getResources().getString(R.string.media_list_fail), Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getApplicationContext(),e.toString(), Toast.LENGTH_SHORT).show();
                                 finish();
                             }
                         });
-                        //Toast.makeText(getApplicationContext(),getResources().getString(R.string.media_list_fail), Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(getApplicationContext(),e.toString(), Toast.LENGTH_SHORT).show();
                         finish();
                     }
                 }

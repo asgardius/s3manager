@@ -1,12 +1,12 @@
 package asgardius.page.s3manager;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.auth.BasicAWSCredentials;
@@ -16,9 +16,6 @@ import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.S3ClientOptions;
 import com.amazonaws.services.s3.model.BucketCrossOriginConfiguration;
 import com.amazonaws.services.s3.model.CORSRule;
-import com.amazonaws.services.s3.model.ListObjectsRequest;
-import com.amazonaws.services.s3.model.ObjectListing;
-import com.amazonaws.services.s3.model.S3ObjectSummary;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -66,7 +63,7 @@ public class CorsConfig extends AppCompatActivity {
         try {
             s3client = new AmazonS3Client(myCredentials, region);
         } catch (Exception e) {
-            Toast.makeText(getApplicationContext(),getResources().getString(R.string.media_list_fail), Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(),e.toString(), Toast.LENGTH_SHORT).show();
         }
         s3client.setEndpoint(endpoint);
         s3ClientOptions.setPathStyleAccess(style);
@@ -124,7 +121,7 @@ public class CorsConfig extends AppCompatActivity {
 
                         @Override
                         public void run() {
-                            Toast.makeText(getApplicationContext(),getResources().getString(R.string.media_list_fail), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getApplicationContext(),e.toString(), Toast.LENGTH_SHORT).show();
                         }
                     });
                     //Toast.makeText(getApplicationContext(),getResources().getString(R.string.media_list_fail), Toast.LENGTH_SHORT).show();

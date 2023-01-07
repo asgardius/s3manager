@@ -109,7 +109,7 @@ public class Share extends AppCompatActivity {
         try {
             s3client = new AmazonS3Client(myCredentials, region);
         } catch (Exception e) {
-            Toast.makeText(getApplicationContext(),getResources().getString(R.string.media_list_fail), Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(),e.toString(), Toast.LENGTH_SHORT).show();
         }
         s3client.setEndpoint(endpoint);
         s3ClientOptions.setPathStyleAccess(style);

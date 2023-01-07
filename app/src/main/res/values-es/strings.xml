@@ -62,15 +62,8 @@
     <string name="accountsave_success">Cuenta editada exitosamente</string>
     <string name="nosslwarning">No se permiten las conexiones sin SSL</string>
     <string name="invalid_url">La URL del endpoint debe iniciar con https://</string>
-    <string name="explorer_test_button">Probar explorador de archivos</string>
     <string name="unsupported_file">Tipo de archivo no soportado</string>
-    <string name="test_server_button">Conectar al servidor de pruebas</string>
-    <string name="media_conn_fail">No se pudo obtener el archivo remoto</string>
-    <string name="media_wrong_type">Archivo multimedia inválido</string>
-    <string name="media_list_fail">No se pudo conectar al servidor</string>
     <string name="about_button">Acerca de esta app</string>
-    <string name="dummy_button">Botón de prueba</string>
-    <string name="dummy_content">Contenido de prueba</string>
     <string name="accountadd_pdfendpoint">servidor pdfjs</string>
     <string name="pdf_reader_notready">Necesita configurar un servidor pdf.js</string>
     <string name="share_date">D</string>

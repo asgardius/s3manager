@@ -38,7 +38,7 @@ public class BucketSelect extends AppCompatActivity {
     ArrayList Name;
     ArrayList Img;
     RecyclerView recyclerView;
-    String username, password, endpoint, prefix, location, file, pdfendpoint;
+    String username, password, endpoint, prefix, location, pdfendpoint;
     boolean style, isplaylist;
     Region region;
     S3ClientOptions s3ClientOptions;
@@ -302,7 +302,7 @@ public class BucketSelect extends AppCompatActivity {
 
                                         @Override
                                         public void run() {
-                                            Toast.makeText(getApplicationContext(),getResources().getString(R.string.media_list_fail), Toast.LENGTH_SHORT).show();
+                                            Toast.makeText(getApplicationContext(),e.toString(), Toast.LENGTH_SHORT).show();
                                         }
                                     });
                                     //Toast.makeText(getApplicationContext(),getResources().getString(R.string.media_list_fail), Toast.LENGTH_SHORT).show();

@@ -87,15 +87,8 @@
     <string name="accountsave_success">Account edited successfully</string>
     <string name="nosslwarning">Connections without SSL are not allowed</string>
     <string name="invalid_url">Endpoint URL must start with https://</string>
-    <string name="explorer_test_button">File Explorer Test</string>
     <string name="unsupported_file">Unsupported file type</string>
-    <string name="test_server_button">Connect to test server</string>
-    <string name="media_conn_fail">Cannot retrieve remote file</string>
-    <string name="media_wrong_type">Invalid media file</string>
-    <string name="media_list_fail">Cannot connect to server</string>
     <string name="about_button">About this app</string>
-    <string name="dummy_button">Dummy Button</string>
-    <string name="dummy_content">DUMMY\nCONTENT</string>
     <string name="settings">Settings</string>
     <string name="save_settings">Save settings</string>
     <string name="videocache">Max media cache size (in MiB)</string>

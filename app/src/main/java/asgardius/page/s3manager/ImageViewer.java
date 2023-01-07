@@ -1,22 +1,18 @@
 package asgardius.page.s3manager;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.annotation.SuppressLint;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.otaliastudios.zoom.ZoomImageView;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
 import java.net.URL;
-import java.util.stream.Collectors;
 
 public class ImageViewer extends AppCompatActivity {
     String videoURL, title;
@@ -71,7 +67,7 @@ public class ImageViewer extends AppCompatActivity {
 
                         @Override
                         public void run() {
-                            Toast.makeText(getApplicationContext(),getResources().getString(R.string.media_list_fail), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getApplicationContext(),e.toString(), Toast.LENGTH_SHORT).show();
                             finish();
                         }
                     });

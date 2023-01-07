@@ -35,7 +35,6 @@ import com.google.android.exoplayer2.source.ProgressiveMediaSource;
 import com.google.android.exoplayer2.ui.PlayerNotificationManager;
 import com.google.android.exoplayer2.ui.StyledPlayerView;
 import com.google.android.exoplayer2.upstream.DefaultHttpDataSource;
-import com.google.android.exoplayer2.upstream.HttpDataSource;
 import com.google.android.exoplayer2.upstream.cache.CacheDataSource;
 import com.google.android.exoplayer2.upstream.cache.LeastRecentlyUsedCacheEvictor;
 import com.google.android.exoplayer2.upstream.cache.SimpleCache;
@@ -195,15 +194,9 @@ public class VideoPlayer extends AppCompatActivity {
                 if(success) {
                     player.pause();
                 } else {
-                    if (cause instanceof HttpDataSource.HttpDataSourceException) {
-                        // An HTTP error occurred.
-                        //System.out.println("Playback error F");
-                        Toast.makeText(getApplicationContext(), getResources().getString(R.string.media_conn_fail), Toast.LENGTH_SHORT).show();
-                    } else {
-                        // An HTTP error occurred.
-                        //System.out.println("Playback error F");
-                        Toast.makeText(getApplicationContext(), getResources().getString(R.string.media_wrong_type), Toast.LENGTH_SHORT).show();
-                    }
+                    // An HTTP error occurred.
+                    //System.out.println("Playback error F");
+                    Toast.makeText(getApplicationContext(), Objects.requireNonNull(error.getCause()).toString(), Toast.LENGTH_SHORT).show();
                     player.release();
                     finish();
                 }

@@ -79,7 +79,7 @@ public class ObjectSelect extends AppCompatActivity {
         try {
             s3client = new AmazonS3Client(myCredentials, region);
         } catch (Exception e) {
-            Toast.makeText(getApplicationContext(),getResources().getString(R.string.media_list_fail), Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(),e.toString(), Toast.LENGTH_SHORT).show();
         }
         s3client.setEndpoint(endpoint);
         s3ClientOptions.setPathStyleAccess(style);
@@ -232,7 +232,7 @@ public class ObjectSelect extends AppCompatActivity {
                             Toast.makeText(getApplicationContext(),e.toString(), Toast.LENGTH_SHORT).show();
                         }
                     });
-                    //Toast.makeText(getApplicationContext(),getResources().getString(R.string.media_list_fail), Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(getApplicationContext(),e.toString(), Toast.LENGTH_SHORT).show();
                     finish();
                 }
             }
@@ -253,7 +253,7 @@ public class ObjectSelect extends AppCompatActivity {
                         URL objectURL = s3client.generatePresignedUrl(request);
                         imageViewer(objectURL.toString(), Name.get(position).toString());
                     } catch (Exception e) {
-                        Toast.makeText(getApplicationContext(),getResources().getString(R.string.media_list_fail), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(),e.toString(), Toast.LENGTH_SHORT).show();
                     }
                 } /*else if (Img.get(position).equals(R.drawable.textfile)) {
                     //load media file
@@ -262,7 +262,7 @@ public class ObjectSelect extends AppCompatActivity {
                         URL objectURL = s3client.generatePresignedUrl(request);
                         textViewer(objectURL.toString());
                     } catch (Exception e) {
-                        Toast.makeText(getApplicationContext(),getResources().getString(R.string.media_list_fail), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(),e.toString(), Toast.LENGTH_SHORT).show();
                     }
                 }*/ else if (Img.get(position).equals(R.drawable.webpage) || Img.get(position).equals(R.drawable.ptextfile)) {
                     //load media file
@@ -271,7 +271,7 @@ public class ObjectSelect extends AppCompatActivity {
                         URL objectURL = s3client.generatePresignedUrl(request);
                         webBrowser(objectURL.toString(), Name.get(position).toString());
                     } catch (Exception e) {
-                        Toast.makeText(getApplicationContext(),getResources().getString(R.string.media_list_fail), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(),e.toString(), Toast.LENGTH_SHORT).show();
                     }
                 } else if (Img.get(position).equals(R.drawable.pdffile)) {
                     //load media file
@@ -307,10 +307,10 @@ public class ObjectSelect extends AppCompatActivity {
 
                                     @Override
                                     public void run() {
-                                        Toast.makeText(getApplicationContext(),getResources().getString(R.string.media_list_fail), Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(getApplicationContext(),e.toString(), Toast.LENGTH_SHORT).show();
                                     }
                                 });
-                                //Toast.makeText(getApplicationContext(),getResources().getString(R.string.media_list_fail), Toast.LENGTH_SHORT).show();
+                                //Toast.makeText(getApplicationContext(),e.toString(), Toast.LENGTH_SHORT).show();
                                 finish();
                             }
                         }
@@ -357,10 +357,10 @@ public class ObjectSelect extends AppCompatActivity {
 
                                         @Override
                                         public void run() {
-                                            Toast.makeText(getApplicationContext(),getResources().getString(R.string.media_list_fail), Toast.LENGTH_SHORT).show();
+                                            Toast.makeText(getApplicationContext(),e.toString(), Toast.LENGTH_SHORT).show();
                                         }
                                     });
-                                    //Toast.makeText(getApplicationContext(),getResources().getString(R.string.media_list_fail), Toast.LENGTH_SHORT).show();
+                                    //Toast.makeText(getApplicationContext(),e.toString(), Toast.LENGTH_SHORT).show();
                                     finish();
                                 }
                             }
@@ -501,7 +501,7 @@ public class ObjectSelect extends AppCompatActivity {
 
                             @Override
                             public void run() {
-                                Toast.makeText(getApplicationContext(),getResources().getString(R.string.media_list_fail), Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getApplicationContext(),e.toString(), Toast.LENGTH_SHORT).show();
                             }
                         });
                     }
@@ -679,10 +679,10 @@ public class ObjectSelect extends AppCompatActivity {
 
                                         @Override
                                         public void run() {
-                                            Toast.makeText(getApplicationContext(),getResources().getString(R.string.media_list_fail), Toast.LENGTH_SHORT).show();
+                                            Toast.makeText(getApplicationContext(),e.toString(), Toast.LENGTH_SHORT).show();
                                         }
                                     });
-                                    //Toast.makeText(getApplicationContext(),getResources().getString(R.string.media_list_fail), Toast.LENGTH_SHORT).show();
+                                    //Toast.makeText(getApplicationContext(),e.toString(), Toast.LENGTH_SHORT).show();
                                     finish();
                                 }
                             }
