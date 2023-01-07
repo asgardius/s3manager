@@ -44,16 +44,17 @@ Known supported providers
 
 <li>Amazon Web Services</li>
 <li>Scaleway Elements</li>
-<li>Oracle Cloud (partial)</li>
 <li>Wasabi Cloud</li>
+<li>Backblaze B2</li>
 <li>MinIO **</li>
 <li>Garage **</li>
 
 Known not supported providers
 
-<li>Google Cloud</li>
+<li>Google Cloud (Not compatible with S3v4)</li>
+<li>Oracle Cloud (compatibility issues with S3v4)</li>
 
-** You must set region as us-east-1 on server settings
+** You must set region as us-east-1 at server settings
 
 Please report all issues at https://forum.asgardius.company/t/s3-manager
 

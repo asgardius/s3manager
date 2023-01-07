@@ -63,13 +63,14 @@ Known supported providers
 
 * Amazon Web Services
 * Scaleway Elements
-* Oracle Cloud (partial)
 * Wasabi Cloud
+* Backblaze B2
 * MinIO **
 * Garage **
 
 Known not supported providers
 
-* Google Cloud
+* Google Cloud (Not compatible with S3v4)
+* Oracle Cloud (compatibility issues with S3v4)
 
-** You must set region as us-east-1 on server settings
+** You must set region as us-east-1 at server settings
