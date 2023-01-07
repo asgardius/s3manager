@@ -18,6 +18,8 @@ Current feature list
 * Delete folders
 * File upload
 * File download
+* Download folder content
+* Upload folder content
 * pdf file reader using user provided pdf.js server
 * file sharing links
 * get object info
@@ -63,8 +65,11 @@ Known supported providers
 * Scaleway Elements
 * Oracle Cloud (partial)
 * Wasabi Cloud
-* MinIO
+* MinIO **
+* Garage **
 
 Known not supported providers
 
 * Google Cloud
+
+** You must set region as us-east-1 on server settings

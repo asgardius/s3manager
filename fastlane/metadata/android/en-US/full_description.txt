@@ -14,6 +14,8 @@ Current feature list
 <li>Delete folders</li>
 <li>File upload</li>
 <li>File download</li>
+<li>Download folder content</li>
+<li>Upload folder content</li>
 <li>pdf file reader using user provided pdf.js server</li>
 <li>file sharing links</li>
 <li>get object info</li>
@@ -44,14 +46,17 @@ Known supported providers
 <li>Scaleway Elements</li>
 <li>Oracle Cloud (partial)</li>
 <li>Wasabi Cloud</li>
-<li>MinIO</li>
+<li>MinIO **</li>
+<li>Garage **</li>
 
 Known not supported providers
 
 <li>Google Cloud</li>
 
+** You must set region as us-east-1 on server settings
+
 Please report all issues at https://forum.asgardius.company/t/s3-manager
 
 This app has nonfreenet antifeature because its compatibility list.
 
-You can use MinIO to have a FOSS selfhosted server to use with this app
+You can use MinIO or Garage to have a FOSS selfhosted server to use with this app
