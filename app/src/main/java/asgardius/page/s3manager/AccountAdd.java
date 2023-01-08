@@ -105,6 +105,9 @@ public class AccountAdd extends AppCompatActivity {
                         if (location.equals("")) {
                             location = "us-east-1";
                         }
+                        if(endpoint.endsWith("/")) {
+                            endpoint = endpoint.substring(0, endpoint.length()-1);
+                        }
                         if (edit) {
                             db.execSQL("UPDATE account SET id=\""+alias+"\", endpoint=\""+endpoint+"\", username=\""+username+"\", password=\""+password+"\", region=\""+location+"\", pdfendpoint=\""+pdfendpoint+"\", style=\""+style+"\" WHERE id=\""+id+"\"");
                             Toast.makeText(getApplicationContext(),getResources().getString(R.string.accountsave_success), Toast.LENGTH_SHORT).show();
@@ -151,6 +154,9 @@ public class AccountAdd extends AppCompatActivity {
                                     region = Region.getRegion("us-east-1");
                                 } else {
                                     region = Region.getRegion(location);
+                                }
+                                if(endpoint.endsWith("/")) {
+                                    endpoint = endpoint.substring(0, endpoint.length()-1);
                                 }
                                 S3ClientOptions s3ClientOptions = S3ClientOptions.builder().build();
                                 s3ClientOptions.setPathStyleAccess(pathstyle.isChecked());
