@@ -152,7 +152,7 @@ public class VideoPlayer extends AppCompatActivity {
         if (isplaylist) {
             for (int i = 0; i < queue.size(); i++) {
                 if (names.get(i).endsWith(".m3u8")) {
-                    MediaItem mediaItem = MediaItem.fromUri(queue.get(i));
+                    MediaItem mediaItem = MediaItem.fromUri(Share.URLify(queue.get(i)));
                     player.addMediaItem(mediaItem);
                 } else {
                     mediaSource = new ProgressiveMediaSource.Factory(
@@ -161,7 +161,7 @@ public class VideoPlayer extends AppCompatActivity {
                                     .setUpstreamDataSourceFactory(new DefaultHttpDataSource.Factory()
                                             .setUserAgent("S3 Manager"))
                                     .setFlags(CacheDataSource.FLAG_IGNORE_CACHE_ON_ERROR)
-                    ).createMediaSource(MediaItem.fromUri(Uri.parse(queue.get(i))));
+                    ).createMediaSource(MediaItem.fromUri(Share.URLify(queue.get(i))));
                     player.addMediaSource(mediaSource);
                 }
             }
@@ -169,7 +169,7 @@ public class VideoPlayer extends AppCompatActivity {
             player.seekTo(names.indexOf(title), 0);
         } else {
             if (title.endsWith(".m3u8")) {
-                MediaItem mediaItem = MediaItem.fromUri(videoURL);
+                MediaItem mediaItem = MediaItem.fromUri(Share.URLify(videoURL));
                 player.setMediaItem(mediaItem);
             } else {
                 mediaSource = new ProgressiveMediaSource.Factory(
@@ -178,7 +178,7 @@ public class VideoPlayer extends AppCompatActivity {
                                 .setUpstreamDataSourceFactory(new DefaultHttpDataSource.Factory()
                                         .setUserAgent("S3 Manager"))
                                 .setFlags(CacheDataSource.FLAG_IGNORE_CACHE_ON_ERROR)
-                ).createMediaSource(MediaItem.fromUri(Uri.parse(videoURL)));
+                ).createMediaSource(MediaItem.fromUri(Share.URLify(videoURL)));
                 player.setMediaSource(mediaSource);
             }
             player.prepare();
