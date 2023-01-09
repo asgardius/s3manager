@@ -3,6 +3,7 @@ package asgardius.page.s3manager;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,6 +30,7 @@ public class CorsConfig extends AppCompatActivity {
     S3ClientOptions s3ClientOptions;
     AWSCredentials myCredentials;
     AmazonS3 s3client;
+    ProgressBar simpleProgressBar;
     BucketCrossOriginConfiguration bucketcors;
     boolean style;
     boolean allorigins, pdfcompatible, found = false;
@@ -40,6 +42,7 @@ public class CorsConfig extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cors_config);
+        simpleProgressBar = (ProgressBar) findViewById(R.id.simpleProgressBar);
         endpoint = getIntent().getStringExtra("endpoint");
         title = getIntent().getStringExtra("title");
         username = getIntent().getStringExtra("username");
@@ -95,6 +98,7 @@ public class CorsConfig extends AppCompatActivity {
 
                         @Override
                         public void run() {
+                            simpleProgressBar.setVisibility(View.INVISIBLE);
                             if (allorigins) {
                                 origins.setText(getResources().getString(R.string.cors_all));
                                 deletecors.setVisibility(View.VISIBLE);
@@ -134,6 +138,7 @@ public class CorsConfig extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 //buttonaction
+                simpleProgressBar.setVisibility(View.VISIBLE);
                 setAllowall();
             }
         });
@@ -141,6 +146,7 @@ public class CorsConfig extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 //buttonaction
+                simpleProgressBar.setVisibility(View.VISIBLE);
                 setAllowpdf();
             }
         });
@@ -148,6 +154,7 @@ public class CorsConfig extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 //buttonaction
+                simpleProgressBar.setVisibility(View.VISIBLE);
                 setDeletecors();
             }
         });
@@ -183,6 +190,7 @@ public class CorsConfig extends AppCompatActivity {
 
                         @Override
                         public void run() {
+                            simpleProgressBar.setVisibility(View.INVISIBLE);
                             Toast.makeText(getApplicationContext(),getResources().getString(R.string.cors_error), Toast.LENGTH_SHORT).show();
                         }
                     });
@@ -223,6 +231,7 @@ public class CorsConfig extends AppCompatActivity {
 
                         @Override
                         public void run() {
+                            simpleProgressBar.setVisibility(View.INVISIBLE);
                             Toast.makeText(getApplicationContext(),getResources().getString(R.string.cors_error), Toast.LENGTH_SHORT).show();
                         }
                     });
@@ -257,6 +266,7 @@ public class CorsConfig extends AppCompatActivity {
 
                         @Override
                         public void run() {
+                            simpleProgressBar.setVisibility(View.INVISIBLE);
                             Toast.makeText(getApplicationContext(),getResources().getString(R.string.cors_error), Toast.LENGTH_SHORT).show();
                         }
                     });
