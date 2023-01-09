@@ -58,6 +58,8 @@ Known not supported providers
 
 Please report all issues at https://forum.asgardius.company/t/s3-manager
 
+You can find app documentation at https://wiki.asgardius.company/shelves/asgardius-s3-manager-english (english) or https://wiki.asgardius.company/shelves/asgardius-s3-manager-espanol (spanish)
+
 This app has nonfreenet antifeature because its compatibility list.
 
 You can use MinIO or Garage to have a FOSS selfhosted server to use with this app

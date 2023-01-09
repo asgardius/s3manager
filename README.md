@@ -48,6 +48,8 @@ F-droid release may take a few days to get updated [More info here](https://www.
 
 You can get help at https://forum.asgardius.company/t/s3-manager
 
+You can find app documentation at https://wiki.asgardius.company/shelves/asgardius-s3-manager-english (english) or https://wiki.asgardius.company/shelves/asgardius-s3-manager-espanol (spanish)
+
 Supported languages
 
 * English
