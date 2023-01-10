@@ -323,6 +323,14 @@ public class VideoPlayer extends AppCompatActivity {
     @Override
 
     public void onDestroy() {
+        if (!mWifiLock.isHeld()) {
+            mWifiLock.acquire();
+            //System.out.println("WifiLock acquired");
+        }
+        if (!mWakeLock.isHeld()) {
+            mWakeLock.acquire();
+            //System.out.println("WakeLock acquired");
+        }
         mediaSessionConnector.setPlayer(null);
         deleteCache(this, standaloneDatabaseProvider);
         mediaSession.setActive(false);

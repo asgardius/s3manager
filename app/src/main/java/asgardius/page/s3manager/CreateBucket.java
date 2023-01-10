@@ -67,8 +67,10 @@ public class CreateBucket extends AppCompatActivity {
                                     @Override
                                     public void run() {
                                         // Sending reference and data to Adapter
+                                        setResult(25);
                                         Toast.makeText(getApplicationContext(),getResources().getString(R.string.create_bucket_success), Toast.LENGTH_SHORT).show();
-                                        mainmenu();
+                                        finish();
+                                        //mainmenu();
 
                                     }
                                 });
@@ -98,12 +100,12 @@ public class CreateBucket extends AppCompatActivity {
 
     }
 
-    private void mainmenu() {
+    /*private void mainmenu() {
 
         Intent intent = new Intent(this, MainActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         intent.putExtra("EXIT", true);
         startActivity(intent);
 
-    }
+    }*/
 }

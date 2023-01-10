@@ -351,6 +351,19 @@ public class Uploader extends AppCompatActivity {
 
     @SuppressLint("SetTextI18n")
     @Override
+
+    public void onDestroy() {
+        if (!mWifiLock.isHeld()) {
+            mWifiLock.acquire();
+            //System.out.println("WifiLock acquired");
+        }
+        if (!mWakeLock.isHeld()) {
+            mWakeLock.acquire();
+            //System.out.println("WakeLock acquired");
+        }
+        super.onDestroy();
+    }
+
     public void onActivityResult(int requestCode, int resultCode, final Intent resultData) {
         // The ACTION_OPEN_DOCUMENT intent was sent with the request code OPEN_DIRECTORY_REQUEST_CODE.
         // If the request code seen here doesn't match, it's the response to some other intent,

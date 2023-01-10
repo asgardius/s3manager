@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.Activity;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
@@ -357,7 +358,8 @@ public class BucketSelect extends AppCompatActivity {
         intent.putExtra("password", password);
         intent.putExtra("region", location);
         intent.putExtra("style", style);
-        startActivity(intent);
+        //startActivity(intent);
+        ((Activity) this).startActivityForResult(intent, 25);
     }
 
     private void download(String bucket) {
@@ -394,4 +396,15 @@ public class BucketSelect extends AppCompatActivity {
             Toast.makeText(getApplicationContext(),getResources().getString(R.string.copy_ok), Toast.LENGTH_SHORT).show();
         }
     }
+
+    public void onActivityResult(int requestCode, int resultCode, final Intent resultData) {
+        // The ACTION_OPEN_DOCUMENT intent was sent with the request code OPEN_DIRECTORY_REQUEST_CODE.
+        // If the request code seen here doesn't match, it's the response to some other intent,
+        // and the below code shouldn't run at all.
+        super.onActivityResult(requestCode, resultCode, resultData);
+        if(requestCode == 25 && resultCode == 25)  {
+            recreate();
+        }
+    }
+
 }
