@@ -9,7 +9,7 @@ android {
         applicationId "asgardius.page.s3manager"
         minSdk 23
         targetSdk 33
-        versionCode 67
+        versionCode 68
         versionName "0.7.6"
         setProperty("archivesBaseName", "s3-manager-$versionName")
 
@@ -42,7 +42,7 @@ dependencies {
     implementation 'androidx.recyclerview:recyclerview:1.2.1'
     implementation"com.otaliastudios:zoomlayout:1.9.0"
     // BEGIN AWS DEPENDENCIES
-    def aws_version = "2.60.0"
+    def aws_version = "2.61.0"
     implementation "com.amazonaws:aws-android-sdk-s3:$aws_version"
     implementation ("com.amazonaws:aws-android-sdk-mobile-client:$aws_version") { transitive = true }
     // END AWS DEPENDENCIES
