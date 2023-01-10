@@ -54,7 +54,7 @@ Known not supported providers
 <li>Google Cloud (Not compatible with S3v4)</li>
 <li>Oracle Cloud (compatibility issues with S3v4)</li>
 
-** You must set region as us-east-1 at server settings
+** Extra steps required (read documentation)
 
 Please report all issues at https://forum.asgardius.company/t/s3-manager
 

@@ -75,4 +75,4 @@ Known not supported providers
 * Google Cloud (Not compatible with S3v4)
 * Oracle Cloud (compatibility issues with S3v4)
 
-** You must set region as us-east-1 at server settings
+** Extra steps required (read documentation)
