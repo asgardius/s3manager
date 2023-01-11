@@ -46,6 +46,7 @@ Known supported providers
 <li>Scaleway Elements</li>
 <li>Wasabi Cloud</li>
 <li>Backblaze B2</li>
+<li>Cloudflare R2 (partial)</li>
 <li>MinIO **</li>
 <li>Garage **</li>
 

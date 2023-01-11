@@ -67,6 +67,7 @@ Known supported providers
 * Scaleway Elements
 * Wasabi Cloud
 * Backblaze B2
+* Cloudflare R2 (partial)
 * MinIO **
 * Garage **
 
